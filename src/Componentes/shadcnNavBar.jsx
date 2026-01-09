@@ -4,6 +4,7 @@ import * as React from "react"
 
 import Link from "next/link"
 import { ShoppingCart, Phone, Menu, X } from "lucide-react"
+import Image from "next/image"
 
 export function ShadcnNavBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -14,11 +15,9 @@ export function ShadcnNavBar() {
 
           {/* Brand */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 text-white flex items-center justify-center font-bold">
-              S
-            </div>
-            <span className="text-sm font-extrabold text-gray-900">
-              SiluetaChic
+<Image src={'/silueta.png'} alt={'icono'} height={64} width={64} />
+            <span className="text-sm font-extrabold text-indigo-400">
+              Silueta Chic
             </span>
           </div>
 

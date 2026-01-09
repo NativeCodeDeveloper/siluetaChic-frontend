@@ -10,7 +10,7 @@ export default function PostPortada() {
           Tecnología avanzada que garantiza seguridad y resultados excepcionales
         </p>
 
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-10">
           {/* Card 1 */}
           <div className="bg-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition">
             <div className="flex justify-center -mt-20 mb-6">

@@ -5,6 +5,7 @@ import { Case1 } from "@/Componentes/carruselMarcas";
 import PostPortada from "@/app/(public)/postPortada/page";
 import SeccionComuncacion from "@/app/(public)/seccionComuncacion/page";
 import Testimonios from "@/app/(public)/testimonios/page";
+import SeccionContacto from "@/app/(public)/seccionContacto/page";
 
 
 
@@ -18,6 +19,8 @@ export default function Home({ searchParams }) {
             <PostPortada></PostPortada>
             <SeccionComuncacion></SeccionComuncacion>
             <Testimonios></Testimonios>
+            <br/><br/><br/><br/>
+            <SeccionContacto></SeccionContacto>
         </main>
     );
 }

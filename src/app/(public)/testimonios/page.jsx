@@ -1,5 +1,4 @@
-import React from "react";
-import { TestimonialCard } from "@bolttech/atoms-testimonial-card";
+import TestimonialCard from "@/Componentes/TestimonialCard";
 
 
 
@@ -22,12 +21,33 @@ export default function Testimonios() {
                 <div className="mt-30 grid grid-cols-1 md:grid-cols-4 gap-10">
 
 
-                    {/* Card 1 */}
-                    <div className="bg-white rounded-3xl p-10  transition">
+                    <TestimonialCard
+                        nombre="María C."
+                        puntuacion={5}
+                        servicio="Piernas Completas"
+                        comentario="La mejor inversión que he hecho. Los resultados son increíbles y el trato es excelente. Ya no tengo que preocuparme por depilarme constantemente."
+                    />
 
+                    <TestimonialCard
+                        nombre="Laura P."
+                        puntuacion={5}
+                        servicio="Rostro Completo"
+                        comentario="Profesionales de verdad. Me explicaron todo el proceso, me sentí segura en todo momento. Los resultados superaron mis expectativas."
+                    />
 
-                    </div>
+                    <TestimonialCard
+                        nombre="Carolina R."
+                        puntuacion={5}
+                        servicio="Pack Completo"
+                        comentario="Rápido, eficiente y sin dolor. Llevaba años buscando algo así. Totalmente recomendado para quienes quieren olvidarse del vello."
+                    />
 
+                    <TestimonialCard
+                        nombre="Andrea Z."
+                        puntuacion={5}
+                        servicio="Pack Completo"
+                        comentario="Tenia miedo pero el trato fue exepcional , lo recomiendo 100 % No tuve irritacion ni ningun problema despues de las sesiones ademas son muy amables."
+                    />
 
 
 

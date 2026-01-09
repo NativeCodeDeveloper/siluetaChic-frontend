@@ -3,70 +3,79 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AnimatedLayout } from "@/Componentes/AnimatedLayout";
 
-// Añado metadata optimizada para SEO / indexación de búsqueda (Open Graph, Twitter, robots, keywords, canonical)
-// Asunción: uso NEXT_PUBLIC_SITE_URL si está definida; si no, se usa https://macarrepuestos.cl como fallback.
-export const metadataBase = new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://macarrepuestos.cl");
+// Metadata optimizada SEO para Silueta Chic – Centro de Depilación Triláser en Ñuñoa, Santiago
+export const metadataBase = new URL(
+  process.env.NEXT_PUBLIC_SITE_URL || "https://siluetachic.cl"
+);
 
 export const metadata = {
-    title: {
-        default: "MaCar Repuestos | Especialistas en Maxus",
-        template: "%s | MaCar Repuestos",
+  title: {
+    default: "Silueta Chic | Centro de Depilación Triláser en Ñuñoa",
+    template: "%s | Silueta Chic",
+  },
+  description:
+    "Silueta Chic es un centro profesional de depilación triláser en Ñuñoa, Santiago. Especialistas en depilación corporal femenina y masculina, tratamientos seguros, tecnología avanzada y atención personalizada.",
+  icons: {
+    icon: "/silueta.ico",
+    shortcut: "/silueta.ico",
+    apple: "/silueta.png",
+  },
+  keywords: [
+    "depilación triláser",
+    "depilación láser Santiago",
+    "depilación láser Ñuñoa",
+    "centro de depilación",
+    "depilación corporal",
+    "depilación profesional",
+    "depilación femenina",
+    "depilación masculina",
+    "depilación definitiva",
+    "Silueta Chic",
+    "depilación láser clínica estética",
+    "triláser Ñuñoa",
+    "centro de estética Santiago",
+  ],
+  authors: [{ name: "Silueta Chic", url: metadataBase.href }],
+  publisher: "Silueta Chic",
+  robots: {
+    index: true,
+    follow: true,
+    "max-snippet": -1,
+    "max-image-preview": "large",
+    "max-video-preview": -1,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
     },
+  },
+  alternates: {
+    canonical: metadataBase.href,
+  },
+  openGraph: {
+    title: "Silueta Chic | Depilación Triláser Profesional en Ñuñoa",
     description:
-        "MaCar Repuestos - Repuestos, accesorios y piezas (originales y alternas) para vehículos Maxus. Stock disponible, envío a todo Chile y asesoría técnica especializada.",
-    keywords: [
-        "repuestos Maxus",
-        "piezas Maxus",
-        "repuestos Maxus Chile",
-        "repuestos Maxus Santiago",
-        "partes Maxus",
-        "MaCar Repuestos",
-        "Maxus repuestos",
-        "T60",
-        "T90",
-        "V80",
+      "Centro especializado en depilación triláser en Ñuñoa, Santiago. Resultados efectivos, tecnología avanzada y especialistas en depilación corporal.",
+    url: metadataBase.href,
+    siteName: "Silueta Chic",
+    images: [
+      {
+        url: `${metadataBase.href.replace(/\/$/, "")}/og-silueta-chic.png`,
+        width: 1200,
+        height: 630,
+        alt: "Silueta Chic - Centro de Depilación Triláser",
+      },
     ],
-    authors: [{ name: "MaCar Repuestos", url: metadataBase.href }],
-    publisher: "MaCar Repuestos",
-    robots: {
-        index: true,
-        follow: true,
-        "max-snippet": -1,
-        "max-image-preview": "large",
-        "max-video-preview": -1,
-        googleBot: {
-            index: true,
-            follow: true,
-            "max-video-preview": -1,
-        },
-    },
-    alternates: {
-        canonical: metadataBase.href,
-    },
-    openGraph: {
-        title: "MaCar Repuestos | Repuestos para Maxus",
-        description:
-            "Repuestos, accesorios y piezas para Maxus — stock, envío a todo Chile y asesoría técnica.",
-        url: metadataBase.href,
-        siteName: "MaCar Repuestos",
-        images: [
-            {
-                url: `${metadataBase.href.replace(/\/$/, "")}/logoGrande.png`,
-                width: 1200,
-                height: 630,
-                alt: "MaCar Repuestos - Logo",
-            },
-        ],
-        locale: "es_CL",
-        type: "website",
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "MaCar Repuestos | Repuestos para Maxus",
-        description:
-            "Repuestos, accesorios y piezas para Maxus — stock, envío a todo Chile y asesoría técnica.",
-        images: [`${metadataBase.href.replace(/\/$/, "")}/logoGrande.png`],
-    },
+    locale: "es_CL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Silueta Chic | Depilación Triláser en Ñuñoa",
+    description:
+      "Depilación triláser profesional en Ñuñoa, Santiago. Especialistas en depilación corporal con tecnología avanzada.",
+    images: [`${metadataBase.href.replace(/\/$/, "")}/og-silueta-chic.png`],
+  },
 };
 
 export default function RootLayout({ children }) {
