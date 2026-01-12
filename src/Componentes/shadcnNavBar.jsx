@@ -23,13 +23,18 @@ export function ShadcnNavBar() {
 
           {/* Links desktop */}
           <nav className="hidden lg:flex items-center gap-8">
-            {["Inicio","Hombre","Mujer","Servicios","Dudas","Contacto"].map(item => (
+              {[  {titulo : 'Inicio' , href : '/'},
+                  {titulo : 'Hombre' , href : '/hombre'},
+                  {titulo : 'Mujer' , href : '/mujer'},
+                  {titulo : 'Servicios' , href : '/servicios'},
+                  {titulo : 'Dudas' , href : '/dudas'},
+                  {titulo : 'Contacto' , href : '/contacto'}].map((item) => (
               <Link
-                key={item}
-                href="#"
+                key={item.titulo}
+                href={item.href}
                 className="relative text-sm font-semibold text-purple-500 hover:text-purple-600 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-[3px] after:w-0 after:bg-gradient-to-r after:from-purple-400 after:to-blue-500 hover:after:w-full after:transition-all after:duration-300"
               >
-                {item}
+                {item.titulo}
               </Link>
             ))}
           </nav>
@@ -58,7 +63,7 @@ export function ShadcnNavBar() {
             </button>
 
             <Link
-              href="#"
+              href="/carrito"
               className="relative w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 text-white flex items-center justify-center hover:from-purple-600 hover:to-blue-700 transition"
             >
               <ShoppingCart className="w-6 h-6" />
@@ -78,14 +83,19 @@ export function ShadcnNavBar() {
           ].join(" ")}
         >
           <div className="px-4 py-6 flex flex-col gap-6">
-            {["Inicio","Hombre","Mujer","Servicios","Dudas","Contacto"].map((item) => (
+              {[  {titulo : 'Inicio' , href : '/'},
+                  {titulo : 'Hombre' , href : '/hombre'},
+                  {titulo : 'Mujer' , href : '/mujer'},
+                  {titulo : 'Servicios' , href : '/servicios'},
+                  {titulo : 'Dudas' , href : '/dudas'},
+                  {titulo : 'Contacto' , href : '/contacto'}].map((item) => (
               <Link
-                key={item}
-                href="#"
+                key={item.titulo}
+                href={item.href}
                 className="text-lg font-semibold text-purple-500 hover:text-purple-600 transition"
                 onClick={() => setMobileOpen(false)}
               >
-                {item}
+                {item.titulo}
               </Link>
             ))}
           </div>
