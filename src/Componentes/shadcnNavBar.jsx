@@ -28,7 +28,7 @@ export function ShadcnNavBar() {
                   {titulo : 'Mujer' , href : '/mujer'},
                   {titulo : 'Servicios' , href : '/servicios'},
                   {titulo : 'Dudas' , href : '/dudas'},
-                  {titulo : 'Contacto' , href : '/contacto'}].map((item) => (
+                  {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
               <Link
                 key={item.titulo}
                 href={item.href}
@@ -88,7 +88,7 @@ export function ShadcnNavBar() {
                   {titulo : 'Mujer' , href : '/mujer'},
                   {titulo : 'Servicios' , href : '/servicios'},
                   {titulo : 'Dudas' , href : '/dudas'},
-                  {titulo : 'Contacto' , href : '/contacto'}].map((item) => (
+                  {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
               <Link
                 key={item.titulo}
                 href={item.href}

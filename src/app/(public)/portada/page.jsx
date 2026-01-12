@@ -47,8 +47,7 @@ export default function Portada() {
                 {/* Left */}
                 <motion.div
                     initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.35 }}
+                    animate="show"
                     variants={{
                         hidden: { opacity: 0, y: 18 },
                         show: {
