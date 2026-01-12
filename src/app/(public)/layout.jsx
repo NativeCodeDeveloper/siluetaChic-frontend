@@ -6,6 +6,7 @@ import ToasterClient from "@/Componentes/ToasterClient";
 import ObjetoPagarProvider from "@/ContextosGlobales/ObjetoPagarContext";
 import FloatingWhatsApp from "@/Componentes/FloatingWhatsApp";
 import FooterSiluetaChic from "@/Componentes/Footer";
+import SeccionContacto from "@/app/(public)/seccionContacto/page";
 
 
 export default function PublicLayout({ children }) {
@@ -20,7 +21,8 @@ export default function PublicLayout({ children }) {
                     <main className="relative z-0">{children}</main>
 
                     <FloatingWhatsApp/>
-
+                    <br/><br/><br/><br/>
+                    <SeccionContacto></SeccionContacto>
                     <FooterSiluetaChic/>
 
                 </div>
