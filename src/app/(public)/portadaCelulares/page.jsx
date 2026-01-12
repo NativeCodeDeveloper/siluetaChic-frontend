@@ -38,7 +38,6 @@ export default function PortadaCelulares() {
                         sizes="100vw"
                         className="object-cover object-[78%_18%]"
                     />
-                    <div className="absolute inset-0 bg-black/35" />
                     <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_70%_30%,rgba(34,211,238,0.30)_0%,rgba(0,0,0,0)_62%)]" />
                 </div>
 
@@ -59,13 +58,13 @@ export default function PortadaCelulares() {
 {/* Sellos de confianza */}
 <div className="px-6 pb-4">
   <div className="grid grid-cols-3 gap-3">
-    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md py-3">
+    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-2xl py-3">
       <span className="text-[11px] font-extrabold tracking-wide text-sky-900">CALIDAD</span>
     </div>
-    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md py-3">
+    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-2xl py-3">
       <span className="text-[11px] font-extrabold tracking-wide text-sky-900">CUIDADO</span>
     </div>
-    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md py-3">
+    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-2xl py-3">
       <span className="text-[11px] font-extrabold tracking-wide text-sky-900">SUAVIDAD</span>
     </div>
   </div>
@@ -78,7 +77,7 @@ export default function PortadaCelulares() {
                <Link href="/agenda" className="w-full sm:w-auto">
                    <Button
                        size="lg"
-                       className="w-50 sm:w-auto rounded-full bg-gradient-to-r from-cyan-500 via-indigo-300 to-indigo-400 px-10 py-6 text-xs font-extrabold text-white shadow-[0_12px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:brightness-110 active:scale-[0.98]"
+                       className="w-60 sm:w-auto rounded-full bg-gradient-to-r from-cyan-600 via-indigo-400 to-indigo-600 px-10 py-6 text-xs font-extrabold text-white shadow-[0_12px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:brightness-110 active:scale-[0.98]"
                    >
                        AGENDA TU EVALUACIÓN
                        <span className="text-white/90">→</span>
