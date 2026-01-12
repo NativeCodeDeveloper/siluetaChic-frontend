@@ -45,16 +45,31 @@ export default function PortadaCelulares() {
 
        <div className="w-auto">
 
-           <h1 className={`p-6 text-start text-4xl  font-bold 
+           <h1 className={`p-6 text-start text-5xl  font-bold 
            
             text-sky-900
            `}>
-               Depilación <span className="bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-600 bg-clip-text text-transparent">Trilaser</span> Indolora: Tu piel suave y libre todo el año.
+               Depilación <span className=" bg-gradient-to-r from-purple-600 via-indigo-500 to-cyan-600 bg-clip-text text-transparent">Trilaser</span> Indolora: Tu piel suave y libre todo el año.
            </h1>
 
-<p className='text-base p-10 tracking-wide text-gray-700'>
+<p className='text-base p-10 tracking-wide text-gray-600 font-semibold'>
     Resultados reales desde la primera sesión. Tecnología de vanguardia para eliminar el vello, la irritación y la foliculitis definitivamente.
 </p>
+
+{/* Sellos de confianza */}
+<div className="px-6 pb-4">
+  <div className="grid grid-cols-3 gap-3">
+    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md py-3">
+      <span className="text-[11px] font-extrabold tracking-wide text-sky-900">CALIDAD</span>
+    </div>
+    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md py-3">
+      <span className="text-[11px] font-extrabold tracking-wide text-sky-900">CUIDADO</span>
+    </div>
+    <div className="flex flex-col items-center justify-center rounded-2xl bg-white/70 backdrop-blur-md border border-white/40 shadow-md py-3">
+      <span className="text-[11px] font-extrabold tracking-wide text-sky-900">SUAVIDAD</span>
+    </div>
+  </div>
+</div>
 
 
 

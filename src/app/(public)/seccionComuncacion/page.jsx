@@ -13,7 +13,7 @@ export default function SeccionComuncacion() {
 
                 <div>
                     <p className="mt-4 text-gray-500 text-lg">
-                        Na depilación láser no solo ofrece una solución a largo plazo para el vello no deseado. También puede marcar un cambio profundo en tu relación con tu piel. Te da libertad, comodidad y seguridad. Te permite soltar la rutina de la rasuradora, olvidarte de la cera y abrazar una nueva forma de cuidado personal.
+                        La depilación láser no solo ofrece una solución a largo plazo para el vello no deseado. También puede marcar un cambio profundo en tu relación con tu piel. Te da libertad, comodidad y seguridad. Te permite soltar la rutina de la rasuradora, olvidarte de la cera y abrazar una nueva forma de cuidado personal.
                     </p>
                 </div>
 
