@@ -302,14 +302,14 @@ totalPagado
                                 </label>
 
                                 <label className="block">
-                                    <span className="text-sm font-medium text-gray-700">Direccion Despacho</span>
+                                    <span className="text-sm font-medium text-gray-700">Direccion</span>
                                     <input
                                         type="text"
                                         value={direccion_despacho}
                                         onChange={(e) => setdireccion_despacho(e.target.value)}
                                         required
                                         className=" p-2 mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-gray-900 placeholder:text-gray-400 py-2"
-                                        placeholder="Ej: Alameda 123"
+                                        placeholder="Ej: Santiago Centro / Alameda 123"
                                     />
                                 </label>
 
@@ -323,7 +323,7 @@ totalPagado
                                         onChange={(e) => setComuna(e.target.value)}
                                         required
                                         className=" p-2 mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-gray-900 placeholder:text-gray-400 py-2"
-                                        placeholder="Ej: San Carlos"
+                                        placeholder="Ej: Ñuñoa"
                                     />
                                 </label>
 
@@ -338,7 +338,7 @@ totalPagado
                                         onChange={(e) => setRegionPais(e.target.value)}
                                         required
                                         className=" p-2 mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-gray-900 placeholder:text-gray-400 py-2"
-                                        placeholder="Ej: Los Rios / Chile"
+                                        placeholder="Ej: Metropolitana / Chile"
                                     />
                                 </label>
 
@@ -350,7 +350,7 @@ totalPagado
                                         value={comentarios}
                                         onChange={(e) => setComentarios(e.target.value)}
                                         className=" p-2 mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 text-gray-900 placeholder:text-gray-400 py-2"
-                                        placeholder="Ej: Referencia para la entrega casa interior color azul"
+                                        placeholder="(Opcional)"
                                     />
                                 </label>
 

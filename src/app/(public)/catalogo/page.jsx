@@ -129,8 +129,8 @@ export default function Catalogo(){
         <div>
             <ToasterClient/>
             <div className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 h-50 flex justify-center items-center gap-2 flex-col'>
-                <h1 className='text-white text-5xl font-bold'>Catalogo de Servicios</h1>
-                <p className="text-white tracking-wide font-bold text-2xl">Descubre nuestros tratamientos de depilación láser con tecnología Triláser</p>
+                <h1 className='text-white text-4xl md:text-5xl text-center font-bold'>Catalogo de Servicios</h1>
+                <p className="text-white tracking-wide font-bold text-base md:text-2xl text-center">Descubre nuestros tratamientos de depilación láser con tecnología Triláser</p>
             </div>
 
      <div className="flex justify-center mt-10 px-4">
@@ -182,11 +182,11 @@ active:scale-95">
             )}
 
 
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center p-20 ml-20 -mt-20'>
+            <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-8 px-6 md:grid-cols-3">
                 {listaProductos.map((producto) => (
                     <div
                         key={producto.id_producto}
-                        className="group relative mt-10 w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-indigo-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                        className="group relative flex h-full w-full max-w-sm flex-col overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-indigo-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
                     >
                         {/* Glow / gradient border */}
                         <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
@@ -194,7 +194,7 @@ active:scale-95">
                         {/* Top accent */}
                         <div className="h-1 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400" />
 
-                        <div className="relative p-6 sm:p-8">
+                        <div className="relative flex h-full flex-col p-6 sm:p-8">
                             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-50 via-indigo-50 to-cyan-50 ring-1 ring-indigo-100">
                                 <MediaCardImage
                                     imagenProducto={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${producto.imagenProducto}/card`}
@@ -219,7 +219,7 @@ active:scale-95">
 
                             </div>
 
-                            <div className=" flex gap-3">
+                            <div className="mt-auto flex gap-3">
                                 <button
                                     onClick={() => comprarProducto(producto)}
                                     className="w-full rounded-2xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-extrabold tracking-wide text-indigo-600 shadow-sm transition-all duration-200 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:scale-[0.99]">
