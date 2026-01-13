@@ -1,34 +1,40 @@
 "use client"
 
 import * as React from "react"
-
+import {useCarritoGlobal} from "@/ContextosGlobales/CarritoContext";
 import Link from "next/link"
 import { ShoppingCart, Phone, Menu, X } from "lucide-react"
 import Image from "next/image"
+import {useEffect, useState} from "react";
 
 export function ShadcnNavBar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [_carrito, setCarrito] = useCarritoGlobal();
+  // Estado para saber si el componente está montado en el cliente
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
     <header className="w-full bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative h-16 flex items-center justify-between">
-
           {/* Brand */}
           <div className="flex items-center gap-3">
-<Image src={'/silueta.png'} alt={'icono'} height={64} width={64} />
+            <Image src={'/silueta.png'} alt={'icono'} height={64} width={64} />
             <span className="text-sm font-extrabold text-indigo-400">
               Silueta Chic
             </span>
           </div>
-
           {/* Links desktop */}
           <nav className="hidden lg:flex items-center gap-8">
-              {[  {titulo : 'Inicio' , href : '/'},
-                  {titulo : 'Hombre' , href : '/hombre'},
-                  {titulo : 'Mujer' , href : '/mujer'},
-                  {titulo : 'Servicios' , href : '/servicios'},
-                  {titulo : 'Dudas' , href : '/dudas'},
-                  {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
+            {[  {titulo : 'Inicio' , href : '/'},
+                {titulo : 'Comprar' , href : '/catalogo'},
+                {titulo : 'Servicios' , href : '/servicios'},
+                {titulo : 'Dudas' , href : '/dudas'},
+                {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
               <Link
                 key={item.titulo}
                 href={item.href}
@@ -38,7 +44,6 @@ export function ShadcnNavBar() {
               </Link>
             ))}
           </nav>
-
           {/* Actions */}
           <div className="flex items-center gap-3">
             <Link
@@ -50,7 +55,6 @@ export function ShadcnNavBar() {
               </span>
               RESERVAR
             </Link>
-
             {/* Mobile toggle */}
             <button
               type="button"
@@ -61,19 +65,19 @@ export function ShadcnNavBar() {
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
-
             <Link
               href="/carrito"
               className="relative w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 text-white flex items-center justify-center hover:from-purple-600 hover:to-blue-700 transition"
             >
               <ShoppingCart className="w-6 h-6" />
-              <span className="absolute -top-1 -right-1 min-w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 text-xs font-bold flex items-center justify-center border-2 border-white">
-                0
-              </span>
+              {isMounted && (
+                <span className="absolute -top-1 -right-1 min-w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 text-xs font-bold flex items-center justify-center border-2 border-white">
+                  {_carrito.length}
+                </span>
+              )}
             </Link>
           </div>
         </div>
-
         {/* Mobile menu (collapsible) */}
         <div
           className={[
@@ -83,12 +87,11 @@ export function ShadcnNavBar() {
           ].join(" ")}
         >
           <div className="px-4 py-6 flex flex-col gap-6">
-              {[  {titulo : 'Inicio' , href : '/'},
-                  {titulo : 'Hombre' , href : '/hombre'},
-                  {titulo : 'Mujer' , href : '/mujer'},
-                  {titulo : 'Servicios' , href : '/servicios'},
-                  {titulo : 'Dudas' , href : '/dudas'},
-                  {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
+            {[  {titulo : 'Inicio' , href : '/'},
+                {titulo : 'Comprar' , href : '/catalogo'},
+                {titulo : 'Servicios' , href : '/servicios'},
+                {titulo : 'Dudas' , href : '/dudas'},
+                {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
               <Link
                 key={item.titulo}
                 href={item.href}

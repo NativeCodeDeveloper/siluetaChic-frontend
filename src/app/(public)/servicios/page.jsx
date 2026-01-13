@@ -1,4 +1,9 @@
+'use client';
+
 import Image from "next/image";
+import {useEffect, useState} from "react";
+import ToasterClient from "@/Componentes/ToasterClient";
+import {toast} from "react-hot-toast";
 import {
     BoltIcon,
     SparklesIcon,
@@ -10,8 +15,37 @@ import {
 } from "@heroicons/react/24/solid";
 
 export  default function ServicioPage(){
+    const API = process.env.NEXT_PUBLIC_API_URL;
+    const [publicaciones, setPublicaciones] = useState([]);
+
+async function cargarPublicaciones(){
+    try {
+        const res = await fetch(`${API}/publicaciones/seleccionarPublicaciones`, {
+            method: "GET",
+            headers: {Accept: "application/json"},
+            mode: "cors"
+        })
+
+        if(!res.ok){
+            return toast.error('No ha sido posible cargar publicaciones , contacte a soporte de NativeCode')
+        }else{
+
+            const dataPublicaciones = await res.json();
+            setPublicaciones(dataPublicaciones);
+        }
+    }catch(err){
+       return toast.error('No ha sido posible cargar publicaciones , contacte a soporte de NativeCode')
+    }
+}
+
+useEffect(()=>{
+    cargarPublicaciones();
+},[])
+
+
     return(
         <div>
+            <ToasterClient/>
             {/*PANTALLAS ESCRITORIO*/}
             <div className="hidden md:block">
                 <div className="
@@ -44,86 +78,48 @@ export  default function ServicioPage(){
                         </h1>
 
 
-                        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-20'>
+                        <div className="mx-auto mt-16 grid w-full max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-3 md:px-0">
 
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
+                            {publicaciones.map((publicacion) => (
+                                <article
+                                    key={publicacion.id_publicaciones}
+                                    className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-slate-900/10"
+                                >
+                                    {/* subtle glow */}
+                                    <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                        <div className="absolute -top-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
+                                        <div className="absolute -bottom-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
+                                    </div>
 
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Depilación Axila</h1>
-                                    <p>Tratamiento rápido y efectivo</p>
-                                    <br/>
-                                </div>
-                            </div>
+                                    {/* image */}
+                                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-50 to-white">
+                                        <img
+                                            src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${publicacion.imagenPublicaciones_primera}/card`}
+                                            alt={publicacion.descripcionPublicaciones || 'Proceso'}
+                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                    </div>
 
+                                    {/* content */}
+                                    <div className="relative flex flex-col gap-2 p-5">
+                                        <h3 className="text-center text-base font-extrabold tracking-tight text-slate-900 line-clamp-2">
+                                            {publicacion.descripcionPublicaciones}
+                                        </h3>
 
+                                        <div className="mx-auto h-px w-16 bg-gradient-to-r from-purple-300 via-indigo-400 to-cyan-600 opacity-70" />
 
+                                        <p className="text-center text-sm leading-relaxed text-slate-500">
+                                            Tecnología triláser para resultados suaves y progresivos.
+                                        </p>
+                                    </div>
 
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Depilación Pierna</h1>
-                                    <p>Resultados desde la primera sesión</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Rostro Completo</h1>
-                                    <p>Tratamiento facial delicado</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Barba y Rostro</h1>
-                                    <p>Perfilado profesional</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Empeine y Dedos</h1>
-                                    <p>Acabado perfecto</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Otras Areas</h1>
-                                    <p>Tratamiento a medida</p>
-                                    <br/>
-                                </div>
-
-                            </div>
+                                    {/* bottom accent */}
+                                    <div className="h-1 w-full bg-gradient-to-r from-purple-300 via-indigo-500 to-cyan-500 opacity-80" />
+                                </article>
+                            ))}
 
                         </div>
 
@@ -488,84 +484,46 @@ export  default function ServicioPage(){
 
                         <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 p-4'>
 
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
+                            {publicaciones.map((publicacion) => (
+                                <article
+                                    key={publicacion.id_publicaciones}
+                                    className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-slate-900/10"
+                                >
+                                    {/* subtle glow */}
+                                    <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                        <div className="absolute -top-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
+                                        <div className="absolute -bottom-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
+                                    </div>
 
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Depilación Axila</h1>
-                                    <p>Tratamiento rápido y efectivo</p>
-                                    <br/>
-                                </div>
-                            </div>
+                                    {/* image */}
+                                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-50 to-white">
+                                        <img
+                                            src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${publicacion.imagenPublicaciones_primera}/card`}
+                                            alt={publicacion.descripcionPublicaciones || 'Proceso'}
+                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                    </div>
 
+                                    {/* content */}
+                                    <div className="relative flex flex-col gap-2 p-5">
+                                        <h3 className="text-center text-base font-extrabold tracking-tight text-slate-900 line-clamp-2">
+                                            {publicacion.descripcionPublicaciones}
+                                        </h3>
 
+                                        <div className="mx-auto h-px w-16 bg-gradient-to-r from-purple-300 via-indigo-400 to-cyan-600 opacity-70" />
 
+                                        <p className="text-center text-sm leading-relaxed text-slate-500">
+                                            Tecnología triláser para resultados suaves y progresivos.
+                                        </p>
+                                    </div>
 
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Depilación Pierna</h1>
-                                    <p>Resultados desde la primera sesión</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Rostro Completo</h1>
-                                    <p>Tratamiento facial delicado</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Barba y Rostro</h1>
-                                    <p>Perfilado profesional</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Empeine y Dedos</h1>
-                                    <p>Acabado perfecto</p>
-                                    <br/>
-                                </div>
-
-                            </div>
-
-
-
-                            <div className='flex flex-col items-center justify-center border rounded-2xl shadow-lg'>
-                                <Image src={'/prueba1.jpg'} alt={'prueba'} width={400} height={400} />
-
-                                <div className=' flex flex-col items-center justify-center mt-5'>
-                                    <h1 className='text-gray-700 font-bold'>Otras Areas</h1>
-                                    <p>Tratamiento a medida</p>
-                                    <br/>
-                                </div>
-
-                            </div>
+                                    {/* bottom accent */}
+                                    <div className="h-1 w-full bg-gradient-to-r from-purple-300 via-indigo-500 to-cyan-500 opacity-80" />
+                                </article>
+                            ))}
 
                         </div>
 
