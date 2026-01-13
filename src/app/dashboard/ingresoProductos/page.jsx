@@ -36,6 +36,8 @@ export default function Dashboard() {
     const [categoriaProducto, setcategoriaProducto] = useState("");
     const [categoriaProductoSeleccion, setcategoriaProductoSeleccion] = useState("");
     const [tituloSimilar, settituloSimilar] = useState("");
+    const [listaSubcategorias, setlistaSubcategorias] = useState([]);
+    const [subcategorias, setsubcategorias] = useState('0');
 
     // Previews locales para mostrar las imágenes seleccionadas (no mostrar URLs en inputs)
     const [preview1, setPreview1] = useState("");
@@ -161,7 +163,31 @@ export default function Dashboard() {
     }
 
 
+async function listarSubcategorias(id_categoriaProducto) {
+        try {
+            const res = await fetch(`${API}/subcategorias/seleccionarPorCategoria`, {
+                method: "POST",
+                headers: {Accept: "application/json",
+                "Content-Type": "application/json"},
+                body: JSON.stringify({id_categoriaProducto}),
+                mode: "cors"
+            })
 
+            if(!res.ok){
+                return;
+            }
+
+                const dataSubcategoria = await res.json();
+                setlistaSubcategorias(dataSubcategoria);
+
+        }catch (e) {
+            return toast.error('No ha sido posible listar las subcategorias contacte  a soporte de NativeCode: ERROR :' + e);
+        }
+}
+
+useEffect(() => {
+    listarSubcategorias(categoriaProducto)
+},[categoriaProducto])
 
 
     //FUNCION PARA BUSCAR POR SIMILITUDES DE NOMBRE DE TITULO DE PRODUCTOS
@@ -360,28 +386,30 @@ export default function Dashboard() {
 
 
     //FUNCION PARA ACTUALIZAR PRODUCTO
-    async function actualizarProducto(tituloProducto, descripcionProducto, valorProducto,categoriaProducto, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta, id_producto) {
+    async function actualizarProducto(tituloProducto, descripcionProducto, valorProducto,categoriaProducto,subcategorias, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta, id_producto) {
         try {
             if (
                 !tituloProducto ||
                 !descripcionProducto ||
                 !valorProducto ||
                 !categoriaProducto ||
+                !subcategorias ||
                 !imagenProducto||
                 !id_producto
             ) {
                 return toast.error("Faltan Datos Obligatorios ❌ ");
             }
-
-
             const res = await fetch(`${API}/producto/actualizarProducto`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { Accept: "application/json",
+                    'Content-Type': 'application/json' },
+                mode: "cors",
                 body: JSON.stringify({
                     tituloProducto,
                     descripcionProducto,
                     valorProducto,
                     categoriaProducto,
+                    subcategoria : subcategorias,
                     imagenProducto,
                     imagenProductoSegunda,
                     imagenProductoTercera,
@@ -389,16 +417,13 @@ export default function Dashboard() {
                     id_producto })
             })
 
-            const resultado = await res.json();
-
             if (!res.ok) {
-                console.error("problema al actualizar producto", resultado)
-                return toast.error("No fue posible actualizar el producto contacte a soporte informatico de NativeCode.cl");
-
+                return toast.error("No fue posible actualizar el producto contacte a soporte informatico de NativeCode.cl REEWSSSK");
             }
 
-            if (resultado.message === "ok") {
+            const resultado = await res.json();
 
+            if (resultado.message === "ok") {
                 return toast.success("Producto actualizado correctamente ✅");
             }
 
@@ -470,6 +495,7 @@ export default function Dashboard() {
                 descripcionProducto,
                 valorProducto,
                 categoriaProducto,
+                subcategorias,
                 finalImage1,
                 finalImage2,
                 finalImage3,
@@ -680,6 +706,12 @@ export default function Dashboard() {
                 return;
             }
 
+
+            if (!subcategorias) {
+                toast.error("Debe seleccionar una subcategoria");
+                return;
+            }
+
             setSubiendo(true);
 
             // Subidas a Cloudflare según existan archivos
@@ -752,7 +784,8 @@ export default function Dashboard() {
                 imagenProductoSegunda: finalImageUrl2 || "",
                 imagenProductoTercera: finalImageUrl3 || "",
                 imagenProductoCuarta: finalImageUrl4 || "",
-                categoriaProducto: categoriaProducto
+                categoriaProducto: categoriaProducto,
+                subcategoria : subcategorias
             };
 
             let res, out;
@@ -817,6 +850,63 @@ export default function Dashboard() {
                                 insertarProducto();
                             }}
                         >
+
+
+
+
+
+
+
+                            {/* Categoría del producto */}
+                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
+                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
+                                    Categoria Producto
+                                </label>
+                                <select
+                                    value={categoriaProducto}
+                                    onChange={(e) => setcategoriaProducto(e.target.value)}
+                                    className="text-sm w-full mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 cursor-pointer transition duration-150 ease-in-out"
+                                >
+                                    <option value="" disabled>Seleccione</option>
+                                    {listadoCategorias.map((categoria) => (
+                                        <option
+                                            key={categoria.id_categoriaProducto}
+                                            value={categoria.id_categoriaProducto}
+                                        >
+                                            {categoria.descripcionCategoria}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+
+
+                            {/* SubCategoría del producto */}
+                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
+                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
+                                    Subcategoria Producto
+                                </label>
+                                <select
+                                    value={subcategorias}
+                                    onChange={(e) => setsubcategorias(e.target.value)}
+                                    className="text-sm w-full mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 cursor-pointer transition duration-150 ease-in-out"
+                                >
+                                    <option value="" disabled>Seleccione</option>
+                                    {listaSubcategorias.map((subcategoria) => (
+                                        <option
+                                            key={subcategoria.id_subcategoria}
+                                            value={subcategoria.id_subcategoria}
+                                        >
+                                            {subcategoria.descripcionCategoria}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+
+
                             {/* Título del producto */}
                             <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
                                 {/* Indicador visual lateral dinámico */}
@@ -861,28 +951,6 @@ export default function Dashboard() {
                                 />
                             </div>
 
-                            {/* Categoría del producto */}
-                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
-                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
-                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
-                                    Categoria Producto
-                                </label>
-                                <select
-                                    value={categoriaProducto}
-                                    onChange={(e) => setcategoriaProducto(e.target.value)}
-                                    className="text-sm w-full mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 cursor-pointer transition duration-150 ease-in-out"
-                                >
-                                    <option value="" disabled>Seleccione</option>
-                                    {listadoCategorias.map((categoria) => (
-                                        <option
-                                            key={categoria.id_categoriaProducto}
-                                            value={categoria.id_categoriaProducto}
-                                        >
-                                            {categoria.descripcionCategoria}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
 
                             {/* Imagen Principal (preview en vez de mostrar URL) */}
                             <label className="text-sm font-semibold">Imagen Principal</label>
