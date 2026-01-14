@@ -2,6 +2,7 @@
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AnimatedLayout } from "@/Componentes/AnimatedLayout";
+import AgendaProvider from "@/ContextosGlobales/AgendaContext";
 
 // Metadata optimizada SEO para Silueta Chic – Centro de Depilación Triláser en Ñuñoa, Santiago
 export const metadataBase = new URL(
@@ -84,7 +85,11 @@ export default function RootLayout({ children }) {
             <html lang="es">
             <body className="min-h-screen bg-white">
             {/* Aquí usamos el componente cliente que ya maneja Motion */}
-            <AnimatedLayout>{children}</AnimatedLayout>
+            <AnimatedLayout>
+                <AgendaProvider>
+                    {children}
+                </AgendaProvider>
+            </AnimatedLayout>
             </body>
             </html>
         </ClerkProvider>

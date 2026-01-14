@@ -203,7 +203,7 @@ export default function NavbarDashboard() {
 
               <Button
               component={Link}
-              href="/dashboard"
+              href="/dashboard/calendario"
               color="inherit"
               disableRipple
               sx={{
@@ -240,6 +240,51 @@ export default function NavbarDashboard() {
             >
              Agenda
             </Button>
+
+
+
+
+              <Button
+                  component={Link}
+                  href="/dashboard/agendaCitas"
+                  color="inherit"
+                  disableRipple
+                  sx={{
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      textTransform: 'none',
+                      fontWeight: 500,
+                      fontSize: '0.9rem',
+                      borderRadius: '10px',
+                      px: 3,
+                      py: 1,
+                      color: '#475569',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: 0,
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: 0,
+                          height: '2px',
+                          background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
+                          transition: 'width 0.3s ease'
+                      },
+                      '&:hover': {
+                          bgcolor: 'rgba(59, 130, 246, 0.08)',
+                          color: '#3B82F6',
+                          '&::before': {
+                              width: '80%'
+                          }
+                      }
+                  }}
+              >
+                  Clientes Agendados
+              </Button>
+
+
 
               <Button
                   component={Link}
@@ -461,6 +506,52 @@ export default function NavbarDashboard() {
                   Categorías
                 </Link>
               </MenuItem>
+
+
+
+
+                <MenuItem
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                        fontFamily: 'Inter, system-ui, sans-serif',
+                        fontSize: '0.9rem',
+                        py: 1.5,
+                        px: 3,
+                        color: '#475569',
+                        '&:hover': {
+                            bgcolor: 'rgba(59, 130, 246, 0.08)',
+                            color: '#3B82F6'
+                        }
+                    }}
+                >
+                    <Link href="/dashboard/calendario" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+                       Agenda
+                    </Link>
+                </MenuItem>
+
+
+
+                <MenuItem
+                    onClick={handleCloseNavMenu}
+                    sx={{
+                        fontFamily: 'Inter, system-ui, sans-serif',
+                        fontSize: '0.9rem',
+                        py: 1.5,
+                        px: 3,
+                        color: '#475569',
+                        '&:hover': {
+                            bgcolor: 'rgba(59, 130, 246, 0.08)',
+                            color: '#3B82F6'
+                        }
+                    }}
+                >
+                    <Link href="/dashboard/agendaCitas" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
+                        Clientes Agendados
+                    </Link>
+                </MenuItem>
+
+
+
               <MenuItem
                 onClick={handleCloseNavMenu}
                 sx={{

@@ -25,35 +25,53 @@ function PedidoDetalleInner(){
     const [asunto, setAsunto] = useState("");
     const [email, setEmail] = useState("");
     const [mensaje, setMensaje] = useState("");
+    const [isEnviandoSeguimiento, setIsEnviandoSeguimiento] = useState(false);
 
 
     async function seguimientoCliente(asunto,email,mensaje){
         try {
             if (!asunto || !email || !mensaje) {
-                return toast.error('Para hacer el seguimiento debe llenar todos los campos de texto');
+                toast.error('Para hacer el seguimiento debe llenar todos los campos de texto');
+                return false;
             }
 
             const res = await fetch(`${API}/correo/seguimiento`, {
                 method: "POST",
-                headers: {Accept: "application/json",
-                    "Content-Type": "application/json"},
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({asunto,email,mensaje}),
                 cache: "no-cache"
             })
+
             if(!res.ok){
-                return toast.error('El correo del cliente NO es valido. No existe.');
+                return false;
             }
 
             const respuestaBackend = await res.json();
-
-            if(respuestaBackend.message === true){
-                return toast.success("Se ha realziado seguimiento correctamente. Se ha enviado mensaje de seguimiento al correo.")
-            }else{
-                return toast.error('El correo del cliente NO es valido. No existe.');
-            }
+            return respuestaBackend.message === true;
 
         }catch(error){
-            return toast.error('Ha ocurrido un error porfavor contacte a soporte de NativeCode');
+            return false;
+        }
+    }
+
+    async function handleEnviarSeguimiento() {
+        if (isEnviandoSeguimiento) return;
+        try {
+            setIsEnviandoSeguimiento(true);
+
+            const ok = await seguimientoCliente(asunto, email, mensaje);
+
+            if (ok) {
+                toast.success("Correo de seguimiento enviado correctamente");
+            } else {
+                toast.error("No se pudo enviar el correo de seguimiento");
+            }
+
+        } finally {
+            setIsEnviandoSeguimiento(false);
         }
     }
 
@@ -338,9 +356,10 @@ function PedidoDetalleInner(){
 
                             <div className="flex items-center gap-3 pt-2">
                                 <ShadcnButton
-                                    funcion={()=> seguimientoCliente(asunto,email,mensaje)}
-                                    className="text-xs bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
-                                    nombre="Enviar Seguimiento"
+                                    funcion={handleEnviarSeguimiento}
+                                    disabled={isEnviandoSeguimiento}
+                                    className={`text-xs bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2 ${isEnviandoSeguimiento ? "opacity-60 pointer-events-none" : ""}`}
+                                    nombre={isEnviandoSeguimiento ? "Enviando..." : "Enviar Seguimiento"}
                                 />
                             </div>
                         </div>
@@ -530,9 +549,10 @@ function PedidoDetalleInner(){
 
                             <div className="flex items-center gap-3 pt-2">
                                 <ShadcnButton
-                                    funcion={()=> seguimientoCliente(asunto,email,mensaje)}
-                                    className="text-xs bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
-                                    nombre="Enviar Seguimiento"
+                                    funcion={handleEnviarSeguimiento}
+                                    disabled={isEnviandoSeguimiento}
+                                    className={`text-xs bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2 ${isEnviandoSeguimiento ? "opacity-60 pointer-events-none" : ""}`}
+                                    nombre={isEnviandoSeguimiento ? "Enviando..." : "Enviar Seguimiento"}
                                 />
                             </div>
                         </div>

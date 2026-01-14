@@ -47,7 +47,7 @@ export function ShadcnNavBar() {
           {/* Actions */}
           <div className="flex items-center gap-3">
             <Link
-              href="#"
+              href="/AgendaProceso"
               className="hidden sm:flex items-center gap-2 rounded-full border border-gray-300 px-4 py-2 text-sm font-bold text-gray-900 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition"
             >
               <span className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 text-white flex items-center justify-center">
@@ -88,6 +88,7 @@ export function ShadcnNavBar() {
         >
           <div className="px-4 py-6 flex flex-col gap-6">
             {[  {titulo : 'Inicio' , href : '/'},
+                {titulo : 'Agenda tu Hora' , href : '/AgendaProceso'},
                 {titulo : 'Comprar' , href : '/catalogo'},
                 {titulo : 'Servicios' , href : '/servicios'},
                 {titulo : 'Dudas' , href : '/dudas'},
