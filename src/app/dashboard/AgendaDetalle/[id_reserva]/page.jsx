@@ -9,6 +9,7 @@ import ShadcnInput from "@/Componentes/shadcnInput2";
 import formatearFecha from "@/FuncionesTranversales/funcionesTranversales";
 
 import * as React from "react"
+
 import {
     Select,
     SelectContent,
@@ -20,7 +21,7 @@ import {
 } from "@/components/ui/select"
 
 import {Textarea} from "@/components/ui/textarea";
-import ShadcnButton2 from "@/componentes/shadcnButton2";
+import ShadcnButton2 from "@/Componentes/shadcnButton2";
 
 export default function AgendaDetalle() {
     const API = process.env.NEXT_PUBLIC_API_URL;
