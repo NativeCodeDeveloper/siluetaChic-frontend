@@ -242,8 +242,10 @@ export default function AgendaDetalle() {
                             <div key={data.id_reserva} className="flex flex-col gap-2 list-none">
                                 <h2 className="text-lg sm:text-xl font-bold text-sky-900 tracking-tight">Información de
                                     la reserva</h2>
+
                                 <li><span className="font-semibold text-sky-900">Nombre: </span> {data.nombrePaciente}
                                 </li>
+
                                 <li><span
                                     className="font-semibold text-sky-900">Apellido: </span>{data.apellidoPaciente}
                                 </li>
@@ -262,6 +264,8 @@ export default function AgendaDetalle() {
                     </div>
 
 
+
+
                     <div className="space-y-5 rounded-2xl border border-gray-200/70 bg-white p-6 shadow-sm">
                         <div>
                             <label htmlFor="tituloCorreo"
@@ -277,6 +281,8 @@ export default function AgendaDetalle() {
                         </div>
 
 
+
+
                         <div>
                             <label htmlFor="mensajeCorreo"
                                    className="block text-sm font-semibold text-sky-800 mb-2">
@@ -290,6 +296,7 @@ export default function AgendaDetalle() {
                                 className="w-full text-sm min-h-[180px] resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 leading-relaxed shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-300"
                             />
                         </div>
+
 
                         <div className="flex items-center gap-3 pt-3">
                             <ShadcnButton
@@ -310,6 +317,7 @@ export default function AgendaDetalle() {
                             className="w-full sm:w-[340px] bg-white border border-gray-200 text-slate-900 shadow-sm rounded-xl focus:ring-2 focus:ring-sky-300 focus:border-sky-300">
                             <SelectValue placeholder="Selecciona un estado para la cita"/>
                         </SelectTrigger>
+
                         <SelectContent
                             className="z-50 bg-white text-slate-900 border border-gray-200 shadow-xl rounded-2xl">
                             <SelectGroup>

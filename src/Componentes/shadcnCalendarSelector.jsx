@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import {CalendarIcon} from "lucide-react"
+import { es } from "date-fns/locale"
 
 import {Button} from "@/components/ui/button"
 import {Calendar} from "@/components/ui/calendar"
@@ -14,11 +15,10 @@ import {
 } from "@/components/ui/popover"
 
 function formatDate(date) {
-    if (!date) {
-        return ""
-    }
+    if (!date) return ""
 
-    return date.toLocaleDateString("en-US", {
+    // Formato legible en español (ej: "15 de enero de 2026")
+    return date.toLocaleDateString("es-CL", {
         day: "2-digit",
         month: "long",
         year: "numeric",
@@ -60,22 +60,10 @@ export function Calendar28({nombre, onChange}) {
             <div className="relative flex gap-2">
                 <Input
                     id="date"
+                    readOnly
                     value={value}
-                    placeholder="June 01, 2025"
+                    placeholder="01 de junio de 2025"
                     className="bg-white text-slate-900 border border-gray-200 rounded-md pr-10 py-2 shadow-sm"
-                    onChange={(e) => {
-                        const nextValue = e.target.value
-                        setValue(nextValue)
-
-                        // Intentamos interpretar lo que escribió el usuario.
-                        // Si es una fecha válida, sincronizamos date y month.
-                        const parsed = new Date(nextValue)
-                        if (isValidDate(parsed)) {
-                            setDate(parsed)
-                            setMonth(parsed)
-                            onChange?.(formatISODateOnly(parsed))
-                        }
-                    }}
                     onKeyDown={(e) => {
                         if (e.key === "ArrowDown") {
                             e.preventDefault()
@@ -104,6 +92,7 @@ export function Calendar28({nombre, onChange}) {
                             mode="single"
                             selected={date}
                             captionLayout="dropdown"
+                            locale={es}
                             month={month}
                             onMonthChange={(nextMonth) => {
                                 // Evita setState innecesario (previene loops en algunos casos con DayPicker)

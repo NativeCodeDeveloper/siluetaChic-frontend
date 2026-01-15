@@ -158,6 +158,7 @@ totalPagado
     // Envía los datos al backend que crea la preferencia de Mercado Pago
     const handleSubmit = async (e) => {
         e.preventDefault(); // evita que la página se recargue
+        if (loading) return; // evita doble submit
         setLoading(true);
         setError('');
 
@@ -188,6 +189,7 @@ totalPagado
             });
 
             if (!res.ok) {
+                setLoading(false);
                 return toast.error("No se puede procesar el pago porfavor evalue otro medio de pago contactandonos por WhatsApp")
             }
 
@@ -198,6 +200,7 @@ totalPagado
 
             const checkoutUrl = data.init_point;
             if (!checkoutUrl) {
+                setLoading(false);
                 return toast.error("No se puede procesar el pago porfavor evalue otro medio de pago contactandonos por WhatsApp")
             }
             // Redirigimos al usuario al Checkout Pro de Mercado Pago

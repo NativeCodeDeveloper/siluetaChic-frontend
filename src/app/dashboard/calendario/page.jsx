@@ -36,6 +36,8 @@ export default function Calendario() {
 
 
     const [events, setEvents] = useState([]);
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentView, setCurrentView] = useState("month");
 
 
     const [nombrePaciente, setNombrePaciente] = useState("");
@@ -395,52 +397,58 @@ export default function Calendario() {
 
     return (
         // Contenedor con altura fija para que el calendario se muestre correctamente
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 px-4 py-6 md:px-8">
+        <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 px-4 py-8 md:px-10">
             <ToasterClient/>
 
-            <div className="mx-auto w-full max-w-6xl">
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mb-5">Módulo de Agenda</h1>
+            <div className="mx-auto w-full max-w-7xl">
+                <div className="mb-6 flex flex-col gap-2">
+                  <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Módulo de Agenda</h1>
+                  <p className="text-sm text-slate-600">Gestiona reservas, revisa disponibilidad y actualiza datos en un solo lugar.</p>
+                </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    <div className="rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm p-5">
-                        <div className="space-y-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm p-5 ring-1 ring-black/5">
+                        <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">Nombre</label>
+                                <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Nombre</label>
                                 <ShadcnInput value={nombrePaciente ?? ""}
                                              onChange={(e) => setNombrePaciente(e.target.value)}/>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">Apellido</label>
+                                <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Apellido</label>
                                 <ShadcnInput
                                     value={apellidoPaciente ?? ""}
                                     onChange={(e) => setApellidoPaciente(e.target.value)}/>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">Rut</label>
+                                <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Rut</label>
                                 <ShadcnInput
                                     value={rut ?? ""}
                                     onChange={(e) => setRut(e.target.value)}/>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">Correo</label>
+                                <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Correo</label>
                                 <ShadcnInput value={email ?? ""}
                                              onChange={(e) => setEmail(e.target.value)}/>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">Teléfono</label>
+                                <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Teléfono</label>
                                 <ShadcnInput value={telefono ?? ""}
                                              onChange={(e) => setTelefono(e.target.value)}/>
                             </div>
                         </div>
                     </div>
 
-                    <div className="space-y-4">
-                        <div className="rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm p-5">
-                            <h2 className="text-sm font-semibold text-slate-900 mb-3">Inicio</h2>
+                    <div className="space-y-5">
+                        <div className="rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm p-5 ring-1 ring-black/5">
+                            <div className="mb-3 flex items-center justify-between">
+                              <h2 className="text-sm font-semibold text-slate-900">Inicio</h2>
+                              <span className="text-xs text-slate-500">Selecciona fecha y hora</span>
+                            </div>
                             <div className="flex flex-col md:flex-row md:items-center md:gap-4">
 
                                 <div className="flex-1">
@@ -448,7 +456,7 @@ export default function Calendario() {
                                 </div>
 
                                 <div
-                                    className="mt-3 md:mt-0 bg-slate-50/70 border border-slate-200 rounded-xl p-3 w-full md:w-48">
+                                    className="mt-3 md:mt-0 bg-slate-50/70 border border-slate-200 rounded-xl p-3 w-full md:w-52 ring-1 ring-black/5">
                                     <div className="text-xs text-slate-500">Fecha</div>
                                     <div className="text-sm font-medium text-slate-800">{fechaInicio || "--"}</div>
                                     <div className="text-xs text-slate-500 mt-2">Hora</div>
@@ -458,8 +466,11 @@ export default function Calendario() {
                             </div>
                         </div>
 
-                        <div className="rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm p-5">
-                            <h2 className="text-sm font-semibold text-slate-900 mb-3">Final</h2>
+                        <div className="rounded-2xl border border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm p-5 ring-1 ring-black/5">
+                            <div className="mb-3 flex items-center justify-between">
+                              <h2 className="text-sm font-semibold text-slate-900">Final</h2>
+                              <span className="text-xs text-slate-500">Debe ser el mismo día</span>
+                            </div>
                             <div className="flex flex-col md:flex-row md:items-center md:gap-4">
 
                                 <div className="flex-1">
@@ -467,7 +478,7 @@ export default function Calendario() {
                                 </div>
 
                                 <div
-                                    className="mt-3 md:mt-0 bg-slate-50/70 border border-slate-200 rounded-xl p-3 w-full md:w-48">
+                                    className="mt-3 md:mt-0 bg-slate-50/70 border border-slate-200 rounded-xl p-3 w-full md:w-52 ring-1 ring-black/5">
                                     <div className="text-xs text-slate-500">Fecha</div>
                                     <div
                                         className="text-sm font-medium text-slate-800">{fechaFinalizacion || "--"}</div>
@@ -479,20 +490,20 @@ export default function Calendario() {
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center pt-1">
                             <ShadcnButton2
                                 funcion={() => insertarNuevaReserva(nombrePaciente, apellidoPaciente, rut, telefono, email, fechaInicio, horaInicio, fechaFinalizacion, horaFinalizacion)}
-                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 shadow-sm"
+                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-300"
                                 nombre={"Agregar"}></ShadcnButton2>
 
                             <ShadcnButton2
                                 funcion={() => actualizarInformacionReserva(nombrePaciente, apellidoPaciente, rut, telefono, email, fechaInicio, horaInicio, fechaFinalizacion, horaFinalizacion, estadoReserva, id_reserva)}
-                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 shadow-sm"
+                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300"
                                 nombre={"Actualizar"}></ShadcnButton2>
 
                             <ShadcnButton2
                                 funcion={() => limpiarData()}
-                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-slate-900 text-white hover:bg-slate-800 shadow-sm"
+                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-slate-900 text-white hover:bg-slate-800 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-300"
                                 nombre={"Limpiar"}></ShadcnButton2>
 
                         </div>
@@ -500,8 +511,18 @@ export default function Calendario() {
                     </div>
                 </div>
 
-                <div className="mt-8">
-                    <div className="bg-white shadow-lg rounded-lg p-6 h-[700px]">
+                <div className="mt-10">
+                    <div className="bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl border border-slate-200 ring-1 ring-black/5 overflow-hidden">
+                      <div className="px-6 py-4 border-b border-slate-200 bg-white">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                          <div>
+                            <h3 className="text-sm font-semibold text-slate-900">Calendario de Reservas</h3>
+                            <p className="text-xs text-slate-500">Navega por mes/semana/día y selecciona una reserva para ver su detalle.</p>
+                          </div>
+                          <div className="text-xs text-slate-500">Vista: <span className="font-medium text-slate-700">{currentView}</span></div>
+                        </div>
+                      </div>
+                      <div className="p-6 h-[700px]">
                         <Calendar
                             // Pasamos el localizador configurado para manejar fechas y formatos
                             localizer={localizer}
@@ -521,8 +542,12 @@ export default function Calendario() {
                             // Mensajes personalizados para la UI del calendario
                             messages={messages}
                             culture="es"
+                            date={currentDate}
+                            onNavigate={(nextDate) => setCurrentDate(nextDate)}
+                            view={currentView}
+                            onView={(nextView) => setCurrentView(nextView)}
+                            defaultView="month"
                             style={{height: "100%"}}
-
 
                             // Permite seleccionar rangos de tiempo en el calendario
                             selectable
@@ -571,12 +596,12 @@ export default function Calendario() {
                             }}
                         />
                         {/* Leyenda / ayuda */}
-                        <div className="flex items-center gap-4 text-sm text-slate-600 mt-10">
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600 mt-6">
                             <span className="inline-block w-3 h-3 rounded-sm bg-sky-600" aria-hidden="true"/>
                             <span>Reserva</span>
-                            <span className="ml-4 text-xs italic">Pasa el cursor sobre una reserva para ver el nombre completo</span>
-                            <br/>
+                            <span className="text-xs italic text-slate-500">Pasa el cursor sobre una reserva para ver el nombre completo</span>
                         </div>
+                      </div>
                     </div>
                 </div>
 

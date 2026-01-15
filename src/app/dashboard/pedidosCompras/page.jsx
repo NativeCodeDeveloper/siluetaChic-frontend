@@ -224,7 +224,7 @@ export default function PedidosCompra() {
                     <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-100 bg-gradient-to-r from-indigo-50 via-white to-purple-50 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
                         <div className="w-full sm:max-w-xl">
                             <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">
-                                Dashboard · Ecommerce Lite
+                                Dashboard · Ecommerce Pro
                             </p>
                             <h1 className="mt-2 text-2xl font-semibold text-gray-900 sm:text-3xl">
                                 Gestión de Pedidos

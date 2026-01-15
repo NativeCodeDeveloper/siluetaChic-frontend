@@ -837,12 +837,12 @@ useEffect(() => {
     return (
         <div>
             <ToasterClient/>
-            <h1 className="max-w-7xl mx-auto px-6 mt-10 text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 bg-clip-text text-transparent">Gestión de Productos</h1>
-            <div className="max-w-7xl mx-auto px-6 py-10">
+            <h1 className="max-w-7xl mx-auto px-4 md:px-6 mt-6 text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 bg-clip-text text-transparent">Gestión de Productos</h1>
+            <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
 
 
                 {/**CONTENEDOR PARTE SUPERIOR */}
-                <div className="rounded-2xl bg-white/70 backdrop-blur ring-1 ring-gray-200 shadow-xl p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="rounded-2xl bg-white/70 backdrop-blur ring-1 ring-gray-200 shadow-lg p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <form
                             onSubmit={(e) => {
@@ -850,6 +850,7 @@ useEffect(() => {
                                 insertarProducto();
                             }}
                         >
+                            <div className="space-y-5">
 
 
 
@@ -858,15 +859,15 @@ useEffect(() => {
 
 
                             {/* Categoría del producto */}
-                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
-                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
-                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
+                            <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                                <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
                                     Categoria Producto
                                 </label>
                                 <select
                                     value={categoriaProducto}
                                     onChange={(e) => setcategoriaProducto(e.target.value)}
-                                    className="text-sm w-full mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 cursor-pointer transition duration-150 ease-in-out"
+                                    className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 hover:border-blue-300 cursor-pointer transition"
                                 >
                                     <option value="" disabled>Seleccione</option>
                                     {listadoCategorias.map((categoria) => (
@@ -883,15 +884,15 @@ useEffect(() => {
 
 
                             {/* SubCategoría del producto */}
-                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
-                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
-                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
+                            <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                                <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
                                     Subcategoria Producto
                                 </label>
                                 <select
                                     value={subcategorias}
                                     onChange={(e) => setsubcategorias(e.target.value)}
-                                    className="text-sm w-full mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 hover:border-blue-400 cursor-pointer transition duration-150 ease-in-out"
+                                    className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 hover:border-blue-300 cursor-pointer transition"
                                 >
                                     <option value="" disabled>Seleccione</option>
                                     {listaSubcategorias.map((subcategoria) => (
@@ -908,37 +909,37 @@ useEffect(() => {
 
 
                             {/* Título del producto */}
-                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
+                            <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
                                 {/* Indicador visual lateral dinámico */}
-                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
-                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
+                                <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
                                     Título
                                 </label>
                                 <input
                                     type="text"
                                     value={tituloProducto}
                                     onChange={(e) => settituloProducto(e.target.value)}
-                                    className="text-sm w-full mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                                    className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 transition"
                                 />
                             </div>
 
                             {/* Descripción del producto */}
-                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
-                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
-                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
+                            <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                                <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
                                     Descripción
                                 </label>
                                 <textarea
                                     value={descripcionProducto}
                                     onChange={(e) => setdescripcionProducto(e.target.value)}
-                                    className="text-sm w-full h-50 mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                                    className="text-sm w-full min-h-[104px] mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 transition"
                                 ></textarea>
                             </div>
 
                             {/* Valor del producto */}
-                            <div className="relative group group-focus-within:scale-[1.02] transition-transform duration-200 mb-6">
-                                <span className="absolute left-0 top-0 h-full w-1 rounded bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
-                                <label className="pl-3 text-sm font-semibold group-focus-within:text-blue-600 transition-colors">
+                            <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                                <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
                                     Valor Producto
                                 </label>
                                 <input
@@ -947,122 +948,137 @@ useEffect(() => {
                                     onChange={(e) => setvalorProducto(e.target.value)}
                                     name="valorProductoe"
                                     id="valorProductoe"
-                                    className="text-sm w-full mt-1 rounded-xl border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                                    className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 transition"
                                 />
                             </div>
 
+                            {/* Imágenes del producto */}
+                            <div className="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <h3 className="text-sm font-semibold text-slate-900">Imágenes del producto</h3>
+                                  <p className="text-xs text-slate-500">Sube hasta 4 imágenes. Máx. 1600px por lado.</p>
+                                </div>
+                              </div>
 
-                            {/* Imagen Principal (preview en vez de mostrar URL) */}
-                            <label className="text-sm font-semibold">Imagen Principal</label>
-                            <div className="mt-2">
-                                {preview1 ? (
-                                    <img src={preview1} alt="Imagen principal" className="w-full h-48 object-cover rounded-lg ring-1 ring-gray-200" />
-                                ) : (
-                                    <div className="w-full h-48 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 ring-1 ring-gray-200">Sin imagen</div>
-                                )}
+                              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {/* Imagen 1 */}
+                                <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[11px] uppercase tracking-wide font-semibold text-slate-600">Imagen principal</span>
+                                    <span className="text-[11px] text-slate-400">#1</span>
+                                  </div>
+                                  <div className="mt-2">
+                                    {preview1 ? (
+                                      <img src={preview1} alt="Imagen principal" className="w-full h-40 object-cover rounded-xl ring-1 ring-slate-200" />
+                                    ) : (
+                                      <div className="w-full h-40 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-200">Sin imagen</div>
+                                    )}
+                                  </div>
+                                  <label htmlFor="file1" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 cursor-pointer transition">
+                                    Subir imagen
+                                  </label>
+                                  <input
+                                    id="file1"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleSelectImage(e, setFile)}
+                                    className="hidden"
+                                  />
+                                </div>
+
+                                {/* Imagen 2 */}
+                                <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[11px] uppercase tracking-wide font-semibold text-slate-600">Imagen 2</span>
+                                    <span className="text-[11px] text-slate-400">#2</span>
+                                  </div>
+                                  <div className="mt-2">
+                                    {preview2 ? (
+                                      <img src={preview2} alt="Imagen 2" className="w-full h-28 object-cover rounded-xl ring-1 ring-slate-200" />
+                                    ) : (
+                                      <div className="w-full h-28 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-200">Sin imagen</div>
+                                    )}
+                                  </div>
+                                  <label htmlFor="file2" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 cursor-pointer transition">
+                                    Subir imagen
+                                  </label>
+                                  <input
+                                    id="file2"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleSelectImage(e, setFile2)}
+                                    className="hidden"
+                                  />
+                                </div>
+
+                                {/* Imagen 3 */}
+                                <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[11px] uppercase tracking-wide font-semibold text-slate-600">Imagen 3</span>
+                                    <span className="text-[11px] text-slate-400">#3</span>
+                                  </div>
+                                  <div className="mt-2">
+                                    {preview3 ? (
+                                      <img src={preview3} alt="Imagen 3" className="w-full h-28 object-cover rounded-xl ring-1 ring-slate-200" />
+                                    ) : (
+                                      <div className="w-full h-28 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-200">Sin imagen</div>
+                                    )}
+                                  </div>
+                                  <label htmlFor="file3" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 cursor-pointer transition">
+                                    Subir imagen
+                                  </label>
+                                  <input
+                                    id="file3"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleSelectImage(e, setFile3)}
+                                    className="hidden"
+                                  />
+                                </div>
+
+                                {/* Imagen 4 */}
+                                <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[11px] uppercase tracking-wide font-semibold text-slate-600">Imagen 4</span>
+                                    <span className="text-[11px] text-slate-400">#4</span>
+                                  </div>
+                                  <div className="mt-2">
+                                    {preview4 ? (
+                                      <img src={preview4} alt="Imagen 4" className="w-full h-28 object-cover rounded-xl ring-1 ring-slate-200" />
+                                    ) : (
+                                      <div className="w-full h-28 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-200">Sin imagen</div>
+                                    )}
+                                  </div>
+                                  <label htmlFor="file4" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 cursor-pointer transition">
+                                    Subir imagen
+                                  </label>
+                                  <input
+                                    id="file4"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleSelectImage(e, setFile4)}
+                                    className="hidden"
+                                  />
+                                </div>
+                              </div>
                             </div>
-                            <br />
-
-                            {/* Imagen 2 (preview local/remote) */}
-                            <label className="text-sm font-semibold">Imagen 2</label>
-                            <div className="mt-2">
-                                {preview2 ? (
-                                    <img src={preview2} alt="Imagen 2" className="w-full h-36 object-cover rounded-lg ring-1 ring-gray-200" />
-                                ) : (
-                                    <div className="w-full h-36 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 ring-1 ring-gray-200">Sin imagen</div>
-                                )}
-                            </div>
-                            <br />
-
-                            {/* Imagen 3 (preview) */}
-                            <label className="text-sm font-semibold">Imagen 3</label>
-                            <div className="mt-2">
-                                {preview3 ? (
-                                    <img src={preview3} alt="Imagen 3" className="w-full h-36 object-cover rounded-lg ring-1 ring-gray-200" />
-                                ) : (
-                                    <div className="w-full h-36 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 ring-1 ring-gray-200">Sin imagen</div>
-                                )}
-                            </div>
-                            <br />
-
-                            {/* Imagen 4 (preview) */}
-                            <label className="text-sm font-semibold">Imagen 4</label>
-                            <div className="mt-2">
-                                {preview4 ? (
-                                    <img src={preview4} alt="Imagen 4" className="w-full h-36 object-cover rounded-lg ring-1 ring-gray-200" />
-                                ) : (
-                                    <div className="w-full h-36 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 ring-1 ring-gray-200">Sin imagen</div>
-                                )}
-                            </div>
-                            <br />
-
-                            <label htmlFor="file1" className="inline-flex w-full items-center justify-center mt-1 rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-3 font-medium text-sm text-blue-700 hover:bg-blue-100 cursor-pointer">
-                                Subir Imagen 1
-                            </label>
-                            <input
-                                id="file1"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleSelectImage(e, setFile)}
-                                className="hidden"
-                            />
-                            <br />
-                            <br />
-
-                            <label htmlFor="file2" className="inline-flex w-full items-center justify-center mt-1 rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-3 font-medium text-sm text-blue-700 hover:bg-blue-100 cursor-pointer">
-                                Subir Imagen 2
-                            </label>
-                            <input
-                                id="file2"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleSelectImage(e, setFile2)}
-                                className="hidden"
-                            />
-                            <br />
-                            <br />
-                            <label htmlFor="file3" className="inline-flex w-full items-center justify-center mt-1 rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-3 font-medium text-sm text-blue-700 hover:bg-blue-100 cursor-pointer">
-                                Subir Imagen 3
-                            </label>
-                            <input
-                                id="file3"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleSelectImage(e, setFile3)}
-                                className="hidden"
-                            />
-                            <br />
-                            <br />
-                            <label htmlFor="file4" className="inline-flex w-full items-center justify-center mt-1 rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-3 font-medium text-sm text-blue-700 hover:bg-blue-100 cursor-pointer">
-                                Subir Imagen 4
-                            </label>
-                            <input
-                                id="file4"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleSelectImage(e, setFile4)}
-                                className="hidden"
-                            />
-                            <br />
-                            <br />
 
                             <button
                                 type="submit"
                                 disabled={subiendo}
-                                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 font-semibold text-white shadow-sm hover:bg-blue-700 hover:shadow-md transition disabled:opacity-60"
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 hover:shadow-md transition focus:outline-none focus:ring-2 focus:ring-blue-500/30 disabled:opacity-60"
                             >
                                 {subiendo ? "Subiendo..." : "Subir Producto"}
                             </button>
 
-
-
                             {productoSeleccionado && (
-                                <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-2 w-full">
+                                <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
                                     <button
                                         onClick={() => handleActualizar()}
                                         type="button"
                                         disabled={subiendo}
-                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700 disabled:opacity-60"
+                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-green-700 disabled:opacity-60"
                                         aria-label="Actualizar producto seleccionado"
                                     >
                                         {subiendo ? 'Actualizando...' : 'Actualizar'}
@@ -1071,7 +1087,7 @@ useEffect(() => {
                                     <button
                                         type="button"
                                         onClick={() => marcarProductoNormal(productoSeleccionado.id_producto)}
-                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-slate-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-700"
+                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-slate-600 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-slate-700"
                                         aria-label="Marcar producto sin oferta"
                                     >
                                         Marcar Sin Oferta
@@ -1080,7 +1096,7 @@ useEffect(() => {
                                     <button
                                         type="button"
                                         onClick={() => marcarOfertaProductos(productoSeleccionado.id_producto)}
-                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-700"
+                                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-purple-600 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-purple-700"
                                         aria-label="Marcar producto como oferta"
                                     >
                                         Marcar Oferta
@@ -1089,20 +1105,19 @@ useEffect(() => {
                                     <button
                                         type="button"
                                         onClick={() => limpiarFormulario()}
-                                        className="w-full sm:w-auto mt-2 sm:mt-0 inline-flex items-center justify-center gap-2 rounded-lg bg-gray-400 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500"
+                                        className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gray-400 px-3 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-gray-500"
                                         aria-label="Limpiar formulario"
                                     >
                                         Limpiar
                                     </button>
                                 </div>
                             )}
-
-
+                            </div>
                         </form>
                     </div>
 
-                    <div className="rounded-2xl bg-gradient-to-b from-slate-50 to-white ring-1 ring-gray-200 shadow-lg p-6 flex flex-col items-center text-center min-h-[300px]">
-                        <h2 className="text-sm font-semibold text-gray-600">Imagenes del Producto seleccionado</h2>
+                    <div className="rounded-2xl bg-gradient-to-b from-slate-50 to-white ring-1 ring-gray-200 shadow-lg p-4 flex flex-col items-center text-center min-h-[240px]">
+                        <h2 className="text-[11px] font-semibold uppercase tracking-wide text-gray-600">Imágenes del producto seleccionado</h2>
                         {productoSeleccionado ? (
                             <div className="flex flex-col gap-4 w-full mt-4 items-center">
                                 {[
@@ -1130,7 +1145,7 @@ useEffect(() => {
 
 
                 {/*FILTRO SELECCION DE PRODUCTOS POR CATEGORIA*/}
-                <div className="w-full md:max-w-sm">
+                <div className="w-full md:max-w-sm mt-6">
                     <br/><br/>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Filtrar por categoría</label>
                     <div className="relative">
@@ -1159,7 +1174,7 @@ useEffect(() => {
 
                 {/* FORMULARIO PARA ENCONTRAR POR SIMILITUD DE NOMBRE EN CONSULTA A LA BASE DE DATOS*/}
                 <div className="w-full md:max-w-md">
-                    <div className="rounded-2xl border border-slate-200 bg-white/80 backdrop-blur p-4 md:p-5 shadow-sm">
+                    <div className="rounded-2xl border border-slate-200 bg-white/80 backdrop-blur p-4 shadow-sm">
                         <label className="block text-sm font-semibold text-slate-700">Buscar por similitud en nombre</label>
                         <p className="mt-1 text-xs text-slate-500">Encuentra productos con títulos parecidos. Escribe al menos 3 caracteres.</p>
                         <div className="mt-3 relative flex w-full">
@@ -1190,36 +1205,36 @@ useEffect(() => {
 
 
 
-                <div className="w-full mt-20 bg-gradient-to-br from-white to-sky-50 rounded-4xl bg-white shadow-xl ring-1 ring-gray-50 p-6">
-                    <Table>
+                <div className="w-full mt-10 bg-gradient-to-br from-white to-sky-50 rounded-3xl bg-white shadow-lg ring-1 ring-gray-100 p-4">
+                    <Table className="text-sm">
                         <TableCaption>Listado de Productos Ingresados</TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide ">Imagen Referencia</TableHead>
-                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide">Titulo</TableHead>
-                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide">Valor</TableHead>
-                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide"> </TableHead>
-                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide"> </TableHead>
+                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide text-xs py-2">Imagen Referencia</TableHead>
+                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide text-xs py-2">Titulo</TableHead>
+                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide text-xs py-2">Valor</TableHead>
+                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide text-xs py-2"> </TableHead>
+                                <TableHead className="text-center bg-gradient-to-r bg-sky-100 uppercase font-bold tracking-wide text-xs py-2"> </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {productos.map((producto) => (
                                 <TableRow key={producto.id_producto}>
-                                    <TableCell className="text-center mx-auto">
-                                        <img className="mx-auto" src={cfToSrc(producto.imagenProducto, VARIANT_MINI)} alt={"Imagen"} width={100} height={100}/>
+                                    <TableCell className="text-center mx-auto py-2">
+                                        <img className="mx-auto w-16 h-16 object-cover rounded-lg ring-1 ring-gray-200" src={cfToSrc(producto.imagenProducto, VARIANT_MINI)} alt={"Imagen"} width={100} height={100}/>
                                     </TableCell>
 
-                                    <TableCell className="text-center font-bold">{producto.tituloProducto}</TableCell>
-                                    <TableCell className="text-center font-bold text-green-600">$ {producto.valorProducto}</TableCell>
+                                    <TableCell className="text-center font-bold py-2">{producto.tituloProducto}</TableCell>
+                                    <TableCell className="text-center font-bold text-green-600 py-2">$ {producto.valorProducto}</TableCell>
 
 
-                                    <TableCell className="text-center">
-                                        <ShadcnButton className="bg-red-600" variant={"bg-red"} nombre={"Eliminar"} funcion={()=> eliminarProducto(producto.id_producto)}/>
+                                    <TableCell className="text-center py-2">
+                                        <ShadcnButton className="bg-red-600 h-8 px-3 text-xs rounded-lg" variant={"bg-red"} nombre={"Eliminar"} funcion={()=> eliminarProducto(producto.id_producto)}/>
                                     </TableCell>
 
 
-                                    <TableCell className="text-center">
-                                        <ShadcnButton className="bg-green-600" nombre={"Seleccionar"} funcion={()=> cargarProductoEspecifico(producto.id_producto)} />
+                                    <TableCell className="text-center py-2">
+                                        <ShadcnButton className="bg-green-600 h-8 px-3 text-xs rounded-lg" nombre={"Seleccionar"} funcion={()=> cargarProductoEspecifico(producto.id_producto)} />
                                     </TableCell>
 
                                 </TableRow>
