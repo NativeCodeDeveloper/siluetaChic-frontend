@@ -2,13 +2,13 @@
 import {useParams} from "next/navigation";
 import {useState, useEffect} from "react";
 import {toast} from "react-hot-toast";
-import ToasterClient from "@/componentes/ToasterClient";
+import ToasterClient from "@/Componentes/ToasterClient";
 import formatearFecha from "@/FuncionesTranversales/funcionesTranversales.js"
-import {ShadcnButton} from "@/componentes/shadcnButton";
+import {ShadcnButton} from "@/Componentes/shadcnButton";
 import {useRouter} from "next/navigation";
-import {ShadcnInput} from "@/componentes/shadcnInput";
-import {ShadcnSelect} from "@/componentes/shadcnSelect";
-import ShadcnDatePicker from "@/componentes/shadcnDatePicker";
+import {ShadcnInput} from "@/Componentes/shadcnInput";
+import {ShadcnSelect} from "@/Componentes/shadcnSelect";
+import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 import * as React from "react";
 
 

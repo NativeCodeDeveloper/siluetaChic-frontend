@@ -3,7 +3,7 @@ import {useMemo, useState, useEffect, useRef} from "react";
 import {Michroma} from "next/font/google";
 import {useAgenda} from "@/ContextosGlobales/AgendaContext";
 import Link from "next/link";
-import ShadcnButton2 from "@/componentes/shadcnButton2";
+import ShadcnButton2 from "@/Componentes/shadcnButton2";
 import {toast} from "react-hot-toast";
 import * as React from "react";
 

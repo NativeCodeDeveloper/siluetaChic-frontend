@@ -2,13 +2,12 @@
 
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
 import {useState, useEffect} from "react";
-import ToasterClients from "@/componentes/ToasterClient";
+import ToasterClients from "@/Componentes/ToasterClient";
 import ShadcnInput from "@/Componentes/shadcnInput2";
-import {ShadcnSelect} from "@/componentes/shadcnSelect";
 import ShadcnButton from "@/Componentes/shadcnButton2";
 import {toast} from "react-hot-toast";
 import * as React from "react"
-import ShadcnDatePicker from "@/componentes/shadcnDatePicker";
+import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 import {useRouter} from "next/navigation";
 import {BookOpenIcon} from "@heroicons/react/24/outline";
 import {ClipboardDocumentListIcon} from "@heroicons/react/24/outline";
@@ -232,6 +231,7 @@ export default function FichaClinica() {
 
     return (
         <div className='p-20'>
+            <ToasterClients/>
 
             {/*PANTALLAS CELULARES*/}
             <div className="block md:hidden">

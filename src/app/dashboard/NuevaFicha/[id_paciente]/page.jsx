@@ -3,13 +3,13 @@
 import {useParams} from "next/navigation";
 import {useState, useEffect} from "react";
 import {toast} from "react-hot-toast";
-import {ShadcnSelect} from "@/componentes/shadcnSelect";
+import {ShadcnSelect} from "@/Componentes/shadcnSelect";
 import {Textarea} from "@/components/ui/textarea";
-import ShadcnDatePicker from "@/componentes/shadcnDatePicker";
-import ToasterClient from "@/componentes/ToasterClient";
+import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
+import ToasterClient from "@/Componentes/ToasterClient";
 import Link from "next/link";
-import {ShadcnInput} from "@/componentes/shadcnInput";
-import {ShadcnButton} from "@/componentes/shadcnButton";
+import {ShadcnInput} from "@/Componentes/shadcnInput";
+import {ShadcnButton} from "@/Componentes/shadcnButton";
 
 // FUNCION PRINCIPAL DEL COMPONENTE
 export default function NuevaFicha() {
@@ -613,4 +613,3 @@ export default function NuevaFicha() {
         </div>
     );
 }
-

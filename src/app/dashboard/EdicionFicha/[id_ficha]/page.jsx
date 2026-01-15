@@ -1,13 +1,13 @@
 "use client"
 
-import {ShadcnSelect} from "@/componentes/shadcnSelect";
+import {ShadcnSelect} from "@/Componentes/shadcnSelect";
 import {Textarea} from "@/components/ui/textarea";
 import {useState, useEffect} from "react";
 import {useParams} from "next/navigation";
-import ToasterClient from "@/componentes/ToasterClient";
+import ToasterClient from "@/Componentes/ToasterClient";
 import toast from "react-hot-toast";
-import {ShadcnButton} from "@/componentes/shadcnButton";
-import {ShadcnInput} from "@/componentes/shadcnInput";
+import {ShadcnButton} from "@/Componentes/shadcnButton";
+import {ShadcnInput} from "@/Componentes/shadcnInput2";
 
 
 export default function EdicionFichaClinica() {

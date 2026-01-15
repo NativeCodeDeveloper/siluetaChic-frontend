@@ -7,10 +7,10 @@ import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
-import ShadcnInput from "@/componentes/shadcnInput2";
+import ShadcnInput from "@/Componentes/shadcnInput2";
 import ShadcnFechaHora from "@/Componentes/ShadcnFechaHora";
-import ShadcnButton2 from "@/componentes/shadcnButton2";
-import ToasterClient from "@/componentes/ToasterClient";
+import ShadcnButton2 from "@/Componentes/shadcnButton2";
+import ToasterClient from "@/Componentes/ToasterClient";
 import {toast} from "react-hot-toast";
 
 

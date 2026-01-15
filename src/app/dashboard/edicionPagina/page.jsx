@@ -11,6 +11,7 @@ export default function EdicionPagina() {
     const [MensajeContacto, setMensajeContacto] = useState("");
     const [MensajeTexto1, setMensajeTexto1] = useState("");
     const [MensajeTexto2, setMensajeTexto2] = useState("");
+
     // Estado para timestamp de última actualización
     const [ultimaActualizacion, setUltimaActualizacion] = useState("");
     // Estados de carga

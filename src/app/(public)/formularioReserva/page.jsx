@@ -1,9 +1,9 @@
 "use client"
 import {useEffect, useState} from "react";
 import ShadcnInput from "@/Componentes/shadcnInput2";
-import ShadcnButton2 from "@/componentes/shadcnButton2";
+import ShadcnButton2 from "@/Componentes/shadcnButton2";
 import {useAgenda} from "@/ContextosGlobales/AgendaContext";
-import ToasterClient from "@/componentes/ToasterClient";
+import ToasterClient from "@/Componentes/ToasterClient";
 import {toast} from "react-hot-toast";
 import {useRouter} from "next/navigation";
 

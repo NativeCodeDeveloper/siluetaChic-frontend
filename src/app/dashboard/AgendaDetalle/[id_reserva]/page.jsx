@@ -2,7 +2,7 @@
 import {useState, useEffect} from "react";
 import Link from "next/link";
 import {useParams} from "next/navigation";
-import ToasterClient from "@/componentes/ToasterClient";
+import ToasterClient from "@/Componentes/ToasterClient";
 import {toast} from "react-hot-toast";
 import ShadcnButton from "@/Componentes/shadcnButton2";
 import ShadcnInput from "@/Componentes/shadcnInput2";
