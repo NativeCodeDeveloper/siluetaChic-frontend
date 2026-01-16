@@ -10,7 +10,7 @@ import ToasterClient from "@/Componentes/ToasterClient";
 import Link from "next/link";
 import {ShadcnInput} from "@/Componentes/shadcnInput";
 import {ShadcnButton} from "@/Componentes/shadcnButton";
-
+import {useRouter} from "next/navigation";
 // FUNCION PRINCIPAL DEL COMPONENTE
 export default function NuevaFicha() {
 
@@ -19,6 +19,12 @@ export default function NuevaFicha() {
     const [dataPaciente, setDataPaciente] = useState([]);
     const API = process.env.NEXT_PUBLIC_API_URL;
 
+    const router = useRouter();
+
+
+    function retroceder(id_paciente) {
+        router.push(`/dashboard/FichasPacientes/${id_paciente}`);
+    }
 
     //ESTADOS REACT PARA LA INSERCION DE NUEVA FICHA
     const [tipoAtencion, setTipoAtencion] = useState("");
@@ -478,6 +484,19 @@ export default function NuevaFicha() {
                             </svg>
                             Ingresar Ficha
                         </button>
+
+
+
+                        {dataPaciente.map((ficha,index) => (
+                            <div key={index}>
+                                <ShadcnButton
+                                    funcion={()=> retroceder(ficha.id_paciente)}
+                                    nombre={"Retroceder"}/>
+                            </div>
+
+                        ))}
+
+
                     </div>
                 </div>
 

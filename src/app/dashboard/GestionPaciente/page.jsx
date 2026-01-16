@@ -11,6 +11,7 @@ import * as React from "react"
 import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 import {useRouter} from "next/navigation";
 import {UserIcon} from "@heroicons/react/24/outline";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 
 export default function GestionPaciente() {
@@ -185,7 +186,9 @@ export default function GestionPaciente() {
                     setTelefono("");
                     setCorreo("");
                     setDireccion("");
-                    setPais("");                    return toast.error("No se ha podido ingresar paciente. Intente mas tarde");
+                    setPais("");
+                    await  listarPacientes();
+                    return toast.success("Paciente ingresado correctamente.");
                 }
             }
         } catch (err) {
@@ -234,9 +237,17 @@ export default function GestionPaciente() {
         <div className="min-h-screen bg-gray-50 p-6 sm:p-10">
             <ToasterClients/>
             <div className="max-w-5xl mx-auto">
+                <div className='flex justify-end'>
+                    <InfoButton informacion={"Este módulo de la aplicación está diseñado para registrar el libro de ficha clínica de un paciente. Cuando un paciente acude por primera vez a una sesión o consulta, debe ser ingresado una única vez en este apartado. De esta forma, el sistema almacenará sus datos demográficos, permitiendo posteriormente comenzar con la documentación de sus fichas clínicas.\n" +
+                        "\n" +
+                        "Es importante considerar que la agenda de un paciente no está directamente relacionada con su ingreso en el sistema. Un paciente puede estar agendado para una atención, pero no contará con ficha clínica hasta que sea registrado previamente en esta sección.\n" +
+                        "\n" +
+                        "Para editar la información de un paciente, en la tabla inferior se debe seleccionar el ícono de la persona ubicado bajo el título “Ver datos”. Al seleccionarlo, se podrá acceder a la información del paciente para modificarla o eliminarla, según sea necesario.\n" +
+                        "\n"}/>
+                </div>
 
                 <div className="mb-6">
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-900 tracking-tight">Gestión e Ingreso
+                    <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-800 tracking-tight">Gestión e Ingreso
                         de pacientes</h1>
                     <p className="mt-2 text-gray-600 max-w-2xl">Registra pacientes rápidamente para abrir su ficha
                         clínica.</p>
@@ -248,7 +259,7 @@ export default function GestionPaciente() {
                     {/* Form card */}
                     <div className="bg-white shadow-sm rounded-xl p-6 md:p-8 border border-sky-100">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold text-blue-900">Ingreso de paciente</h2>
+                            <h2 className="text-lg font-semibold text-gray-800">Ingreso de paciente</h2>
                         </div>
 
                         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-5">

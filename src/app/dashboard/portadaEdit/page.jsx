@@ -361,24 +361,18 @@ export default function Publicaciones() {
             {/* FORMULARIOS COMPACTOS: Actualizar e Insertar, lado a lado en pantallas medianas+ */}
 
 
-<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <div className="space-y-1">
-        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900">Publicaciones</h1>
-        <p className="text-sm text-gray-500">
-            Administra las imágenes que se muestran en el carrusel bajo la portada.
-        </p>
-    </div>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="space-y-1">
+                    <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900">Imagenes de Portada</h1>
+                    <p className="text-sm text-gray-500">
+                        Administra las imagenes que necesitas que se muestren en el carrusel de imagenes principal en la portada.
+                    </p>
+                </div>
 
-    <div className="flex justify-start sm:justify-end">
-        <InfoButton informacion={'Nota informativa:\n' +
-            'Este apartado está diseñado exclusivamente para la carga de imágenes que serán visualizadas en el carrusel ubicado debajo de la portada de la página principal.\n' +
-            'Las imágenes cargadas en esta sección no se mostrarán en ninguna otra área del sitio.\n' +
-            '\n' +
-            'La carga se realiza de una imagen por vez.\n' +
-            'En caso de presentar inconvenientes durante el proceso, se recomienda intentar nuevamente utilizando una imagen de menor tamaño.\n' +
-            'Para un mejor rendimiento y compatibilidad, se sugiere utilizar formatos PNG o JPG.\n'}/>
-    </div>
-</div>
+                <div className="flex justify-start sm:justify-end">
+                    <InfoButton informacion={'Esta sección te permite cambiar las imágenes que aparecen en la portada del sitio, visibles en el carrusel principal. 📐 Medida recomendada:1920 × 686 px (formato horizontal)🖼️ Cantidad recomendada:Hasta 4 imágenes para una carga más rápida y una mejor experiencia en móviles y computadores.👉 Usar menos imágenes bien seleccionadas ayuda a que el sitio cargue más rápido y se vea más profesional.'}/>
+                </div>
+            </div>
 
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

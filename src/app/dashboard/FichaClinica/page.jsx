@@ -11,6 +11,7 @@ import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 import {useRouter} from "next/navigation";
 import {BookOpenIcon} from "@heroicons/react/24/outline";
 import {ClipboardDocumentListIcon} from "@heroicons/react/24/outline";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 
 export default function FichaClinica() {
@@ -338,10 +339,17 @@ export default function FichaClinica() {
             <div className="hidden md:block">
                 <div>
                     <div className="flex">
-                        <h1 className="text-xl font-semibold tracking-tight text-blue-700">Ficha Clínica del Paciente</h1>
-                        <span> <ClipboardDocumentListIcon className="h-6 w-6 text-blue-700"/></span>
+                        <h1 className="text-5xl font-bold tracking-tight text-gray-700">Fichas Clinicas</h1>
                     </div>
                     <p className="text-sm text-slate-600">Busca al paciente para revisar su ficha clínica</p>
+                   <div className='flex justify-end'>
+                       <InfoButton informacion={'En esta sección podrá encontrar el listado completo de las fichas clínicas correspondientes a los pacientes que han sido ingresados al sistema.\n' +
+                           '\n' +
+                           'Es importante considerar que los pacientes que solo han sido agendados aún no cuentan con una ficha clínica abierta. Para que un paciente disponga de una ficha clínica activa, debe ser ingresado por primera vez a través del módulo Ingreso de Paciente.\n' +
+                           '\n' +
+                           'En el listado inferior, cada paciente dispone de un icono de cuaderno. Al seleccionar este icono, será redirigido a la información detallada del paciente, donde podrá visualizar y gestionar todas las fichas clínicas asociadas.\n'}/>
+                   </div>
+                    <br/>
                     <div className="">
                         {/* Search card */}
                         <div className="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm">

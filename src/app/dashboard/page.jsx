@@ -50,23 +50,16 @@ export default function DashboardHome() {
                 `}</style>
                 <div
                     className="relative min-h-screen w-full flex items-center justify-center overflow-hidden px-4 py-10 bg-cover bg-center"
-                    style={{ backgroundImage: "url('/prosuite2.png')" }}>
-                    <div className="absolute inset-0 overflow-hidden">
-                        <div className="absolute -top-24 -left-16 w-72 h-72 bg-white  rounded-3xl blur-2xl"></div>
-                        <div
-                            className="absolute top-1/2 -right-40 w-[420px] h-[420px] bg-white  rounded-full blur-3xl opacity-70"></div>
-                        <div
-                            className="absolute bottom-[-40px] left-1/3 w-64 h-64 bg-white  rounded-full blur-2xl"></div>
-
-                    </div>
+                    style={{ backgroundImage: "url('/pro4.png')" }}>
+                    <div className="absolute inset-0 overflow-hidden"></div>
                     <div className=" relative z-10 flex flex-col items-center text-center max-w-2xl">
 
                         <div className=" -mt-40  ">
-                            <h1 className={`${michroma.className} text-4xl md:text-6xl font-extrabold tracking-tight animate-fadeInUp mt-30`}>
+                            <h1 className={`${michroma.className} text-4xl md:text-6xl font-extrabold tracking-tight text-gray-100 animate-fadeInUp mt-30`}>
                                 N a t i v e C o d e
 
                             </h1>
-                            <p className={`${michroma.className}  font-extrabold tracking-tight  animate-fadeInUp`}>
+                            <p className={`${michroma.className}  font-extrabold tracking-tight text-gray-200 animate-fadeInUp`}>
                                 E - C O M M E R C E .  P R O
                             </p>
 
@@ -118,29 +111,22 @@ export default function DashboardHome() {
                 `}</style>
                 <div
                     className="relative min-h-screen w-full flex items-center justify-center overflow-hidden px-4 py-10 bg-cover bg-center"
-                    style={{ backgroundImage: "url('/prosuite2.png')" }}>
-                    <div className="absolute inset-0 overflow-hidden">
-                        <div className="absolute -top-24 -left-16 w-72 h-72 bg-white  rounded-3xl blur-2xl"></div>
-                        <div
-                            className="absolute top-1/2 -right-40 w-[420px] h-[420px] bg-white  rounded-full blur-3xl opacity-70"></div>
-                        <div
-                            className="absolute bottom-[-40px] left-1/3 w-64 h-64 bg-white  rounded-full blur-2xl"></div>
-
-                    </div>
+                    style={{ backgroundImage: "url('/pro4.png')" }}>
+                    <div className="absolute inset-0 overflow-hidden"></div>
                     <div className=" relative z-10 flex flex-col items-center text-center max-w-2xl">
 
                         <div className="flex -mt-20  ">
-                            <h1 className={`${michroma.className} text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900 animate-fadeInUp mt-30`}>
+                            <h1 className={`${michroma.className} text-4xl md:text-6xl font-extrabold tracking-tight text-gray-50 animate-fadeInUp mt-30`}>
                                NativeCode
                             </h1>
 
 
 
                         </div>
-                        <h2 className={`${michroma.className} mr-80 -mt-25 text-base md:text-xl font-medium text-gray-700 opacity-90 animate-fadeInUp delay-200`}>
+                        <h2 className={`${michroma.className} mt-1 text-base md:text-xl font-medium text-gray-300 opacity-90 animate-fadeInUp delay-200`}>
                             E - C O M M E R C E .  P R O
                         </h2>
-                        <div className="mt-30 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full animate-fadeInUp delay-200">
+                        <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full animate-fadeInUp delay-200">
                             <div className="rounded-2xl border border-gray-200 bg-white/80 p-4 shadow-sm text-left">
                                 <p className="text-[11px] font-semibold uppercase tracking-wide ">Agenda
                                     Online</p>
@@ -148,6 +134,7 @@ export default function DashboardHome() {
                                      en
                                     tiempo real.</p>
                             </div>
+
                             <div className="rounded-2xl border border-gray-200 bg-white/80 p-4 shadow-sm text-left">
                                 <p className="text-[11px] font-semibold uppercase tracking-wide ">Sistema de Fichas</p>
                                 <p className="mt-1 text-sm text-gray-800">Centraliza fichas, evoluciones y documentos de

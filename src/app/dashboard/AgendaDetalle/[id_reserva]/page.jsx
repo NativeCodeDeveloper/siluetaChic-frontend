@@ -7,7 +7,7 @@ import {toast} from "react-hot-toast";
 import ShadcnButton from "@/Componentes/shadcnButton2";
 import ShadcnInput from "@/Componentes/shadcnInput2";
 import formatearFecha from "@/FuncionesTranversales/funcionesTranversales";
-
+import {InfoButton} from "@/Componentes/InfoButton";
 import * as React from "react"
 
 import {
@@ -37,10 +37,8 @@ export default function AgendaDetalle() {
     const [email, setEmail] = useState("");
     const [mensaje, setMensaje] = useState("Estimado/a [Nombre del paciente],\n" +
         "\n" +
-        "Le recordamos que tiene una cita de telemedicina agendada para hoy [fecha] a las [hora].\n" +
-        "\n" +
-        "Por favor, procure conectarse con 5 minutos de anticipación y verificar previamente su conexión a internet y dispositivo.\n" +
-        "\n" +
+        "Le recordamos que tiene una cita para hoy [fecha] a las [hora].\n" +
+         +
         "Ante cualquier duda o inconveniente, no dude en contactarnos.\n" +
         "\n" +
         "Atentamente,\n" +
@@ -215,8 +213,15 @@ export default function AgendaDetalle() {
         <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
             <ToasterClient/>
 
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
 
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 py-10">
+                <div className='flex justify-end'>
+                    <InfoButton informacion={'En esta sección puedes enviar mensajes automáticos de recordatorio a tus pacientes. El mensaje se enviará al correo que registraron al momento de agendar su hora.\n' +
+                        '\n' +
+                        'Además, puedes gestionar el estado de cada cita (Reservada, Confirmada, Completada, Anulada o Pendiente de pago).\n' +
+                        '⚠️ Importante: al eliminar una cita, esta se borrará de forma permanente y no podrá recuperarse.\n'}/>
+
+                </div>
 
                 <h1 className="text-3xl sm:text-4xl font-black tracking-tight bg-gradient-to-r from-sky-600 via-indigo-500 to-emerald-400 bg-clip-text text-transparent drop-shadow-[0_1px_0_rgba(255,255,255,0.9)]">
                     Agenda Detalle

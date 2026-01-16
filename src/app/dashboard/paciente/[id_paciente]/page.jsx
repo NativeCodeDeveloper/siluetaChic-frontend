@@ -10,6 +10,7 @@ import {ShadcnInput} from "@/Componentes/shadcnInput";
 import {ShadcnSelect} from "@/Componentes/shadcnSelect";
 import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 import * as React from "react";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 
 
@@ -42,6 +43,12 @@ export default function Paciente(){
     }
 
 
+    function convertirFecha(isoString) {
+        if (!isoString) return null;
+
+        const date = new Date(isoString);
+        return date.toISOString().split("T")[0];
+    }
 
 
     //FUNCION PARA LA ACTUALIZACION DE DATOS DEL PACIENTE
@@ -67,13 +74,27 @@ export default function Paciente(){
                 headers: {Accept: "application/json",
                     "Content-Type": "application/json"},
                 mode: "cors",
-                body: JSON.stringify({nombre,apellido,rut,nacimiento,sexo,prevision_id,telefono,correo,direccion,pais,id_paciente})
+                body: JSON.stringify({
+                    nombre,
+                    apellido,
+                    rut,
+                    nacimiento : convertirFecha(nacimiento),
+                    sexo,
+                    prevision_id,
+                    telefono,
+                    correo,
+                    direccion,
+                    pais,
+                    id_paciente})
             })
 
             if(!res.ok) {
-                return toast.error("Debe llenar todos los campos para proceder con la actualziacion")
+                return toast.error("Debe llenar todos los campos para proceder con la actualziacion, El servidor no esta recibiendo la informacion correcta.")
+
             } else{
+
                 const resultadoQuery = await res.json();
+
                 if(resultadoQuery.message === true){
                     setNombre("");
                     setApellido("");
@@ -86,6 +107,7 @@ export default function Paciente(){
                     setPais("");
                     await buscarPacientePorId(id_paciente);
                     return toast.success("Datos del paciente actualizados con Exito!");
+
                 }else{
                     return toast.error("No se han podido Actualizar los datos del paciente. Intente mas tarde.")
                 }
@@ -164,9 +186,45 @@ export default function Paciente(){
         return previsionString;
     }
 
+
+
+    async function eliminarPaciente(id_paciente){
+        try {
+            if(!id_paciente){
+                return toast.error("No se puede eliminar el paciente si no hay pacientes seleccionados.")
+            }
+
+            const res = await fetch(`${API}/pacientes/eliminarPaciente`, {
+                method: "POST",
+                headers: {Accept: "application/json",
+                "Content-Type": "application/json"},
+                body: JSON.stringify({id_paciente})
+            })
+
+            if(!res.ok){
+                return toast.error("No se ha podido eliminar paciente, contacte a soporte de NativeCode (Problema en el servidor)")
+            }else{
+
+                const resultadoBackend = await res.json();
+                if(resultadoBackend.message === true){
+                    return toast.success("Se ha eliminado correctamente el paciente de la base de datos")
+                }else{
+                    return toast.error("No se ha podido elimnar al paciente de la base de datos, el mensaje que llega se contepla como false")
+                }
+            }
+        }catch (error) {
+            return toast.error('No ha sido posible eliminar al paciente, contacte a soporte ')
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-white py-6 sm:py-8">
             <ToasterClient/>
+
+            <div className='flex justify-end mr-55'>
+                <InfoButton informacion={"⚠️ Consideración importante:\n" +
+                    "Si un paciente es eliminado, no será posible acceder a sus fichas clínicas, ya que estas quedarán ocultas en el sistema."}/>
+            </div>
 
             <div className="max-w-5xl mx-auto px-4">
                 <header className="mb-5 sm:mb-6">
@@ -238,7 +296,9 @@ export default function Paciente(){
                     )}
                 </div>
 
-                <div className="mt-6 flex justify-center sm:justify-end"> <ShadcnButton nombre={mostrarFormulario ?  "Ocultar Formulario" : "Actualizar Datos" } funcion={()=> setMostrarFormulario((estadoBooleano) => !estadoBooleano)}/></div>
+                <div className="mt-6 flex justify-center sm:justify-end gap-6">
+                    <ShadcnButton nombre={'Eliminar Paciente'} funcion={()=> eliminarPaciente(id_paciente)}/>
+                    <ShadcnButton nombre={mostrarFormulario ?  "Ocultar Formulario" : "Actualizar Datos" } funcion={()=> setMostrarFormulario((estadoBooleano) => !estadoBooleano)}/></div>
 
             </div>
 

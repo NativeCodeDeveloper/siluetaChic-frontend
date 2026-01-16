@@ -13,6 +13,7 @@ import {ShadcnButton} from "@/Componentes/shadcnButton";
 import {toast} from "react-hot-toast";
 import ToasterClient from "@/Componentes/ToasterClient";
 import MediaCardImage from "@/Componentes/MediaCardImage";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 
 export default function Dashboard() {
@@ -44,6 +45,12 @@ export default function Dashboard() {
     const [preview2, setPreview2] = useState("");
     const [preview3, setPreview3] = useState("");
     const [preview4, setPreview4] = useState("");
+
+    // Orden obligatorio de subida: 1 -> 2 -> 3 -> 4
+    // Se habilita la siguiente imagen solo si la anterior ya existe (archivo nuevo o imagen ya guardada)
+    const canUpload2 = Boolean(file || imagenProducto);
+    const canUpload3 = canUpload2 && Boolean(file2 || imagenProductoSegunda);
+    const canUpload4 = canUpload3 && Boolean(file3 || imagenProductoTercera);
 
 
     //LLAMADA A HASH DE CLOUDFLARE
@@ -837,7 +844,46 @@ useEffect(() => {
     return (
         <div>
             <ToasterClient/>
-            <h1 className="max-w-7xl mx-auto px-4 md:px-6 mt-6 text-2xl md:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 bg-clip-text text-transparent">Gestión de Productos</h1>
+
+            <div className='flex justify-end mt-20 mr-30'>
+                <InfoButton informacion={'En este apartado usted podrá subir los productos y/o servicios que ofrecerá su e-commerce.\n' +
+                    '\n' +
+                    'Usted puede cargar hasta 4 imágenes por producto. Para una correcta visualización, las imágenes deben estar en formato PNG o JPG.\n' +
+                    '\n' +
+                    'Las dimensiones recomendadas para las imágenes tipo card son:\n' +
+                    '\t•\tImagen principal: 1200 px\n' +
+                    '\t•\tImágenes secundarias: 600 px\n' +
+                    '\n' +
+                    'Importante: usted debe subir primero la imagen principal y luego las imágenes secundarias, ya que la imagen principal será la referencia visible del producto dentro de la tienda.'}/>
+            </div>
+            <div className="max-w-7xl mx-auto px-4 md:px-6 pt-6">
+              <div className="rounded-3xl border border-slate-200 bg-white/70 backdrop-blur shadow-sm px-6 py-6 md:px-8 md:py-7">
+                <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-[11px] font-semibold text-blue-700 ring-1 ring-blue-100">
+                      <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                      Panel de administración
+                    </div>
+                    <h1 className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
+                      Gestión de productos
+                    </h1>
+                    <p className="mt-2 max-w-2xl text-sm md:text-base text-slate-600 leading-relaxed">
+                      En este módulo usted podrá crear y administrar los productos y/o servicios que se mostrarán en su catálogo.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="hidden sm:flex items-center gap-2 rounded-2xl bg-slate-50 px-4 py-2 ring-1 ring-slate-200">
+                      <span className="text-[11px] font-semibold text-slate-500">Consejo</span>
+                      <span className="text-[11px] text-slate-600">Suba primero la imagen principal para habilitar las secundarias.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-5 h-px w-full bg-gradient-to-r from-blue-200 via-indigo-200 to-cyan-200" />
+              </div>
+            </div>
+
             <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
 
 
@@ -1000,16 +1046,23 @@ useEffect(() => {
                                       <div className="w-full h-28 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-200">Sin imagen</div>
                                     )}
                                   </div>
-                                  <label htmlFor="file2" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 cursor-pointer transition">
+                                  <label
+                                    htmlFor="file2"
+                                    className={`mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 px-4 py-2 text-sm font-semibold transition ${canUpload2 ? "bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer" : "bg-slate-100 text-slate-400 cursor-not-allowed opacity-70"}`}
+                                  >
                                     Subir imagen
                                   </label>
                                   <input
                                     id="file2"
                                     type="file"
                                     accept="image/*"
-                                    onChange={(e) => handleSelectImage(e, setFile2)}
+                                    disabled={!canUpload2}
+                                    onChange={(e) => (canUpload2 ? handleSelectImage(e, setFile2) : null)}
                                     className="hidden"
                                   />
+                                  {!canUpload2 && (
+                                    <p className="mt-2 text-[11px] text-slate-500">Primero debe subir la imagen principal.</p>
+                                  )}
                                 </div>
 
                                 {/* Imagen 3 */}
@@ -1025,16 +1078,23 @@ useEffect(() => {
                                       <div className="w-full h-28 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-200">Sin imagen</div>
                                     )}
                                   </div>
-                                  <label htmlFor="file3" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 cursor-pointer transition">
+                                  <label
+                                    htmlFor="file3"
+                                    className={`mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 px-4 py-2 text-sm font-semibold transition ${canUpload3 ? "bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer" : "bg-slate-100 text-slate-400 cursor-not-allowed opacity-70"}`}
+                                  >
                                     Subir imagen
                                   </label>
                                   <input
                                     id="file3"
                                     type="file"
                                     accept="image/*"
-                                    onChange={(e) => handleSelectImage(e, setFile3)}
+                                    disabled={!canUpload3}
+                                    onChange={(e) => (canUpload3 ? handleSelectImage(e, setFile3) : null)}
                                     className="hidden"
                                   />
+                                  {!canUpload3 && (
+                                    <p className="mt-2 text-[11px] text-slate-500">Primero debe subir la imagen 2.</p>
+                                  )}
                                 </div>
 
                                 {/* Imagen 4 */}
@@ -1050,16 +1110,23 @@ useEffect(() => {
                                       <div className="w-full h-28 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 ring-1 ring-slate-200">Sin imagen</div>
                                     )}
                                   </div>
-                                  <label htmlFor="file4" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 cursor-pointer transition">
+                                  <label
+                                    htmlFor="file4"
+                                    className={`mt-3 inline-flex w-full items-center justify-center rounded-xl border border-dashed border-blue-400 px-4 py-2 text-sm font-semibold transition ${canUpload4 ? "bg-blue-50 text-blue-700 hover:bg-blue-100 cursor-pointer" : "bg-slate-100 text-slate-400 cursor-not-allowed opacity-70"}`}
+                                  >
                                     Subir imagen
                                   </label>
                                   <input
                                     id="file4"
                                     type="file"
                                     accept="image/*"
-                                    onChange={(e) => handleSelectImage(e, setFile4)}
+                                    disabled={!canUpload4}
+                                    onChange={(e) => (canUpload4 ? handleSelectImage(e, setFile4) : null)}
                                     className="hidden"
                                   />
+                                  {!canUpload4 && (
+                                    <p className="mt-2 text-[11px] text-slate-500">Primero debe subir la imagen 3.</p>
+                                  )}
                                 </div>
                               </div>
                             </div>

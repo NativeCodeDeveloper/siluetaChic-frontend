@@ -4,8 +4,9 @@ import {ShadcnInput} from "@/Componentes/shadcnInput";
 import {Textarea} from "@/components/ui/textarea";
 import {useState, useEffect} from "react";
 import ToasterClient from "@/Componentes/ToasterClient";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 export default function Cupones() {
     const API = process.env.NEXT_PUBLIC_API_URL;
@@ -246,48 +247,42 @@ function mostrarIdSeleccionado(id_cupon) {
        <div>
 
            {/*PANTALLAS EN CELULARES*/}
-           <div className="blok md:hidden min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 py-6">
+           <div className="blok md:hidden min-h-screen bg-slate-50 px-4 py-5">
                <ToasterClient/>
                {/* Header con diseño premium */}
-               <div className="max-w-7xl mx-auto mb-6">
-                   <h1 className="text-xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
-                       Sistema de Gestión de Cupones
-                   </h1>
-                   <div className="h-1 w-24 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-3"></div>
+
+               <div className="max-w-7xl mx-auto mb-4">
+                   <h1 className="text-lg font-semibold text-slate-900">Sistema de Gestión de Cupones</h1>
+                   <div className="h-px w-full bg-slate-200 mt-3"></div>
                </div>
 
-               <div className="max-w-7xl mx-auto grid grid-cols-1 gap-5">
+               <div className="max-w-7xl mx-auto grid grid-cols-1 gap-4">
                    {/* Card de Ingreso - Premium */}
-                   <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                       {/* Gradient overlay decorativo */}
-                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5 pointer-events-none"></div>
-                       <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-500"></div>
-
-                       <div className="relative p-6">
+                   <div className="relative bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                       <div className="relative p-4">
                            <div className="flex items-center gap-3 mb-5">
                                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-md">
                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                    </svg>
                                </div>
-                               <h2 className="text-xl font-bold text-slate-800">
+                               <h2 className="text-base font-semibold text-slate-900">
                                    Crear Cupón
                                </h2>
                                <br/>
-
                            </div>
                            <div className="flex items-center gap-3">
                              <label className="text-[11px] uppercase tracking-wide text-sky-800 font-semibold">ID cupón</label>
-                             <span className="text-sm font-bold text-gray-600 border border-slate-200 bg-slate-50 px-3 py-1.5 rounded-xl">{mostrarIdSeleccionado(id_cupon)}</span>
+                             <span className="text-xs font-semibold text-slate-700 border border-slate-200 bg-slate-100 px-2.5 py-1 rounded-lg">{mostrarIdSeleccionado(id_cupon)}</span>
                            </div>
-                           <div className="space-y-4 mt-6">
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
+                           <div className="space-y-3 mt-4">
+                               <div>
                                    <ShadcnInput value={nombreCupon}
                                                 onChange={(e)=>setNombreCupon(e.target.value)}
                                                 placeholder={"Titulo del cupon.."} />
                                </div>
 
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
+                               <div>
                                    <ShadcnInput
                                        value={codigoVerificadorCupon}
                                        onChange={(e)=>setCodigoVerificadorCupon(e.target.value)}
@@ -295,17 +290,15 @@ function mostrarIdSeleccionado(id_cupon) {
                                    />
                                </div>
 
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
-                                   <Textarea className="min-h-[96px] resize-none border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl"
+                               <div>
+                                   <Textarea className="min-h-[84px] resize-none border-slate-200 focus:border-slate-400 focus:ring-2 focus:ring-slate-200 rounded-lg"
                                              placeholder="Descripción del cupón..."
                                              value={objetivoCupon}
                                              onChange={(e)=>setObjetivoCupon(e.target.value)}
-
                                    />
-
                                </div>
 
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
+                               <div>
                                    <h1 className="pt-1 font-bold text-gray-700">Porcentaje descuento</h1>
                                    <p className="text-gray-400 text-[11px]">Solo números del 1 al 100</p>
                                    <ShadcnInput
@@ -314,7 +307,6 @@ function mostrarIdSeleccionado(id_cupon) {
                                        value={porcentajeDescuento}
                                        onChange={(e)=>setPorcentajeDescuento(e.target.value)}
                                    />
-
                                </div>
 
                                <div className="flex gap-3 pt-2">
@@ -334,26 +326,22 @@ function mostrarIdSeleccionado(id_cupon) {
                    </div>
 
                    {/* Card de Listado - Premium */}
-                   <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                       {/* Gradient overlay decorativo */}
-                       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-pink-500/5 to-blue-500/5 pointer-events-none"></div>
-                       <div className="absolute -top-24 -left-24 w-48 h-48 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-500"></div>
-
-                       <div className="relative p-6">
+                   <div className="relative bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                       <div className="relative p-4">
                            <div className="flex items-center gap-3 mb-5">
                                <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-md">
                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                    </svg>
                                </div>
-                               <h2 className="text-xl font-bold text-slate-800">
+                               <h2 className="text-base font-semibold text-slate-900">
                                    Cupones Activos
                                </h2>
                            </div>
 
-                           <div className="transform transition-all duration-200">
-                               <Table className="text-sm">
-                                   <TableCaption>Listado de Cupones.</TableCaption>
+                           <div>
+                               <Table className="text-xs">
+                                   <TableCaption className="text-xs text-slate-500">Listado de cupones</TableCaption>
                                    <TableHeader>
                                        <TableRow>
                                            <TableHead className="text-xs text-slate-600">ID Cupon</TableHead>
@@ -364,15 +352,15 @@ function mostrarIdSeleccionado(id_cupon) {
                                    <TableBody>
                                        {tablaCupones.map((cupon) => (
                                            <TableRow key={cupon.id_cupon}>
-                                               <TableCell className="font-medium py-2">{cupon.id_cupon}</TableCell>
-                                               <TableCell className="py-2">{cupon.codigoVerificadorCupon}</TableCell>
-                                               <TableCell className="py-2">{cupon.porcentajeDescuento} %</TableCell>
-                                               <TableCell className="py-2">
+                                               <TableCell className="font-medium py-1">{cupon.id_cupon}</TableCell>
+                                               <TableCell className="py-1">{cupon.codigoVerificadorCupon}</TableCell>
+                                               <TableCell className="py-1">{cupon.porcentajeDescuento} %</TableCell>
+                                               <TableCell className="py-1">
                                                    <ShadcnButton
                                                        funcion={()=> eliminarCupon(cupon.id_cupon)}
                                                        nombre={"Eliminar"}/>
                                                </TableCell>
-                                               <TableCell className="py-2">
+                                               <TableCell className="py-1">
                                                    <ShadcnButton
                                                        funcion={()=> seleccionarCupon(cupon.id_cupon)}
                                                        nombre={"Seleccionar"}/>
@@ -390,48 +378,49 @@ function mostrarIdSeleccionado(id_cupon) {
 
 
            {/*PANTALLA EN COMPUTADORES DE ESCRITORIO*/}
-           <div className="hidden md:block min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-8 py-8">
+           <div className="hidden md:block min-h-screen bg-slate-50 px-8 py-8">
                <ToasterClient/>
                {/* Header con diseño premium */}
+
+               <div className='flex justify-end mr-15'>
+                   <InfoButton informacion={"En este apartado, usted podrá crear cupones de descuento para que sus clientes obtengan rebajas en los productos o servicios ofrecidos. Estos cupones no son individuales ni se desactivan automáticamente al ser utilizados, por lo que deben desactivarse de forma manual cuando usted lo estime conveniente.\n" +
+                       "\n" +
+                       "En el último campo del formulario, usted puede indicar el porcentaje de descuento que se aplicará al producto. Este valor solo puede ingresarse como un número entero entre 1 y 100; no se permiten letras ni caracteres especiales.\n" +
+                       "\n" +
+                       "Para desactivar un cupón, únicamente debe eliminarlo, y este dejará de estar activo de manera inmediata."}/>
+               </div>
                <div className="max-w-7xl mx-auto mb-7">
-                   <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm">
-                       Sistema de Gestión de Cupones
-                   </h1>
-                   <div className="h-1 w-28 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full mt-3"></div>
+                   <h1 className="text-3xl font-semibold text-slate-900">Sistema de Gestión de Cupones</h1>
+                   <div className="h-px w-full bg-slate-200 mt-4"></div>
                </div>
 
                <div className="max-w-7xl mx-auto grid grid-cols-1 gap-6">
                    {/* Card de Ingreso - Premium */}
-                   <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                       {/* Gradient overlay decorativo */}
-                       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5 pointer-events-none"></div>
-                       <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-500"></div>
-
-                       <div className="relative p-7">
+                   <div className="relative bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                       <div className="relative p-6">
                            <div className="flex items-center gap-3 mb-6">
                                <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-md">
                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                    </svg>
                                </div>
-                               <h2 className="text-2xl font-bold text-slate-800">
+                               <h2 className="text-base font-semibold text-slate-900">
                                    Crear Cupón
                                </h2>
                                <br/>
-
                            </div>
                            <div className="flex items-center gap-3">
                              <label className="text-[11px] uppercase tracking-wide text-sky-800 font-semibold">ID cupón seleccionado</label>
-                             <span className="text-sm font-bold text-gray-600 border border-slate-200 bg-slate-50 px-3 py-1.5 rounded-xl">{mostrarIdSeleccionado(id_cupon)}</span>
+                             <span className="text-xs font-semibold text-slate-700 border border-slate-200 bg-slate-100 px-2.5 py-1 rounded-lg">{mostrarIdSeleccionado(id_cupon)}</span>
                            </div>
-                           <div className="space-y-4 mt-6">
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
+                           <div className="space-y-3 mt-4">
+                               <div>
                                    <ShadcnInput value={nombreCupon}
                                                 onChange={(e)=>setNombreCupon(e.target.value)}
                                                 placeholder={"Titulo del cupon.."} />
                                </div>
 
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
+                               <div>
                                    <ShadcnInput
                                        value={codigoVerificadorCupon}
                                        onChange={(e)=>setCodigoVerificadorCupon(e.target.value)}
@@ -439,24 +428,21 @@ function mostrarIdSeleccionado(id_cupon) {
                                    />
                                </div>
 
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
-                                   <Textarea className="min-h-[96px] resize-none border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 rounded-xl"
+                               <div>
+                                   <Textarea className="min-h-[84px] resize-none border-slate-200 focus:border-slate-400 focus:ring-2 focus:ring-slate-200 rounded-lg"
                                              placeholder="Descripción del cupón..."
                                              value={objetivoCupon}
                                              onChange={(e)=>setObjetivoCupon(e.target.value)}
-
                                    />
-
                                </div>
 
-                               <div className="transform transition-all duration-200 hover:scale-[1.01]">
+                               <div>
                                    <ShadcnInput
                                        type="number"
                                        placeholder="Descuento (%).. solo en numeros 1 a 100.."
                                        value={porcentajeDescuento}
                                        onChange={(e)=>setPorcentajeDescuento(e.target.value)}
                                    />
-
                                </div>
 
                                <div className="flex gap-3 pt-2">
@@ -476,26 +462,22 @@ function mostrarIdSeleccionado(id_cupon) {
                    </div>
 
                    {/* Card de Listado - Premium */}
-                   <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                       {/* Gradient overlay decorativo */}
-                       <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-pink-500/5 to-blue-500/5 pointer-events-none"></div>
-                       <div className="absolute -top-24 -left-24 w-48 h-48 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-500"></div>
-
-                       <div className="relative p-7">
+                   <div className="relative bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                       <div className="relative p-6">
                            <div className="flex items-center gap-3 mb-6">
                                <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-md">
                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                    </svg>
                                </div>
-                               <h2 className="text-2xl font-bold text-slate-800">
+                               <h2 className="text-base font-semibold text-slate-900">
                                    Cupones Activos
                                </h2>
                            </div>
 
-                           <div className="transform transition-all duration-200">
-                               <Table className="text-sm">
-                                   <TableCaption>Listado de Cupones.</TableCaption>
+                           <div>
+                               <Table className="text-xs">
+                                   <TableCaption className="text-xs text-slate-500">Listado de cupones</TableCaption>
                                    <TableHeader>
                                        <TableRow>
                                            <TableHead className="text-xs text-slate-600">ID Cupon</TableHead>
@@ -508,17 +490,17 @@ function mostrarIdSeleccionado(id_cupon) {
                                    <TableBody>
                                        {tablaCupones.map((cupon) => (
                                            <TableRow key={cupon.id_cupon}>
-                                               <TableCell className="font-medium py-2">{cupon.id_cupon}</TableCell>
-                                               <TableCell className="font-medium py-2">{cupon.nombreCupon}</TableCell>
-                                               <TableCell className="font-medium py-2">{cupon.objetivoCupon}</TableCell>
-                                               <TableCell className="py-2">{cupon.codigoVerificadorCupon}</TableCell>
-                                               <TableCell className="py-2">{cupon.porcentajeDescuento} %</TableCell>
-                                               <TableCell className="py-2">
+                                               <TableCell className="font-medium py-1">{cupon.id_cupon}</TableCell>
+                                               <TableCell className="font-medium py-1">{cupon.nombreCupon}</TableCell>
+                                               <TableCell className="font-medium py-1">{cupon.objetivoCupon}</TableCell>
+                                               <TableCell className="py-1">{cupon.codigoVerificadorCupon}</TableCell>
+                                               <TableCell className="py-1">{cupon.porcentajeDescuento} %</TableCell>
+                                               <TableCell className="py-1">
                                                    <ShadcnButton
                                                        funcion={()=> eliminarCupon(cupon.id_cupon)}
                                                        nombre={"Eliminar"}/>
                                                </TableCell>
-                                               <TableCell className="py-2">
+                                               <TableCell className="py-1">
                                                    <ShadcnButton
                                                        funcion={()=> seleccionarCupon(cupon.id_cupon)}
                                                        nombre={"Seleccionar"}/>

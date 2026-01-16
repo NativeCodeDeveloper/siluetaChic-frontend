@@ -8,6 +8,7 @@ import formatearFecha from "@/FuncionesTranversales/funcionesTranversales";
 import ShadcnButton2 from "@/Componentes/shadcnButton2";
 import {useRouter} from "next/navigation";
 import {Calendar28} from "@/Componentes/shadcnCalendarSelector";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 import {
     Table,
@@ -248,10 +249,18 @@ export default function AgendaCitas() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 px-4 py-6 md:px-8">
             <ToasterClient/>
+
             <div className="mx-auto w-full max-w-6xl">
+                <div className='flex justify-end'>
+
+                    <InfoButton informacion={'En este apartado podrá visualizar el listado completo de todas las reservaciones realizadas. Podrá filtrarlas por estado, similitud de nombre, similitud de RUT y por rango de fechas.\n' +
+                        '\n' +
+                        'Al seleccionar una reservación, podrá cambiar su estado y establecer comunicación mediante correo electrónico con el usuario que realizó el agendamiento.'}/>
+
+                </div>
                 <div className="mb-5 flex flex-col gap-1">
                     <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
-                        Gestión de Agenda
+                        Listado de reservaciones
                     </h1>
                     <p className="text-sm md:text-base text-slate-600">
                         Filtra pacientes por nombre, RUT o rango de fechas para revisar rápidamente los citados.
@@ -343,7 +352,7 @@ export default function AgendaCitas() {
                 <div className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between md:p-6">
                     <div className="space-y-0.5">
                         <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">
-                            Listado de pacientes citados
+                            Estado de reservaciones (Lista)
                         </h1>
                         <p className="text-sm text-slate-600">
                             Revisa el detalle por fecha, paciente, RUT y estado.

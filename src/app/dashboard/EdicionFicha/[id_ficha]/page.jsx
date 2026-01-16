@@ -8,6 +8,7 @@ import ToasterClient from "@/Componentes/ToasterClient";
 import toast from "react-hot-toast";
 import {ShadcnButton} from "@/Componentes/shadcnButton";
 import {ShadcnInput} from "@/Componentes/shadcnInput2";
+import {useRouter} from "next/navigation";
 
 
 export default function EdicionFichaClinica() {
@@ -17,6 +18,13 @@ export default function EdicionFichaClinica() {
     const [anotacionConsulta, setanotacionConsulta] = useState("");
 
     const API = process.env.NEXT_PUBLIC_API_URL;
+
+    const router = useRouter();
+
+    function retroceder(id_paciente) {
+        router.push(`/dashboard/FichasPacientes/${id_paciente}`);
+    }
+
 
     async function actualizarFicha(tipoAtencion, anotacionConsulta, id_ficha) {
         try {
@@ -110,8 +118,8 @@ export default function EdicionFichaClinica() {
 
                     {dataFicha.map((ficha) => (
 
-                        <div className="space-y-4">
-                            <div key={ficha.id_ficha}>
+                        <div key={ficha.id_ficha} className="space-y-4">
+                            <div>
                                 <div
                                     className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-sky-50 p-4 rounded-xl border border-sky-100">
                                     <h1>
@@ -194,8 +202,8 @@ export default function EdicionFichaClinica() {
 
                     {dataFicha.map((ficha) => (
 
-                        <div className="space-y-4">
-                            <div key={ficha.id_ficha}>
+                        <div key={ficha.id_ficha} className="space-y-4">
+                            <div>
                                 <div
                                     className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-sky-50 p-4 rounded-xl border border-sky-100">
                                     <h1>
@@ -257,11 +265,27 @@ export default function EdicionFichaClinica() {
                         ></Textarea>
                         <br/>
 
-                        <div className="pt-6 flex justify-end">
+                        <div className="pt-6 flex justify-end gap-6">
                             <ShadcnButton
                                 funcion={() => actualizarFicha(tipoAtencion, anotacionConsulta, id_ficha)}
                                 nombre={"Actualizar"}/>
+
+                            {dataFicha.map((ficha) => (
+                                <div key={ficha.id_paciente ?? ficha.id_ficha}>
+                                    <ShadcnButton
+                                        funcion={() => retroceder(ficha.id_paciente)}
+                                        nombre={"Retroceder"}
+                                    />
+                                </div>
+
+                            ))}
+
+
                         </div>
+
+
+
+
                     </div>
                 </div>
 

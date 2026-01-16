@@ -15,6 +15,7 @@ import {toast} from "react-hot-toast";
 
 
 import es from "date-fns/locale/es";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 const locales = {
     es: es,
@@ -112,6 +113,102 @@ export default function Calendario() {
     useEffect(() => {
         cargarDataAgenda()
     }, [])
+
+
+
+    async function bloquearAgenda(
+        fechaInicio,
+        horaInicio,
+        fechaFinalizacion,
+        horaFinalizacion
+    ) {
+        try {
+
+            if ( !fechaInicio || !horaInicio || !horaFinalizacion) {
+                return toast.error('Debe llenar los campos de fechas para bloquear un periodo');
+            }
+
+            const nombrePaciente = "AGENDA BLOQUEADA";
+            const apellidoPaciente = "-";
+            const rut = "-";
+            const telefono = "-";
+            const email = "-";
+            const ahora = new Date();
+            const inicio = new Date(`${fechaInicio}T${horaInicio}`);
+            const final = new Date(`${fechaFinalizacion}T${horaFinalizacion}`);
+
+            if (inicio < ahora) {
+                return toast.error("No es posible agendar en fechas NO vigentes")
+            }
+
+            if (final < inicio) {
+                return toast.error("No es posible en fechas irreales")
+            }
+
+            // Validación local: si el rango se solapa con alguna reserva ya cargada, evitar llamar al servidor
+            if (isOverlapping(inicio, final)) {
+                return toast.error('La hora seleccionada ya está ocupada (verifique otras horas)');
+            }
+
+
+            if (fechaInicio === fechaFinalizacion) {
+
+                const res = await fetch(`${API}/reservaPacientes/insertarReserva`, {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    mode: "cors",
+                    body: JSON.stringify({
+                        nombrePaciente,
+                        apellidoPaciente,
+                        rut,
+                        telefono,
+                        email,
+                        fechaInicio,
+                        horaInicio,
+                        fechaFinalizacion,
+                        horaFinalizacion,
+                        estadoReserva: "reservada"
+                    })
+                })
+
+
+                const respuestaBackend = await res.json();
+
+                if (respuestaBackend.message === true) {
+                    setNombrePaciente("");
+                    setApellidoPaciente("");
+                    setTelefono("");
+                    setRut("");
+                    setEmail("");
+                    await cargarDataAgenda();
+                    return toast.success("Se ha bloqueado el periodo indicado correctamente.")
+
+                } else if (respuestaBackend.message === "conflicto" || respuestaBackend.message.includes("conflicto")) {
+                    return toast.error("No puede agendar una hora que ya esta ocupada")
+
+                } else if (respuestaBackend.message === false) {
+                    return toast.error('Asegure que no esta ocupada la Hora');
+
+                }
+
+            } else {
+                return toast.error("Solo se permite bloquear periodos dentro de un mismo dia. No se pueden bloquear periodos en dias diferentes.")
+            }
+
+
+        } catch (error) {
+            console.log(error);
+            return toast.error('Sin respuesta del servidor contacte a soporte.');
+
+        }
+    }
+
+
+
+
 
 
     async function insertarNuevaReserva(
@@ -401,6 +498,14 @@ export default function Calendario() {
             <ToasterClient/>
 
             <div className="mx-auto w-full max-w-7xl">
+               <div className='flex justify-end'>
+                   <InfoButton informacion={"En este apartado, usted puede ingresar pacientes de manera manual directamente en la agenda o sistema de citas. Además, es posible editar los datos de los pacientes ya registrados, permitiéndole mantener la información siempre actualizada y correcta.\n" +
+                       "\n" +
+                       "Asimismo, este módulo le permite bloquear períodos específicos de la agenda cuando no se encuentre disponible para atender.\n" +
+                       "Para bloquear un período, solo debe seleccionar el rango horario que desea bloquear dentro del mismo día y luego presionar el botón “Bloquear”. El sistema marcará automáticamente ese período como no disponible para nuevas citas.\n" +
+                       "\n" +
+                       "Esta funcionalidad le entrega un control total sobre la agenda, facilitando la organización de horarios, la gestión de pacientes y la administración de tiempos no disponibles."}/>
+               </div>
                 <div className="mb-6 flex flex-col gap-2">
                   <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Módulo de Agenda</h1>
                   <p className="text-sm text-slate-600">Gestiona reservas, revisa disponibilidad y actualiza datos en un solo lugar.</p>
@@ -505,6 +610,12 @@ export default function Calendario() {
                                 funcion={() => limpiarData()}
                                 className="h-10 w-full sm:w-auto px-4 rounded-lg bg-slate-900 text-white hover:bg-slate-800 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-slate-300"
                                 nombre={"Limpiar"}></ShadcnButton2>
+
+                            <ShadcnButton2
+                                funcion={() => bloquearAgenda(fechaInicio, horaInicio, fechaFinalizacion, horaFinalizacion)}
+                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-red-600 text-white hover:bg-red-500 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-300"
+                                nombre={"Bloquear"}></ShadcnButton2>
+
 
                         </div>
 

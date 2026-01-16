@@ -11,13 +11,13 @@ export default function DashboardLayout({ children }) {
         <div className="h-screen w-full overflow-hidden bg-slate-50">
             <div className="flex h-full w-full">
                 {/* Sidebar */}
-                <aside className="hidden md:flex h-screen w-[260px] shrink-0 flex-col border-r border-slate-800 bg-gray-900 text-white">
+                <aside className="hidden md:flex h-screen w-[260px] shrink-0 flex-col border-r border-slate-800 bg-gray-800 text-white">
                     <div className="px-5 py-5 border-b border-white/10 shrink-0">
                         <div className="flex items-center gap-3">
                             <span className="h-2.5 w-2.5 rounded-full bg-gradient-to-br from-cyan-300 to-cyan-500 shadow-[0_0_18px_rgba(34,211,238,0.35)]" />
                             <div className="leading-tight">
                                 <div className="text-2xl font-semibold tracking-wide">Silueta Chic</div>
-                                <div className="text-[11px] text-white/60">Admin Dashboard</div>
+                                <div className="text-[11px] text-white/60">Panel Administrador</div>
                             </div>
                         </div>
                     </div>
@@ -64,12 +64,23 @@ export default function DashboardLayout({ children }) {
                                 Agenda
                             </Link>
 
+
+
+
+                            <Link
+                                href="/dashboard/calendarioGeneral"
+                                className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
+                            >
+                                <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
+                                Calendario
+                            </Link>
+
                             <Link
                                 href="/dashboard/agendaCitas"
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Clientes agendados
+                                Reservaciones
                             </Link>
 
                             <Link
@@ -89,7 +100,13 @@ export default function DashboardLayout({ children }) {
                             </Link>
 
 
-
+                            <Link
+                                href="/dashboard/portadaEdit"
+                                className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
+                            >
+                                <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
+                                Portada
+                            </Link>
 
                             <Link
                                 href="/dashboard/GestionPaciente"

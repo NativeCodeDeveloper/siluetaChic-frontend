@@ -6,6 +6,7 @@ import {ShadcnButton} from "@/Componentes/shadcnButton";
 import {ShadcnInput} from "@/Componentes/shadcnInput";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 export default function PedidosCompra() {
     const [pedidos, setPedidos] = useState([]);
@@ -221,6 +222,17 @@ export default function PedidosCompra() {
             <div className="mt-10 hidden md:block">
                 <ToasterClient></ToasterClient>
                 <div className="px-4 sm:px-6 lg:px-8">
+                    <div className='flex justify-end '>
+                        <InfoButton informacion={"En este apartado, usted puede visualizar los precios y valores de las transacciones que se van realizando en el sistema, junto con su estado según el flujo de entrega del producto o servicio.\n" +
+                            "El sistema contempla cinco estados, los cuales representan cada etapa del proceso de pago y entrega:\n" +
+                            "\t•\tPendiente de pago: corresponde a clientes que tuvieron la intención de pagar y llegaron hasta la pasarela de pago, pero la transacción no se concretó.\n" +
+                            "\t•\tPagado / Pendiente de entrega: indica que el pago fue realizado correctamente, pero aún está pendiente la entrega del producto o servicio.\n" +
+                            "\t•\tConfirmado: corresponde a clientes que confirmaron haber recibido el producto o servicio.\n" +
+                            "\t•\tCompletado: indica que la transacción se realizó de inicio a fin sin inconvenientes, cerrando correctamente el ciclo de pago y entrega.\n" +
+                            "\n" +
+                            "Para ver el detalle de cada compra, usted debe seleccionar el nombre del pedido dentro del listado, lo que lo llevará a la vista detallada de ese pedido en particular."}/>
+                    </div>
+                    <br/>
                     <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-100 bg-gradient-to-r from-indigo-50 via-white to-purple-50 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
                         <div className="w-full sm:max-w-xl">
                             <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">

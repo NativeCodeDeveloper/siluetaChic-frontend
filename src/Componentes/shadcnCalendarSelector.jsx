@@ -44,7 +44,7 @@ export function Calendar28({nombre, onChange}) {
     const [open, setOpen] = React.useState(false)
 
     // Fecha base (evita re-crear instancias distintas en renders inesperados)
-    const initialDate = React.useMemo(() => new Date("2025-06-01"), [])
+    const initialDate = React.useMemo(() => new Date(2025, 5, 1), []) // 1 de junio 2025 (mes 5 = junio)
 
     const [date, setDate] = React.useState(initialDate)
     const [month, setMonth] = React.useState(initialDate)
@@ -95,13 +95,13 @@ export function Calendar28({nombre, onChange}) {
                             locale={es}
                             month={month}
                             onMonthChange={(nextMonth) => {
-                                // Evita setState innecesario (previene loops en algunos casos con DayPicker)
+                                if (!isValidDate(nextMonth)) return
                                 setMonth((prev) =>
                                     prev?.getTime?.() === nextMonth?.getTime?.() ? prev : nextMonth
                                 )
                             }}
                             onSelect={(selectedDate) => {
-                                if (!selectedDate) return
+                                if (!isValidDate(selectedDate)) return
 
                                 setDate(selectedDate)
                                 setMonth(selectedDate)

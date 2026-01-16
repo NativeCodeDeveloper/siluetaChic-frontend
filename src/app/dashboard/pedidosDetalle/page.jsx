@@ -11,6 +11,7 @@ import Link from "next/link";
 import {Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
 import {ShadcnInput} from "@/Componentes/shadcnInput";
 import {Textarea} from "@/components/ui/textarea";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 
 function PedidoDetalleInner(){
@@ -213,7 +214,18 @@ function PedidoDetalleInner(){
                 <div className="min-h-screen bg-gradient-to-b from-white to-sky-50 px-4 py-6 sm:px-10 sm:py-10">
                     <ToasterClient />
 
+                    <div className='flex justify-end '>
+                        <InfoButton informacion={"En este apartado, usted puede cambiar el estado del pedido mediante el botón “Cambiar estado”. Debajo de este botón se muestra el estado actual de la compra, permitiéndole identificar fácilmente en qué etapa del proceso se encuentra.\n" +
+                            "\n" +
+                            "Además, se indica la fecha en que se realizó el pedido, junto con los datos demográficos de la persona que efectuó la transacción de compra, facilitando la identificación y el seguimiento del cliente.\n" +
+                            "\n" +
+                            "En la sección de seguimiento, usted tiene la posibilidad de recuperar carritos perdidos enviando mensajes directamente al correo electrónico del cliente. En caso de que el correo no sea válido o no se encuentre registrado, el sistema mostrará un mensaje indicando que el correo proporcionado no existe o no es válido.\n" +
+                            "\n" +
+                            "Al final de la pantalla, usted encontrará el listado detallado de los productos o servicios que el cliente agregó al carrito de compras.\n"}/>
+                    </div>
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-sky-100 pb-6">
+
+
                         <div className="space-y-1">
                             <h1 className="text-4xl sm:text-3xl font-semibold text-sky-800 tracking-tight">
                                 Detalle del pedido

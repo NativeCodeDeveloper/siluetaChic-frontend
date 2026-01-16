@@ -13,6 +13,7 @@ import * as React from "react";
 import {CheckboxIcon} from "@radix-ui/react-icons";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import {InfoButton} from "@/Componentes/InfoButton";
 
 
 export default function Paciente() {
@@ -417,12 +418,21 @@ export default function Paciente() {
 
             {/*PANTALLAS ESCRITORIO*/}
             <div className="hidden md:block min-h-screen bg-gradient-to-b from-sky-50 via-white to-white py-10">
+                <div className="max-w-5xl mx-auto px-4 flex justify-end">
+                    <InfoButton informacion={'En este apartado se mostrarán las fichas clínicas del paciente, ordenadas desde la más reciente a la más antigua, incluyendo tanto las fichas como sus anotaciones asociadas.\n' +
+                        '\n' +
+                        'Para editar una ficha clínica, debe seleccionarse el botón Editar, lo que lo llevará al formulario correspondiente donde podrá modificar la información de la ficha seleccionada.\n' +
+                        '\n' +
+                        'En caso de eliminar una ficha clínica, deberá presionar el botón Eliminar. Esta acción removerá la ficha seleccionada del sistema.\n' +
+                        '\n' +
+                        'Si desea crear una nueva ficha clínica, debe seleccionar el botón Nueva Ficha, el cual lo dirigirá al formulario de ingreso para registrar una nueva ficha clínica.'} />
+                </div>
 
                 <div className="max-w-5xl mx-auto px-4">
                     <header className="mb-6">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div>
-                                <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900">Historial
+                                <h1 className="text-5xl  font-extrabold text-gray-800">Historial
                                     Clínico</h1>
                                 <p className="mt-1 text-sm text-slate-500">Detalle y fichas del paciente</p>
                             </div>
