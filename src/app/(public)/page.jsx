@@ -15,9 +15,11 @@ export default function Home({ searchParams }) {
     return (
         <main>
             <Portada></Portada>
-           <PortadaCelulares></PortadaCelulares>
+
             <PostPortada></PostPortada>
+
             <SeccionComuncacion></SeccionComuncacion>
+
             <Testimonios></Testimonios>
 
         </main>

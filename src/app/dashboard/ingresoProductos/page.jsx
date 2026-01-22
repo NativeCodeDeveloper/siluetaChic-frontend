@@ -38,7 +38,7 @@ export default function Dashboard() {
     const [categoriaProductoSeleccion, setcategoriaProductoSeleccion] = useState("");
     const [tituloSimilar, settituloSimilar] = useState("");
     const [listaSubcategorias, setlistaSubcategorias] = useState([]);
-    const [subcategorias, setsubcategorias] = useState('0');
+    const [subcategorias, setsubcategorias] = useState("");
 
     // Previews locales para mostrar las imágenes seleccionadas (no mostrar URLs en inputs)
     const [preview1, setPreview1] = useState("");

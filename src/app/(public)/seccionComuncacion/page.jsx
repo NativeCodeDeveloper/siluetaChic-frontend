@@ -1,107 +1,161 @@
+'use client'
+import CarruselOfertas from "@/Componentes/CarruselOfertas";
+import Link from "next/link";
+import {useEffect, useState} from "react";
+
+
 export default function SeccionComuncacion() {
+    const API = process.env.NEXT_PUBLIC_API_URL;
+    const [listaPublicaciones, setListaPublicaciones] = useState([]);
+
+    async function listarPublicacionesCarrusel() {
+        try {
+            const res = await fetch(`${API}/publicaciones/seleccionarPublicaciones`, {
+                method: "GET",
+                headers: {Accept: "application/json"},
+                mode: "cors",
+                cache: "no-cache"
+            })
+
+            if(!res.ok) {
+                console.error("No se han podido Listar Publicaciones / Falla en el fetch desde el frontEnd");
+                setListaPublicaciones([])
+                return[]
+            }else {
+                const publicaciones = await res.json();
+                setListaPublicaciones(publicaciones);
+                return publicaciones;
+            }
+        }catch(err) {
+            console.error("Problema al consultar Backen desde la vista fronend:"+err);
+        }
+    }
+
+
+    useEffect(() => {
+        listarPublicacionesCarrusel();
+    }, []);
+
+
+
+
+
+    const logos = [
+        { src: "/logos/logo1.png", alt: "Logo 1" },
+        { src: "/logos/logo2.png", alt: "Logo 2", href: "https://tuweb.cl" },
+        { src: "/logos/logo3.png", alt: "Logo 3" },
+    ];
+
+
+    let Carrusel = listaPublicaciones.map((publicacion) =>
+        `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${publicacion.imagenPublicaciones_primera}/full`
+    )
+
     return (
-        <section className="mt-50 px-6">
-            <div className="max-w-7xl mx-auto text-center">
-                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-                    Depilación que <span className="bg-gradient-to-r from-violet-500 to-sky-500 bg-clip-text text-transparent">Transforma</span>
-                </h1>
+       <div>
+           {/* PANTALLAS ESCRITORIO*/}
+           <div className="hidden md:block">
+               <section className="mt-50 px-6">
+                   <div className="max-w-7xl mx-auto text-center">
+                       <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
+                           Revisa nuestras  <span className="bg-gradient-to-r from-violet-500 to-sky-500 bg-clip-text text-transparent">Promosiones</span>
+                       </h1>
 
-                <p className="mt-4 text-gray-500 text-lg">
-                    No solo eliminamos el vello, transformamos tu relación con tu piel
-                </p>
-
-
-                <div>
-                    <p className="mt-4 text-gray-500 text-lg">
-                        La depilación láser no solo ofrece una solución a largo plazo para el vello no deseado. También puede marcar un cambio profundo en tu relación con tu piel. Te da libertad, comodidad y seguridad. Te permite soltar la rutina de la rasuradora, olvidarte de la cera y abrazar una nueva forma de cuidado personal.
-                    </p>
-                </div>
+                       <p className="mt-4 text-gray-500 text-lg">
+                           No solo eliminamos el vello, transformamos tu relación con tu piel
+                       </p>
 
 
-                <div className="mt-30 grid grid-cols-1 md:grid-cols-4 gap-10">
+
+                       <div className="w-full -mt-30 ">
+                           <CarruselOfertas
+                               title=""
+                               images={Carrusel}
+                               intervalMs={1800}
+                           />
+
+                           <Link href="/catalogo">
+                               <button className='
+                    -mt-30 border p-2 text-2xl w-100 rounded-3xl
+                    bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400
+                    text-white font-bold tracking-wide
+                    shadow-lg
+                    transition-all duration-300 ease-out
+                    hover:scale-105
+                    hover:shadow-[0_0_35px_rgba(99,102,241,0.7)]
+                    hover:brightness-110
+                    active:scale-95
+                    '>Comprar Ahora</button>
+                           </Link>
 
 
-                    {/* Card 1 */}
-                    <div className="bg-white rounded-3xl p-10  transition">
-                        <div className="flex justify-center -mt-20 mb-6">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg ring-8 ring-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l7 4v5c0 5-3.5 9-7 11-3.5-2-7-6-7-11V7l7-4z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <h2 className="text-lg font-semibold tracking-tight">Seguridad</h2>
-
-                        <p className="text-sm leading-relaxed">
-                            Tecnología certificada y personal especializado
-                        </p>
-
-                    </div>
 
 
-                    {/* Card 2 */}
-                    <div className="bg-white rounded-3xl p-10  transition">
-                        <div className="flex justify-center -mt-20 mb-6">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 flex items-center justify-center shadow-lg ring-8 ring-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                  <circle cx="12" cy="12" r="9" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 7v5l3 3" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <h2 className="text-lg font-semibold tracking-tight">Rapidez</h2>
-
-                        <p className="text-sm leading-relaxed">
-                            Sesiones cortas con resultados duradeross
-                        </p>
-
-                    </div>
+                       </div>
+                   </div>
+               </section>
+           </div>
 
 
-                    {/* Card 3 */}
-                    <div className="bg-white rounded-3xl p-10  transition">
-                        <div className="flex justify-center -mt-20 mb-6">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-lg ring-8 ring-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M12 21s-6.7-4.4-9.3-7.4C-1 9.9 2 4 7 6c2 1 3 3 5 5 2-2 3-4 5-5 5-2 8 3.9 4.3 7.6C18.7 16.6 12 21 12 21z"/>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <h2 className="text-lg font-semibold tracking-tight">Confort</h2>
-
-                        <p className="text-sm leading-relaxed">
-                            Sistema de enfriamiento para mayor comodidad
-                        </p>
-
-                    </div>
 
 
-                    {/* Card 4 */}
-                    <div className="bg-white rounded-3xl p-10  transition">
-                        <div className="flex justify-center -mt-20 mb-6">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg ring-8 ring-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                  <circle cx="12" cy="7" r="4" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5.5 21a6.5 6.5 0 0113 0" />
-                                </svg>
-                            </div>
-                        </div>
 
-                        <h2 className="text-lg font-semibold tracking-tight">
-                            Personalizado
 
-                        </h2>
 
-                         <p className="text-sm leading-relaxed">
-                            Plan diseñado específicamente para ti
-                         </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+
+
+
+
+
+
+
+
+
+           {/* PANTALLAS CELULARES      */}
+           <div className="block md:hidden">
+               <section className="mt-50 px-6">
+                   <div className="max-w-7xl mx-auto text-center">
+                       <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
+                           Revisa nuestras  <span className="bg-gradient-to-r from-violet-500 to-sky-500 bg-clip-text text-transparent">Promosiones</span>
+                       </h1>
+
+                       <p className="mt-4 text-gray-500 text-lg">
+                           No solo eliminamos el vello, transformamos tu relación con tu piel
+                       </p>
+
+                       <br/>
+
+
+
+                       <div className="w-full -mt-30 ">
+                           <CarruselOfertas
+                               title=""
+                               images={Carrusel}
+                               intervalMs={1800}
+                           />
+
+                           <Link href="/catalogo">
+                               <button className='
+                    -mt-50 border p-2 text-2xl w-70 rounded-3xl
+                    bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400
+                    text-white font-bold tracking-wide
+                    shadow-lg
+                    transition-all duration-300 ease-out
+                    hover:scale-105
+                    hover:shadow-[0_0_35px_rgba(99,102,241,0.7)]
+                    hover:brightness-110
+                    active:scale-95
+                    '>Comprar Ahora</button>
+                           </Link>
+
+
+
+
+                       </div>
+                   </div>
+               </section>
+           </div>
+
+       </div>
     );
 }

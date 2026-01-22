@@ -6,6 +6,15 @@ import MediaCardImage from "@/Componentes/MediaCardImage";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import {useCarritoGlobal} from "@/ContextosGlobales/CarritoContext";
 import {useRouter} from "next/navigation";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 export default function Catalogo(){
     const API = process.env.NEXT_PUBLIC_API_URL;
@@ -13,9 +22,51 @@ export default function Catalogo(){
     const [listaProductos, setlistaProductos] = useState([]);
     const [mujeres, setmujeres] = useState(true);
     const [hombres, sethombres] = useState(false);
-
+    const [listaSubcategoria, setListaSubcategoria] = useState([]);
+    const [subCategoria, setSubCategoria] = useState(undefined);
 
     const router = useRouter();
+
+    async function seleccionarProductosPorSubcategoria(subCategoria) {
+        try {
+
+            const res = await fetch(`${API}/producto/seleccionarPorSubcategoria`, {
+                method: 'POST',
+                headers: {Accept: 'application/json',
+                    'Content-Type': 'application/json'},
+                body: JSON.stringify({subCategoria: Number(subCategoria),}),
+                mode: 'cors'
+            })
+
+            if (!res.ok) {
+                return toast.error("No hay respuesta del servidor contacte al administrador.")
+            }else {
+
+                const dataSubcategoria = await res.json();
+                setlistaProductos(dataSubcategoria);
+            }
+        }catch (e) {
+            return toast.error("No hay respuesta del servidor")
+        }
+    }
+
+    useEffect(() => {
+ if (!subCategoria) return;
+ seleccionarProductosPorSubcategoria(subCategoria);
+
+    }, [subCategoria]);
+
+
+
+
+    useEffect(() => {
+        if (hombres) {
+            listarSubcategoriaHombre();
+        }else{
+            listarSubcategoriaMujer();
+        }
+
+    },[hombres]);
 
 
     function anadirProducto(producto){
@@ -125,48 +176,175 @@ export default function Catalogo(){
 
 
 
+
+    async function listarSubcategoriaHombre(){
+        try {
+
+            const res = await fetch(`${API}/subcategorias/seleccionarPorCategoria`, {
+                method: 'POST',
+                headers: {Accept: 'application/json',
+                'Content-Type': 'application/json'},
+                body: JSON.stringify({id_categoriaProducto : 48}),
+                mode: 'cors'
+            })
+            if (!res.ok) {
+                return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+
+            }else{
+
+                const backendData = await res.json();
+                setListaSubcategoria(backendData);
+
+            }
+        }catch(error){
+            return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+        }
+
+    }
+
+
+
+    async function listarSubcategoriaMujer(){
+        try {
+
+            const res = await fetch(`${API}/subcategorias/seleccionarPorCategoria`, {
+                method: 'POST',
+                headers: {Accept: 'application/json',
+                    'Content-Type': 'application/json'},
+                body: JSON.stringify({id_categoriaProducto : 49}),
+                mode: 'cors'
+            })
+            if (!res.ok) {
+                return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+
+            }else{
+
+                const backendData = await res.json();
+                setListaSubcategoria(backendData);
+
+            }
+        }catch(error){
+            return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+        }
+
+    }
+
+
+
     return (
         <div>
             <ToasterClient/>
             <div className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 h-50 flex justify-center items-center gap-2 flex-col'>
-                <h1 className='text-white text-4xl md:text-5xl text-center font-bold'>Catalogo de Servicios</h1>
-                <p className="text-white tracking-wide font-bold text-base md:text-2xl text-center">Descubre nuestros tratamientos de depilación láser con tecnología Triláser</p>
+  <div className="p-30">
+      <h1 className='text-white text-4xl md:text-5xl text-center font-bold'>Catalogo de Servicios</h1>
+      <p className="hidden md:block text-white tracking-wide text-xs text-center p-5">Diseñado para hombres y mujeres que buscan una piel saludable, libre de vello encarnado e irritación. Entendemos que la verdadera comodidad nace de una rutina sin complicaciones; por eso, nuestra tecnología Trilaser ofrece una solución definitiva que prioriza tu higiene y bienestar. Recupera la suavidad y el confort total en tu día a día con resultados visibles desde la primera sesión
+      </p>
+
+      <p className="block md:hidden text-white tracking-wide text-xs text-center p-5">Diseñado para hombres y mujeres que buscan una piel saludable.
+      </p>
+
+  </div>
             </div>
 
-     <div className="flex justify-center mt-10 px-4">
-         <div className="relative w-full max-w-3xl overflow-hidden rounded-3xl bg-white/70 p-10 sm:p-12 shadow-2xl ring-1 ring-indigo-200/70 backdrop-blur">
+     <div className="flex justify-center mt-8 px-4">
+         <div className="relative w-full max-w-4xl overflow-hidden rounded-3xl bg-white/80 p-4 sm:p-6 shadow-lg ring-1 ring-indigo-100/80 backdrop-blur">
              {/* soft gradient glow */}
-             <div className="pointer-events-none absolute -inset-12 bg-gradient-to-r from-purple-500/15 via-indigo-500/15 to-cyan-400/15 blur-2xl" />
-             {/* top accent line */}
-             <div className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400" />
+             <div className="pointer-events-none absolute -inset-16 bg-gradient-to-r from-purple-500/16 via-indigo-500/16 to-cyan-400/14 blur-3xl" />
+             {/* top accent */}
+             <div className="relative h-1 w-full rounded-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400" />
 
-             <div className="relative flex justify-center items-center gap-6">
-                 <button
-                     onClick={() => seleccionarProductosHombres()}
-                     className="border border-indigo-600 p-3 rounded-3xl w-50 text-2xl font-bold text-indigo-600 bg-indigo-100
-transition-all duration-300 ease-out
-hover:bg-gradient-to-r hover:from-purple-500 hover:via-indigo-500 hover:to-cyan-400
-hover:text-white hover:shadow-xl hover:-translate-y-0.5
-active:scale-95">
-  HOMBRE
-</button>
-                 <button
-                     onClick={() => seleccionarProductosMujer()}
-                     className="border border-indigo-600 p-3 rounded-3xl w-50 text-2xl font-bold text-white bg-indigo-600
-transition-all duration-300 ease-out
-hover:bg-gradient-to-r hover:from-purple-500 hover:via-indigo-500 hover:to-cyan-400
-hover:shadow-xl hover:-translate-y-0.5
-active:scale-95">
-  MUJER
-</button>
+             <div className="relative mt-4">
+                 <p className="mx-auto max-w-2xl text-center text-base sm:text-xl font-extrabold tracking-tight text-slate-800">
+                     Selecciona tu categoría y descubre el plan perfecto para transformar tu rutina
+                 </p>
+                 <p className="mx-auto mt-1 max-w-2xl text-center text-xs sm:text-sm text-slate-500">
+                     Elige Mujer u Hombre para ver servicios y precios recomendados.
+                 </p>
+
+                 <div className="mt-5 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+                     {/* HOMBRE */}
+                     <button
+                         type="button"
+                         onClick={seleccionarProductosHombres}
+                         className={`group relative w-full max-w-[240px] rounded-2xl p-4 sm:p-5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 ${hombres ? 'ring-2 ring-amber-400/70 shadow-[0_0_0_1px_rgba(251,191,36,0.40),0_14px_44px_-28px_rgba(245,158,11,0.55)]' : 'ring-1 ring-slate-200 hover:ring-amber-300/60 hover:shadow-md'} bg-white/70`}
+                     >
+                         <div className="relative mx-auto flex h-[150px] w-[150px] sm:h-[180px] sm:w-[180px] items-center justify-center">
+                             {/* glow */}
+                             <div className="pointer-events-none absolute -inset-6 rounded-full bg-amber-300/25 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                             <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-slate-100 via-white to-slate-100 ring-1 transition-all ${hombres ? 'ring-amber-300/70' : 'ring-indigo-100 group-hover:ring-amber-200/60'}`} />
+                             <img
+                                 src={"/hombre3.png"}
+                                 alt={"Hombre"}
+                                 width={180}
+                                 height={180}
+                                 className="relative z-10 h-full w-full rounded-full object-cover"
+                             />
+                         </div>
+
+                         <div className="mt-4 text-center">
+                             <span className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-[11px] font-extrabold tracking-[0.24em] ${hombres ? 'bg-amber-100 text-amber-900 ring-1 ring-amber-200' : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200'} transition-all duration-300`}
+                             >
+                                 HOMBRE
+                             </span>
+
+                         </div>
+                     </button>
+
+                     {/* MUJER */}
+                     <button
+                         type="button"
+                         onClick={seleccionarProductosMujer}
+                         className={`group relative w-full max-w-[240px] rounded-2xl p-4 sm:p-5 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 ${mujeres ? 'ring-2 ring-amber-400/70 shadow-[0_0_0_1px_rgba(251,191,36,0.40),0_14px_44px_-28px_rgba(245,158,11,0.55)]' : 'ring-1 ring-slate-200 hover:ring-amber-300/60 hover:shadow-md'} bg-white/70`}
+                     >
+                         <div className="relative mx-auto flex h-[150px] w-[150px] sm:h-[180px] sm:w-[180px] items-center justify-center">
+                             {/* glow */}
+                             <div className="pointer-events-none absolute -inset-6 rounded-full bg-amber-300/25 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                             <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-slate-100 via-white to-slate-100 ring-1 transition-all ${mujeres ? 'ring-amber-300/70' : 'ring-indigo-100 group-hover:ring-amber-200/60'}`} />
+                             <img
+                                 src={"/mujer1.png"}
+                                 alt={"Mujer"}
+                                 width={180}
+                                 height={180}
+                                 className="relative z-10 h-full w-full rounded-full object-cover"
+                             />
+                         </div>
+
+                         <div className="mt-4 text-center">
+                             <span className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-[11px] font-extrabold tracking-[0.24em] ${mujeres ? 'bg-amber-100 text-amber-900 ring-1 ring-amber-200' : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200'} transition-all duration-300`}
+                             >
+                                 MUJER
+                             </span>
+
+                         </div>
+                     </button>
+                 </div>
              </div>
          </div>
      </div>
 
 
+<div className="w-full flex justify-center items-center mt-10">
+    <Select
+    value={subCategoria}
+    onValueChange={value => setSubCategoria(value)}
+    >
+        <SelectTrigger className=" w-100">
+            <SelectValue placeholder="Selecciona por Categoria" />
+        </SelectTrigger>
+        <SelectContent>
+            <SelectGroup>
+                <SelectLabel>Filtrar por Categoria</SelectLabel>
+                {listaSubcategoria.map(subcategoria => (
+                    <SelectItem key={subcategoria.id_subcategoria} value={String(subcategoria.id_subcategoria)}>{subcategoria.descripcionCategoria}</SelectItem>
+                ))}
+            </SelectGroup>
+        </SelectContent>
+    </Select>
+</div>
+
             {mujeres && (
                 <div className='w-full flex justify-center items-center gap-6 mt-20 px-4'>
-                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-5xl font-bold text-transparent bg-clip-text'>MUJERES</h1>
+                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-4xl md:text-5xl font-bold text-transparent bg-clip-text'>MUJERES</h1>
                 </div>
 
             )}
@@ -176,7 +354,7 @@ active:scale-95">
 
             {hombres && (
                 <div className='w-full flex justify-center items-center gap-6 mt-20 px-4'>
-                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-5xl font-bold text-transparent bg-clip-text'>HOMBRES</h1>
+                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-4xl md:text-5xl font-bold text-transparent bg-clip-text'>HOMBRES</h1>
                 </div>
 
             )}

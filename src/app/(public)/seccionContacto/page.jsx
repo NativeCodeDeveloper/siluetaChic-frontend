@@ -2,6 +2,8 @@
 import { Phone, Mail, Facebook, Instagram, MapPin } from "lucide-react";
 import { FaWhatsapp, FaTiktok } from "react-icons/fa";
 import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 export default function SeccionContacto() {
     return (
@@ -31,10 +33,12 @@ py-20 flex flex-col justify-center items-center'>
 
 
             <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 px-6 md:flex-row md:gap-6">
-                <div className=''>
-                    <a href="tel:+56977173029" className="w-full md:w-auto">
-                      <button
-                        className="
+
+                <Link href={'/AgendaProceso'}>
+                    <div className=''>
+
+                            <button
+                                className="
                           group
                           w-full sm:w-[320px]
                           p-3
@@ -46,13 +50,19 @@ py-20 flex flex-col justify-center items-center'>
                           hover:shadow-xl hover:-translate-y-1
                           active:translate-y-0
                         "
-                        aria-label="Llamar al +56 9 7717 3029"
-                      >
-                        <Phone className="mr-3 h-6 w-6 text-indigo-500 transition-colors duration-300 group-hover:text-white" />
-                        <span>LLAMA AHORA</span>
-                      </button>
-                    </a>
-                </div>
+                                aria-label="Llamar al +56 9 7717 3029"
+                            >
+                                <Calendar className="mr-3 h-6 w-6 text-indigo-500  transition-colors duration-300 group-hover:text-white"/>
+
+
+                                <span>AGENDAR HORA</span>
+                            </button>
+
+                    </div>
+                </Link>
+
+
+
 
 
                 <div className=''>
@@ -83,9 +93,10 @@ py-20 flex flex-col justify-center items-center'>
                 </div>
 
 
-                <div className=''>
-                    <a href="mailto:siluetachicestudio@gmail.com" className="w-full md:w-auto">
-                      <button
+        <Link href={'/catalogo'}>
+            <div className=''>
+
+                    <button
                         className="
                           group
                           w-full sm:w-[320px]
@@ -99,13 +110,15 @@ py-20 flex flex-col justify-center items-center'>
                           active:translate-y-0
                         "
                         aria-label="Enviar correo a siluetachicestudio@gmail.com"
-                      >
-                        <Mail className="mr-3 h-6 w-6 text-white transition-colors duration-300 group-hover:text-indigo-600" />
-                        <span>CONTÁCTANOS</span>
-                      </button>
-                    </a>
-                </div>
+                    >
+                        <ShoppingCart className="mr-3 h-6 w-6 text-white transition-colors duration-300 group-hover:text-indigo-600"  />
 
+                        <span>COMPRAR AHORA</span>
+                    </button>
+
+            </div>
+
+        </Link>
 
 
 

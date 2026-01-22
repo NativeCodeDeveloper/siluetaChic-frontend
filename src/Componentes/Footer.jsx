@@ -76,9 +76,8 @@ export default function FooterSiluetaChic() {
                         <ul className="mt-4 space-y-3 text-sm text-neutral-400">
                             {[
                                 ["Inicio", "/"],
-                                ["Hombre", "/hombre"],
-                                ["Mujer", "/mujer"],
-                                ["Servicios", "/servicios"],
+                                ["Catalogo", "/catalogo"],
+                                ["Agenda", "/AgendaProceso"],
                                 ["Dudas", "/dudas"],
                                 ["Contacto", "/contacto"],
                             ].map(([label, href]) => (
@@ -101,7 +100,6 @@ export default function FooterSiluetaChic() {
                             {[
                                 ["Cuidados Pre y Post", "/cuidados"],
                                 ["Prohibiciones", "/prohibiciones"],
-                                ["Términos y Condiciones", "/terminos"],
                                 ["Contacto", "/contacto"],
                             ].map(([label, href]) => (
                                 <li key={label}>
@@ -161,11 +159,11 @@ export default function FooterSiluetaChic() {
                 <div className="mt-12 overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10">
                     <div className="relative aspect-[16/6] w-full">
                         <iframe
-                            title="Mapa - Av. Irarrázaval 1989"
-                            className="absolute inset-0 h-full w-full"
+                            className="absolute inset-0 w-full h-full"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3328.833121608925!2d-70.61308342614629!3d-33.453653997673065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf8e24e33aef%3A0xc87340a985daad3!2sAv.%20Irarr%C3%A1zaval%201989%2C%207750000%20%C3%91u%C3%B1oa%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses-419!2scl"
                             loading="lazy"
                             referrerPolicy="no-referrer-when-downgrade"
-                            src="https://www.google.com/maps?q=Avenida%20Irarr%C3%A1zaval%201989%2C%20Oficina%20204%20placa%20sur%2C%20%C3%91u%C3%B1oa%2C%20Santiago%2C%20Chile&output=embed"
+                            allowFullScreen
                         />
                     </div>
                 </div>
