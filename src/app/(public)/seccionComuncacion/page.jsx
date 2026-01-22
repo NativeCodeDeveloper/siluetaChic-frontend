@@ -58,7 +58,7 @@ export default function SeccionComuncacion() {
                <section className="mt-50 px-6">
                    <div className="max-w-7xl mx-auto text-center">
                        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-                           Revisa nuestras  <span className="bg-gradient-to-r from-violet-500 to-sky-500 bg-clip-text text-transparent">Promosiones</span>
+                           Revisa nuestras  <span className="bg-gradient-to-r from-violet-500 to-sky-500 bg-clip-text text-transparent">promociones</span>
                        </h1>
 
                        <p className="mt-4 text-gray-500 text-lg">
@@ -116,7 +116,7 @@ export default function SeccionComuncacion() {
                <section className="mt-50 px-6">
                    <div className="max-w-7xl mx-auto text-center">
                        <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-                           Revisa nuestras  <span className="bg-gradient-to-r from-violet-500 to-sky-500 bg-clip-text text-transparent">Promosiones</span>
+                           Revisa nuestras  <span className="bg-gradient-to-r from-violet-500 to-sky-500 bg-clip-text text-transparent">promociones</span>
                        </h1>
 
                        <p className="mt-4 text-gray-500 text-lg">

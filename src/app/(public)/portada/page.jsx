@@ -12,10 +12,13 @@ import {useEffect, useState} from "react";
 import {toast} from "react-hot-toast";
 import CarruselPortadaMoviles from "@/Componentes/CarruselPortadaMoviles";
 import PortadaCelulares from "@/app/(public)/portadaCelulares/page";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 
 export default function Portada() {
     const API = process.env.NEXT_PUBLIC_API_URL;
+    const router = useRouter();
     const PORTADA = 'portada';
     const CARD = 'card';
     const FULL = 'full';
@@ -53,12 +56,15 @@ export default function Portada() {
    );
 
 
+    function agenda() {
+        router.push(`/AgendaProceso`);
+    }
 
 
     return (
 <div>
 <div className="hidden md:block">
-    <PortadaCarrusel images={listaImagenes} />
+    <PortadaCarrusel onActionClick={()=>agenda()} images={listaImagenes} />
 </div>
 
 <PortadaCelulares/>

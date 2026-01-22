@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react';
+import ServicioPage from "@/app/(public)/servicios/page";
 import { Sun, Scissors, Ban, Droplets, Beaker, Pill, Syringe, ShowerHead, UserRound } from 'lucide-react';
 import {
     Accordion,
@@ -12,11 +13,20 @@ export default function Dudas(){
     const [estadoCuidadosPrevios, setEstadoCuidadosPrevios] = useState(true);
     const [estadoCuidadosPosteriores, setEstadoCuidadosPosteriores] = useState(false);
     const [estadoPreguntas, setEstadoPreguntas] = useState(false);
+    const [servicios, setServicios] = useState(false);
 
     function activarCuidadosPrevios(){
         setEstadoCuidadosPrevios(true);
         setEstadoPreguntas(false);
         setEstadoCuidadosPosteriores(false);
+        setServicios(false);
+    }
+
+    function activarServicios(){
+        setEstadoCuidadosPrevios(false);
+        setEstadoPreguntas(false);
+        setEstadoCuidadosPosteriores(false);
+        setServicios(true);
     }
 
 
@@ -24,6 +34,7 @@ export default function Dudas(){
         setEstadoCuidadosPrevios(false);
         setEstadoPreguntas(false);
         setEstadoCuidadosPosteriores(true);
+        setServicios(false);
     }
 
 
@@ -31,6 +42,7 @@ export default function Dudas(){
         setEstadoCuidadosPrevios(false);
         setEstadoPreguntas(true);
         setEstadoCuidadosPosteriores(false);
+        setServicios(false);
     }
 
 
@@ -67,7 +79,17 @@ export default function Dudas(){
                           className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-purple-500 font-semibold tracking-wide border-purple-400
                 hover:bg-purple-400 hover:text-white
                 "> Preguntas Frecuentes </button>
+
+                  <button onClick={()=> activarServicios()}
+                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-purple-500 font-semibold tracking-wide border-purple-400
+                hover:bg-purple-400 hover:text-white
+                "> Mas informacion </button>
               </div>
+
+
+              {servicios&&(
+                  <ServicioPage></ServicioPage>
+              )}
 
 
               {estadoCuidadosPrevios&&(
@@ -723,19 +745,25 @@ export default function Dudas(){
 
               <div className="flex justify-center gap-10 p-10">
                   <button onClick={()=> activarCuidadosPrevios()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-50 text-white font-semibold tracking-wide bg-purple-400
+                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-white font-semibold tracking-wide bg-purple-400
                 hover:bg-purple-600
                 "> Cuidados Previos </button>
 
                   <button onClick={()=> activarCuidadosPosteriores()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-50 text-purple-500 font-semibold tracking-wide
+                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-purple-500 font-semibold tracking-wide
                 hover:bg-purple-400 hover:text-white border-purple-400
                 "> Cuidados Posteriores </button>
 
                   <button onClick={()=> activarPreguntas()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-50 text-purple-500 font-semibold tracking-wide border-purple-400
+                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-purple-500 font-semibold tracking-wide border-purple-400
                 hover:bg-purple-400 hover:text-white
                 "> Preguntas Frecuentes </button>
+
+
+                  <button onClick={()=> activarServicios()}
+                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-purple-500 font-semibold tracking-wide border-purple-400
+                hover:bg-purple-400 hover:text-white
+                "> Mas informacion </button>
               </div>
 
 
@@ -956,6 +984,9 @@ export default function Dudas(){
               )}
 
 
+              {servicios&&(
+                  <ServicioPage></ServicioPage>
+              )}
 
 
 

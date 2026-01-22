@@ -405,7 +405,7 @@ totalPagado
                                                         {p.tituloProducto}
                                                     </p>
                                                     <p className="mt-0.5 text-xs text-gray-500">
-                                                        Cantidad: <span className="font-medium text-gray-700">{p.cantidadVendida}</span>
+                                                        Sesiones: <span className="font-medium text-gray-700">{p.cantidadVendida}</span>
                                                     </p>
                                                 </div>
                                                 <div className="text-right">

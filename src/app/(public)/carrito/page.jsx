@@ -138,12 +138,12 @@ export default function Carrito() {
         <div className="mt-20">
             <div className="p-4 sm:p-6">
 
-                <h1 className="text-blue-800 text-3xl sm:text-4xl font-bold">Carrito de Compras</h1>
+                    <h1 className="text-blue-800 text-3xl sm:text-4xl font-bold">Cantidad de Sesiones / Promociones</h1>
 
                 {/* Mensaje cuando no hay productos */}
                 {isMounted && productosDelCarrito.length === 0 && (
                     <div className="mt-8 bg-white rounded-lg p-6 shadow-sm text-gray-700">
-                        Tu carrito está vacío.
+                        No hay sesiones o paquetes seleccionados.
                     </div>
                 )}
 
@@ -158,11 +158,11 @@ export default function Carrito() {
                                 <TableHead
                                     className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Referencia</TableHead>
                                 <TableHead
-                                    className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Unidades</TableHead>
+                                    className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Sesiones </TableHead>
                                 <TableHead
                                     className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Aumentar/Disminuir</TableHead>
                                 <TableHead className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Valor
-                                    Unidad</TableHead>
+                                    Sesion</TableHead>
                                 <TableHead
                                     className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">SubTotal</TableHead>
                             </TableRow>

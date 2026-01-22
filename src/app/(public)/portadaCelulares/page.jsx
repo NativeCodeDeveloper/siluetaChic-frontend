@@ -74,7 +74,7 @@ export default function PortadaCelulares() {
 
 
            <div className=" flex flex-col gap-3 sm:flex-row sm:items-center ml-3 mt-2">
-               <Link href="/agenda" className="w-full sm:w-auto">
+               <Link href="/AgendaProceso" className="w-full sm:w-auto">
                    <Button
                        size="lg"
                        className="w-60 sm:w-auto rounded-full bg-gradient-to-r from-cyan-600 via-indigo-400 to-indigo-600 px-10 py-6 text-xs font-extrabold text-white shadow-[0_12px_30px_rgba(0,0,0,0.35)] transition-all duration-300 hover:brightness-110 active:scale-[0.98]"

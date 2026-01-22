@@ -32,7 +32,6 @@ export function ShadcnNavBar() {
           <nav className="hidden lg:flex items-center gap-8">
             {[  {titulo : 'Inicio' , href : '/'},
                 {titulo : 'Comprar' , href : '/catalogo'},
-                {titulo : 'Servicios' , href : '/servicios'},
                 {titulo : 'Dudas' , href : '/dudas'},
                 {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
               <Link

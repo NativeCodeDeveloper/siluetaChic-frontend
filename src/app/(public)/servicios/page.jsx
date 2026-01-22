@@ -48,16 +48,9 @@ useEffect(()=>{
             <ToasterClient/>
             {/*PANTALLAS ESCRITORIO*/}
             <div className="hidden md:block">
-                <div className="
-            bg-gradient-to-r  from-purple-300 via-indigo-400 to-cyan-700
-            h-50 flex flex-col items-center justify-center ">
-                    <h1 className='text-6xl font-bold text-white'>Nuestros Servicios</h1>
-                    <p className='text-white font-bold'>Tecnología Triláser de última generación para resultados excepcionales</p>
-                </div>
 
 
-
-                <div className="flex flex-col items-center justify-center mt-35">
+                <div className="flex flex-col items-center justify-center mt-15">
                     <h1 className='text-5xl font-bold text-gray-800'>Una nueva relación con tu piel</h1>
                     <br/>
                     <div className='mx-auto max-w-4xl text-center'>
@@ -67,64 +60,11 @@ useEffect(()=>{
                             seguridad. Te permite soltar la rutina de la rasuradora, olvidarte de la cera y abrazar una nueva
                             forma de cuidado personal.
                         </p>
+                        <br/><br/><br/>
                     </div>
 
 
 
-                    <div className='mt-30 bg-gray-100 w-full flex flex-col items-center justify-center '>
-                        <h1 className="text-5xl font-bold text-gray-800 mt-20">
-                            Mira el {" "}
-                            <span className="bg-gradient-to-r from-purple-300 via-indigo-400 to-cyan-700 text-transparent bg-clip-text">Proceso</span>
-                        </h1>
-
-
-                        <div className="mx-auto mt-16 grid w-full max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-3 md:px-0">
-
-                            {publicaciones.map((publicacion) => (
-                                <article
-                                    key={publicacion.id_publicaciones}
-                                    className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-slate-900/10"
-                                >
-                                    {/* subtle glow */}
-                                    <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                                        <div className="absolute -top-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
-                                        <div className="absolute -bottom-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
-                                    </div>
-
-                                    {/* image */}
-                                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-50 to-white">
-                                        <img
-                                            src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${publicacion.imagenPublicaciones_primera}/card`}
-                                            alt={publicacion.descripcionPublicaciones || 'Proceso'}
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                                            loading="lazy"
-                                            decoding="async"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    </div>
-
-                                    {/* content */}
-                                    <div className="relative flex flex-col gap-2 p-5">
-                                        <h3 className="text-center text-base font-extrabold tracking-tight text-slate-900 line-clamp-2">
-                                            {publicacion.descripcionPublicaciones}
-                                        </h3>
-
-                                        <div className="mx-auto h-px w-16 bg-gradient-to-r from-purple-300 via-indigo-400 to-cyan-600 opacity-70" />
-
-                                        <p className="text-center text-sm leading-relaxed text-slate-500">
-                                            Tecnología triláser para resultados suaves y progresivos.
-                                        </p>
-                                    </div>
-
-                                    {/* bottom accent */}
-                                    <div className="h-1 w-full bg-gradient-to-r from-purple-300 via-indigo-500 to-cyan-500 opacity-80" />
-                                </article>
-                            ))}
-
-                        </div>
-
-                        <br/> <br/> <br/>
-                    </div>
 
 
                     <div className='flex flex-col items-center justify-center  p-10 bg-gray-100'>
@@ -139,7 +79,7 @@ useEffect(()=>{
                         </h1>
 
                         <div>
-
+                            <br/>
                             <div className='border p-10 rounded-2xl shadow-lg mt-5 bg-white '>
                                 <p className="text-center tracking-wide text-gray-400 ">
                                     Nos especializamos en depilación triláser avanzada, un sistema seguro, rápido y eficaz para lograr una piel suave y libre de vello en cualquier época del año.
@@ -149,12 +89,13 @@ useEffect(()=>{
                                 </p>
                             </div>
                         </div>
+                        <br/><br/>
                     </div>
 
 
 
 
-                    <div className='flex flex-col items-center justify-center mt-50'>
+                    <div className='flex flex-col items-center justify-center'>
 
                         <h1 className='text-5xl font-bold text-gray-800 mt-20'>
                             Tecnología {" "}
@@ -163,7 +104,6 @@ useEffect(()=>{
                         </span>
                         </h1>
 
-                        <br/> <br/> <br/>
 
 
 
@@ -452,12 +392,6 @@ useEffect(()=>{
             {/*PANTALLAS DE CELULARES*/}
 
             <div className="block md:hidden">
-                <div className="
-            bg-gradient-to-r  from-purple-300 via-indigo-400 to-cyan-700
-            h-50 flex flex-col items-center justify-center ">
-                    <h1 className='text-3xl font-bold text-white'>Nuestros Servicios</h1>
-                    <p className='text-white text-xs text-center p-4'>Tecnología Triláser de última generación para resultados excepcionales</p>
-                </div>
 
 
 
@@ -474,61 +408,6 @@ useEffect(()=>{
                     </div>
 
 
-
-                    <div className='mt-30 bg-gray-100 w-full flex flex-col items-center justify-center '>
-                        <h1 className="text-3xl font-bold text-gray-800 mt-20">
-                            Mira el {" "}
-                            <span className="bg-gradient-to-r from-purple-300 via-indigo-400 to-cyan-700 text-transparent bg-clip-text">Proceso</span>
-                        </h1>
-
-
-                        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 p-4'>
-
-                            {publicaciones.map((publicacion) => (
-                                <article
-                                    key={publicacion.id_publicaciones}
-                                    className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-slate-900/10"
-                                >
-                                    {/* subtle glow */}
-                                    <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                                        <div className="absolute -top-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
-                                        <div className="absolute -bottom-28 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
-                                    </div>
-
-                                    {/* image */}
-                                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-50 to-white">
-                                        <img
-                                            src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${publicacion.imagenPublicaciones_primera}/card`}
-                                            alt={publicacion.descripcionPublicaciones || 'Proceso'}
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                                            loading="lazy"
-                                            decoding="async"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                                    </div>
-
-                                    {/* content */}
-                                    <div className="relative flex flex-col gap-2 p-5">
-                                        <h3 className="text-center text-base font-extrabold tracking-tight text-slate-900 line-clamp-2">
-                                            {publicacion.descripcionPublicaciones}
-                                        </h3>
-
-                                        <div className="mx-auto h-px w-16 bg-gradient-to-r from-purple-300 via-indigo-400 to-cyan-600 opacity-70" />
-
-                                        <p className="text-center text-sm leading-relaxed text-slate-500">
-                                            Tecnología triláser para resultados suaves y progresivos.
-                                        </p>
-                                    </div>
-
-                                    {/* bottom accent */}
-                                    <div className="h-1 w-full bg-gradient-to-r from-purple-300 via-indigo-500 to-cyan-500 opacity-80" />
-                                </article>
-                            ))}
-
-                        </div>
-
-                        <br/> <br/> <br/>
-                    </div>
 
 
                     <div className='flex flex-col items-center justify-center  p-10 bg-gray-100 hidden'>

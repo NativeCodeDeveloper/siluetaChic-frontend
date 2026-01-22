@@ -403,14 +403,7 @@ export default function Catalogo(){
                                     className="w-full rounded-2xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-extrabold tracking-wide text-indigo-600 shadow-sm transition-all duration-200 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:scale-[0.99]">
                                     Comprar
                                 </button>
-                                <button
-                                    onClick={()=>anadirProducto(producto)}
-                                    className="w-full rounded-2xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 px-4 py-2.5 text-sm font-extrabold tracking-wide text-white shadow-md transition-all duration-200 hover:brightness-105 hover:shadow-lg active:scale-[0.99]">
-                          <span className="flex items-center justify-center gap-2">
-                            <span>Añadir</span>
-                            <ShoppingCartIcon className="h-5 w-5 text-white transition-transform duration-200 group-hover:translate-x-0.5" />
-                          </span>
-                                </button>
+
                             </div>
                         </div>
                     </div>
