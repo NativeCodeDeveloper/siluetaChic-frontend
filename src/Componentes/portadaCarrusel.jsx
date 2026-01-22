@@ -15,27 +15,30 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
  *                            Si pasas strings, se convertirán internamente.
  *                            Máximo 6 imágenes recomendado.
  */
-export default function PortadaCarrusel({ images = [], onActionClick }) {
+export default function PortadaCarrusel({ images = [], onActionClick, loading = false }) {
     // Estado para rastrear la diapositiva actual
     const [currentIndex, setCurrentIndex] = useState(0);
     // Estado para pausar el autoplay cuando el usuario interactúa
     const [isPaused, setIsPaused] = useState(false);
 
     // Normalizamos las imagenes para asegurarnos de que sean un array de objetos
-    // Si no se pasan imagenes, usamos unos placeholders profesionales por defecto.
-    const normalizedImages = images.length > 0 ? images : [
-        { url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop", alt: "Fashion Store" },
-        { url: "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop", alt: "New Collection" },
-        { url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop", alt: "Sale" },
-    ];
+    // Si vienen strings => { url: string }
+    // Si no hay imágenes, mostramos un estado de loading/skeleton en vez de “placeholders”.
+    const normalizedImages = (images || [])
+        .map((img) => (typeof img === "string" ? { url: img, alt: "" } : img))
+        .filter(Boolean);
+
+    const isLoading = loading || normalizedImages.length === 0;
 
     // Función para ir a la siguiente diapositiva
     const nextSlide = useCallback(() => {
+        if (normalizedImages.length === 0) return;
         setCurrentIndex((prevIndex) => (prevIndex + 1) % normalizedImages.length);
     }, [normalizedImages.length]);
 
     // Función para ir a la diapositiva anterior
     const prevSlide = () => {
+        if (normalizedImages.length === 0) return;
         setCurrentIndex((prevIndex) =>
             prevIndex === 0 ? normalizedImages.length - 1 : prevIndex - 1
         );
@@ -58,6 +61,28 @@ export default function PortadaCarrusel({ images = [], onActionClick }) {
         // Limpiar intervalo al desmontar o cambiar dependencias
         return () => clearInterval(interval);
     }, [isPaused, nextSlide]);
+
+    if (isLoading) {
+        return (
+            <div className="relative w-full max-w-[1808px] h-[360px] sm:h-[320px] md:h-[460px] lg:h-[520px] overflow-hidden bg-gray-900 mx-auto">
+                {/* Skeleton */}
+                <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-white/5 via-white/10 to-white/5" />
+
+                {/* Brillo sutil */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-70" />
+
+                {/* Indicadores falsos */}
+                <div className="absolute bottom-5 md:bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 md:space-x-3 z-10">
+                    <div className="w-8 h-3 rounded-full bg-white/30" />
+                    <div className="w-3 h-3 rounded-full bg-white/20" />
+                    <div className="w-3 h-3 rounded-full bg-white/20" />
+                </div>
+
+                {/* Borde decorativo */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+            </div>
+        );
+    }
 
     return (
         // Contenedor Principal:
