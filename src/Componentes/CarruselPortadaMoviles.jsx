@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -10,14 +8,11 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
  * - Acepta array de strings (urls)
  * - Imágenes siempre completas (sin cortes) usando object-contain
  * - Soporta swipe (touch)
- * - Botón opcional (texto + handler)
  */
 export default function CarruselPortadaMoviles({
   images = [],
   autoPlay = true,
   intervalMs = 4500,
-  buttonText = "",
-  onButtonClick = undefined,
   className = "",
 }) {
   const list = useMemo(() => (Array.isArray(images) ? images.filter(Boolean) : []), [images]);
@@ -90,7 +85,7 @@ export default function CarruselPortadaMoviles({
   return (
     <section className={`w-full ${className}`}>
       <div
-        className="relative w-full overflow-hidden rounded-2xl bg-slate-900/40 ring-1 ring-white/10"
+        className="relative w-full overflow-hidden rounded-2xl bg-white sm:bg-slate-900/40"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
@@ -101,77 +96,42 @@ export default function CarruselPortadaMoviles({
           - Aquí usamos un ratio más común en mobile para que no quede aplastado.
           Si quieres EXACTO 1808x669 en mobile, cambia a aspect-[1808/669].
         */}
-        <div className="relative w-full aspect-[16/10] sm:hidden">
+        <div className="relative w-full aspect-[1808/669] sm:hidden">
           {hasItems ? (
             <div
               className="flex h-full w-full transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${index * 100}%)` }}
             >
               {list.map((src, i) => (
-                <div key={`${src}-${i}`} className="h-full w-full shrink-0">
+                <div key={`${src}-${i}`} className="h-full w-full shrink-0 bg-white">
                   <img
                     src={src}
                     alt={`portada-${i + 1}`}
                     loading={i === 0 ? "eager" : "lazy"}
-                    className="h-full w-full object-contain object-center"
+                    className="h-full w-full object-contain object-top"
                     draggable={false}
                   />
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-white/70 text-sm">
+            <div className="flex h-full w-full items-center justify-center text-slate-600 text-sm bg-white">
               No hay imágenes para mostrar
             </div>
           )}
-
-          {/* CTA Button (centrado en mobile) */}
-          {buttonText && (
-            <button
-              type="button"
-              onClick={onButtonClick}
-              className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-white/95 text-slate-900 px-5 py-3 text-sm font-semibold shadow-lg shadow-black/20 ring-1 ring-black/10 backdrop-blur transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-            >
-              {buttonText}
+          <div className="block md:hidden w-full flex justify-center mt-2">
+            <button className="p-2 border rounded-full border-indigo-600 w-80">
+              <span className="text-base md:text-xl font-bold bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+                AGENDA TU EVALUACION
+              </span>
             </button>
-          )}
+          </div>
 
-          {/* Dots */}
-          {list.length > 1 && (
-            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-center gap-2 pb-14">
-              {list.map((_, i) => (
-                <button
-                  key={`dot-${i}`}
-                  type="button"
-                  onClick={() => goTo(i)}
-                  aria-label={`Ir a imagen ${i + 1}`}
-                  className={`h-2 rounded-full transition-all ${i === index ? "w-8 bg-white" : "w-2 bg-white/40"}`}
-                />
-              ))}
-            </div>
-          )}
+          {/* Removed CTA button */}
 
-          {/* Flechas (opcionales, solo si quieres usarlas; quedan discretas) */}
-          {list.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={prev}
-                aria-label="Anterior"
-                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/30 px-3 py-2 text-white/90 ring-1 ring-white/10 backdrop-blur active:scale-95"
-              >
-                ‹
-              </button>
-              <button
-                type="button"
-                onClick={next}
-                aria-label="Siguiente"
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/30 px-3 py-2 text-white/90 ring-1 ring-white/10 backdrop-blur active:scale-95"
-              >
-                ›
-              </button>
-            </>
-          )}
+          {/* Removed Dots */}
+
+          {/* Removed Arrows */}
         </div>
 
         {/*

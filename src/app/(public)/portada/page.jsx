@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Layers, LayoutPanelTop, Package, Scroll } from "lucide-react";
 import {Cormorant_Garamond} from "next/font/google";
 import PortadaCarrusel from "@/Componentes/portadaCarrusel";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {toast} from "react-hot-toast";
 import CarruselPortadaMoviles from "@/Componentes/CarruselPortadaMoviles";
 import PortadaCelulares from "@/app/(public)/portadaCelulares/page";
@@ -67,7 +67,15 @@ export default function Portada() {
     <PortadaCarrusel onActionClick={()=>agenda()} images={listaImagenes} />
 </div>
 
-<PortadaCelulares/>
+    <div className="block md:hidden">
+        <CarruselPortadaMoviles images={listaImagenes}/>
+    </div>
+
+
+
+
+
+
 
 
 
@@ -78,7 +86,7 @@ export default function Portada() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
                 <div className="flex flex-col gap-4 text-center items-center">
 
-                    <div className="flex justify-center -mt-10">
+                    <div className="flex justify-center -mt-5">
                         <div className="group rounded-full w-36 h-36 sm:w-44 sm:h-44 lg:w-32 lg:h-32 overflow-hidden ring-1 ring-white/10 hover:ring-amber-400/60 hover:shadow-lg transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
                             <img
                                 className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110 group-hover:-translate-y-1"
