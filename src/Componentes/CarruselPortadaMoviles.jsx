@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 /**
  * CarruselPortadaMoviles
@@ -18,6 +20,11 @@ export default function CarruselPortadaMoviles({
   const list = useMemo(() => (Array.isArray(images) ? images.filter(Boolean) : []), [images]);
   const [index, setIndex] = useState(0);
   const timerRef = useRef(null);
+  const router = useRouter();
+
+  function irAgendaMoviles() {
+      router.push("/AgendaProceso");
+  }
 
   // Touch handling
   const touchStartX = useRef(0);
@@ -120,7 +127,9 @@ export default function CarruselPortadaMoviles({
             </div>
           )}
           <div className="block md:hidden w-full flex justify-center mt-2">
-            <button className="p-2 border rounded-full border-indigo-600 w-80">
+            <button
+onClick={()=> irAgendaMoviles()}
+                className="p-2 border rounded-full border-indigo-600 w-80">
               <span className="text-base md:text-xl font-bold bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">
                 AGENDA TU EVALUACION
               </span>
