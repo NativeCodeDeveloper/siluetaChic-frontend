@@ -242,16 +242,20 @@ export default function Catalogo(){
     return (
         <div>
             <ToasterClient/>
-            <div className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 h-50 flex justify-center items-center gap-2 flex-col'>
-  <div className="p-30">
-      <h1 className='text-white text-4xl md:text-5xl text-center font-bold'>Catalogo de Servicios</h1>
-      <p className="hidden md:block text-white tracking-wide text-xs text-center p-5">Diseñado para hombres y mujeres que buscan una piel saludable, libre de vello encarnado e irritación. Entendemos que la verdadera comodidad nace de una rutina sin complicaciones; por eso, nuestra tecnología Trilaser ofrece una solución definitiva que prioriza tu higiene y bienestar. Recupera la suavidad y el confort total en tu día a día con resultados visibles desde la primera sesión
-      </p>
+            <div className="bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 flex items-center justify-center">
+                <div className="w-full max-w-5xl px-4 py-10 sm:py-14 md:py-16">
+                    <h1 className="mx-auto max-w-3xl text-center text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-white">
+                        Catálogo de Servicios
+                    </h1>
 
-      <p className="block md:hidden text-white tracking-wide text-xs text-center p-5">Diseñado para hombres y mujeres que buscan una piel saludable.
-      </p>
+                    <p className="hidden md:block mx-auto mt-4 max-w-4xl text-center text-sm leading-relaxed tracking-wide text-white/95">
+                        Diseñado para hombres y mujeres que buscan una piel saludable, libre de vello encarnado e irritación. Entendemos que la verdadera comodidad nace de una rutina sin complicaciones; por eso, nuestra tecnología Trilaser ofrece una solución definitiva que prioriza tu higiene y bienestar. Recupera la suavidad y el confort total en tu día a día con resultados visibles desde la primera sesión
+                    </p>
 
-  </div>
+                    <p className="md:hidden mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed tracking-wide text-white/95">
+                        Diseñado para hombres y mujeres que buscan una piel saludable.
+                    </p>
+                </div>
             </div>
 
      <div className="flex justify-center mt-8 px-4">

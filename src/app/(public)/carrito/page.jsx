@@ -230,10 +230,7 @@ export default function Carrito() {
                                 {/* Acciones: en móvil apilan si falta espacio */}
                                 <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                        <ButtonGroup aria-label="Acciones mobile">
-                                            <Button size="sm" onClick={()=>disminuirCantidad(producto.id_producto)} variant="outline">-</Button>
-                                            <Button size="sm" onClick={()=>aumentarCantidad(producto.id_producto)} variant="outline">+</Button>
-                                        </ButtonGroup>
+
                                         <div className="text-sm text-gray-700">Unidades: <span className="font-medium">{producto.cantidadVendida}</span></div>
                                     </div>
 
@@ -256,7 +253,7 @@ export default function Carrito() {
                 </div>
 
                 {/* Botón Ir a pagar (se mantiene visible en ambos tamaños) */}
-                <div className="mt-6">
+                <div className="mt-6 flex gap-3 ">
                     <Link href="/formularioPago">
                         <button
                             className="p-2 w-44 rounded-xl font-semibold
@@ -267,6 +264,19 @@ export default function Carrito() {
                             Ir a Pagar
                         </button>
                     </Link>
+
+                    <Link href="/catalogo">
+                        <button
+                            className="p-2 w-44 rounded-xl font-semibold
+    bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600
+    text-white shadow-md transition-all duration-300
+    hover:scale-105 hover:shadow-xl"
+                        >
+                            Volver a Catalogo
+                        </button>
+                    </Link>
+
+
                 </div>
 
             </div>

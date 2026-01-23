@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select"
 import {number} from "zod";
 import ToasterClient from "@/Componentes/ToasterClient";
+import Link from "next/link";
 
 
 
@@ -149,7 +150,6 @@ export default function ProductoDetalle() {
 
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 mt-8">
-            <ToasterClient/>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <div className="flex items-start justify-center bg-white/70 backdrop-blur rounded-2xl p-4 relative">
                     <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto -mt-10">
@@ -202,12 +202,12 @@ export default function ProductoDetalle() {
                             {/* SEPARADOR SUTIL */}
                             <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
-                            <div className="w-full flex  gap-6 ">
+                            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 p-5">
                                 <Select
                                     value={cantidadSesiones}
                                     onValueChange={value => setcantidadSesiones(value)}
                                 >
-                                    <SelectTrigger className=" w-60">
+                                    <SelectTrigger className="w-full sm:w-60">
                                         <SelectValue placeholder="Cantidad de Sesiones" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -226,7 +226,7 @@ export default function ProductoDetalle() {
                                         value={zonaAnatomica}
                                         onValueChange={value => setZonaAnatomica(value)}
                                     >
-                                        <SelectTrigger className=" w-60">
+                                        <SelectTrigger className="w-full sm:w-60">
                                             <SelectValue placeholder="Selecciona Zona" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -244,21 +244,24 @@ export default function ProductoDetalle() {
 
 
                             {/* ACCIONES */}
-                            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                            <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full">
 
                                 <button
                                     type="button"
                                     disabled={booleanSinStock}
                                     onClick={() => comparAhora(producto,cantidadSesiones)}
-                                    className="
-    inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white
-    bg-blue-600 hover:bg-blue-700 active:bg-blue-800
-    shadow-lg shadow-blue-600/20 ring-1 ring-emerald-700/20 transition
-    disabled:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-500 disabled:active:bg-gray-500
-"
+                                    className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-lg shadow-blue-600/20 ring-1 ring-emerald-700/20 transition disabled:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-500 disabled:active:bg-gray-500"
                                 >
                                     Comprar
                                 </button>
+
+                                <Link href="/catalogo">
+                                    <button
+                                        className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-lg shadow-blue-600/20 ring-1 ring-emerald-700/20 transition"
+                                    >
+                                        Volver a Catalogo
+                                    </button>
+                                </Link>
 
                             </div>
 
@@ -305,7 +308,6 @@ export default function ProductoDetalle() {
            <img
                src="/MP_RGB_HANDSHAKE_color_horizontal.svg"
                alt="Mercado Pago"
-
            />
        </div>
 
