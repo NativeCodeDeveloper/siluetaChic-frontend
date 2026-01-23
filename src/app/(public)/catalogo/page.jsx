@@ -335,23 +335,36 @@ export default function Catalogo(){
      </div>
 
 
-<div className="w-full flex justify-center items-center mt-10">
-    <Select
-    value={subCategoria}
-    onValueChange={value => setSubCategoria(value)}
-    >
-        <SelectTrigger className=" w-100">
-            <SelectValue placeholder="Selecciona por Categoria" />
-        </SelectTrigger>
-        <SelectContent>
-            <SelectGroup>
-                <SelectLabel>Filtrar por Categoria</SelectLabel>
-                {listaSubcategoria.map(subcategoria => (
-                    <SelectItem key={subcategoria.id_subcategoria} value={String(subcategoria.id_subcategoria)}>{subcategoria.descripcionCategoria}</SelectItem>
-                ))}
-            </SelectGroup>
-        </SelectContent>
-    </Select>
+<div className="w-full mt-10 px-4">
+    <div className="mx-auto w-full max-w-md">
+        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-slate-600">
+            Filtrar servicios
+        </p>
+
+        <Select value={subCategoria} onValueChange={(value) => setSubCategoria(value)}>
+            <SelectTrigger className="w-full justify-between rounded-2xl border border-indigo-200/70 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-indigo-100/60 backdrop-blur hover:border-indigo-300 focus:ring-2 focus:ring-indigo-500/40">
+                <SelectValue placeholder="Selecciona una categoría" />
+            </SelectTrigger>
+
+            <SelectContent>
+                <SelectGroup>
+                    <SelectLabel>Filtrar por categoría</SelectLabel>
+                    {listaSubcategoria.map((subcategoria) => (
+                        <SelectItem
+                            key={subcategoria.id_subcategoria}
+                            value={String(subcategoria.id_subcategoria)}
+                        >
+                            {subcategoria.descripcionCategoria}
+                        </SelectItem>
+                    ))}
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+
+        <p className="mt-2 text-center text-[11px] text-slate-500">
+            Tip: elige una categoría para ver solo los servicios relacionados.
+        </p>
+    </div>
 </div>
 
             {mujeres && (
