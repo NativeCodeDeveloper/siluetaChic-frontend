@@ -97,7 +97,9 @@ export default function FormularioContacto() {
                           className="inline-flex items-center gap-3 rounded-xl border border-indigo-200/60 bg-white px-4 py-3 text-slate-700 hover:text-indigo-700 hover:border-indigo-300 transition"
                         >
                           <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-700">
-                            ✉️
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+                                  <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v.5l8 5 8-5V6H4zm16 12V8.1l-7.4 4.6a1 1 0 01-1.2 0L4 8.1V18h16z" />
+                              </svg>
                           </span>
                           silueta.chic200@gmail.com
                         </a>
@@ -107,11 +109,91 @@ export default function FormularioContacto() {
                           className="inline-flex items-center gap-3 rounded-xl border border-indigo-200/60 bg-white px-4 py-3 text-slate-700 hover:text-indigo-700 hover:border-indigo-300 transition"
                         >
                           <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-700">
-                            📞
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+                                  <path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.2 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 4a1 1 0 011-1h3.4a1 1 0 011 1 11.4 11.4 0 00.6 3.6 1 1 0 01-.2 1l-2.2 2.2z" />
+                              </svg>
                           </span>
                           +56 9 8139 6016
                         </a>
                       </div>
+                    </div>
+
+                    {/* --- INFORMACIÓN DE CONTACTO --- */}
+                    <div className="mt-6 grid gap-5 rounded-2xl border border-indigo-200/70 bg-white/80 p-5 text-sm backdrop-blur-sm shadow-sm">
+
+                        {/* Horario */}
+                        <div>
+                            <p className="text-xs uppercase tracking-widest text-indigo-600 font-semibold mb-2">
+                                Horario de atención
+                            </p>
+                            <ul className="space-y-1 text-gray-700">
+                                <li><span className="font-medium">Lunes a Viernes:</span> 9:00 AM – 7:00 PM</li>
+                                <li><span className="font-medium">Sábados:</span> 10:00 AM – 2:00 PM</li>
+                                <li><span className="font-medium">Domingos:</span> Cerrado</li>
+                            </ul>
+                        </div>
+
+                        {/* Dirección */}
+                        <div>
+                            <p className="text-xs uppercase tracking-widest text-indigo-600 font-semibold mb-1">
+                                Ubicación
+                            </p>
+                            <p className="text-gray-700">
+                                Avenida Irarrázaval 1989, Oficina 204, Placa Sur, Ñuñoa
+                            </p>
+                        </div>
+
+                        {/* Redes sociales */}
+                        <div>
+                            <p className="text-xs uppercase tracking-widest text-indigo-600 font-semibold mb-2">
+                                Síguenos en redes sociales
+                            </p>
+                            <div className="flex flex-wrap gap-3">
+    <a
+        href="https://www.instagram.com/siluetachicoficial/"
+        target="_blank"
+        aria-label="Instagram"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+            <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z" />
+        </svg>
+    </a>
+
+    <a
+        href="https://www.facebook.com/profile.php?id=61586147694822"
+        target="_blank"
+        aria-label="Facebook"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+            <path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-3h2.5V9.5A3.5 3.5 0 0114.3 6h2.2v3h-2.2a1 1 0 00-1 1V12h3.1l-.5 3h-2.6v7A10 10 0 0022 12z" />
+        </svg>
+    </a>
+
+    <a
+        href="https://www.tiktok.com/@silueta.chic?_r=1&_t=ZM-91rfsGhFSQN"
+        target="_blank"
+        aria-label="TikTok"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+            <path d="M21 8.3a6.7 6.7 0 01-3.9-1.3v7.1a6.3 6.3 0 11-5.3-6.2v3.4a2.9 2.9 0 102.3 2.8V2h3a6.7 6.7 0 003.9 3.9v2.4z" />
+        </svg>
+    </a>
+
+    <a
+        href="https://wa.me/56977173029"
+        target="_blank"
+        aria-label="WhatsApp"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+            <path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.9-1.5A10 10 0 1012 2zm0 18a7.9 7.9 0 01-4-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.4-5.6c-.2-.1-1.3-.6-1.5-.7s-.4-.1-.6.1-.7.7-.8.9-.3.2-.5.1a6.6 6.6 0 01-1.9-1.2 7.4 7.4 0 01-1.3-1.6c-.1-.2 0-.4.1-.5.1-.1.2-.3.3-.4.1-.1.1-.2.2-.4s0-.3 0-.4-.6-1.5-.8-2-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 2.9 2.9 0 00-.9 2.1 5 5 0 001 2.6 11.4 11.4 0 004.4 4c1.6.7 1.6.5 1.9.5a3.2 3.2 0 002.1-1.5c.2-.4.2-.8.2-.9s-.2-.2-.4-.3z" />
+        </svg>
+    </a>
+</div>
+                        </div>
                     </div>
                 </div>
 
