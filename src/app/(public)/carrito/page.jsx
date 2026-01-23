@@ -41,6 +41,7 @@ export default function Carrito() {
     let totalPago = 0;
 
     for (const productos of carrito) {
+        if (!productos) continue;
         if (productoCatidades[productos.id_producto]) {
             productoCatidades[productos.id_producto].cantidadVendida += 1;
         } else {
@@ -159,8 +160,7 @@ export default function Carrito() {
                                     className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Referencia</TableHead>
                                 <TableHead
                                     className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Sesiones </TableHead>
-                                <TableHead
-                                    className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Aumentar/Disminuir</TableHead>
+
                                 <TableHead className="px-4 py-3 text-left font-semibold text-sm text-gray-700 border-b">Valor
                                     Sesion</TableHead>
                                 <TableHead
@@ -184,10 +184,13 @@ export default function Carrito() {
                                         className="px-4 py-4 text-sm text-gray-800 align-middle border-b">{producto.cantidadVendida}</TableCell>
                                     <TableCell className="px-4 py-4 text-sm text-gray-800 align-middle border-b">
 
-                                        <ButtonGroup aria-label="Acciones">
+                                        {/*
+                                            <ButtonGroup aria-label="Acciones">
                                             <Button onClick={()=>disminuirCantidad(producto.id_producto)} variant="outline">-</Button>
                                             <Button onClick={()=>aumentarCantidad(producto.id_producto)} variant="outline">+</Button>
-                                        </ButtonGroup>
+                                            </ButtonGroup>
+
+                                        */}
 
                                     </TableCell>
                                     <TableCell

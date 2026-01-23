@@ -27,6 +27,14 @@ export default function Catalogo(){
 
     const router = useRouter();
 
+    function verEspecificacionProducto(id_producto){
+        try {
+            router.push(`/producto/${id_producto}`);
+        }catch(err){
+            return toast.error("No se puede ver las especificaciones del producto consulte con el administrador.")
+        }
+    }
+
     async function seleccionarProductosPorSubcategoria(subCategoria) {
         try {
 
@@ -399,7 +407,7 @@ export default function Catalogo(){
 
                             <div className="mt-auto flex gap-3">
                                 <button
-                                    onClick={() => comprarProducto(producto)}
+                                    onClick={() => verEspecificacionProducto(producto.id_producto)}
                                     className="w-full rounded-2xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-extrabold tracking-wide text-indigo-600 shadow-sm transition-all duration-200 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:scale-[0.99]">
                                     Comprar
                                 </button>

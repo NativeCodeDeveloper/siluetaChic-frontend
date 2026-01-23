@@ -5,7 +5,17 @@ import {useCarritoGlobal} from "@/ContextosGlobales/CarritoContext";
 import {toast} from "react-hot-toast";
 import {useRouter} from "next/navigation";
 import CarruselProducto from "@/Componentes/CarruselProducto";
-
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import {number} from "zod";
+import ToasterClient from "@/Componentes/ToasterClient";
 
 
 
@@ -14,6 +24,9 @@ export default function ProductoDetalle() {
 
     //USO DE CARRITO GLOBAL DE CONTEXT PARA EL USO EN TODA LA APLICACION DE ARRAY DE OBJETOS GLOBALES
     const [, setCarrito] = useCarritoGlobal();
+    const [zonaIndividual, setZonaIndividual] = useState(true);
+    const [cantidadSesiones, setcantidadSesiones] = useState(undefined);
+    const [zonaAnatomica, setZonaAnatomica] = useState(undefined);
     const router = useRouter();
 
 
@@ -22,20 +35,53 @@ export default function ProductoDetalle() {
         toast.success("Producto añadido al carrito de compras!")
     }
 
-    function comparAhora(productoSeleccionado) {
+
+
+    function agregarSesiones(productoSeleccionado, cantidadSesiones) {
+        let numeroSesiones = Number(cantidadSesiones)
+
+        if (numeroSesiones === 1) {
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+           return  toast.success("Sesiones añadidas al carrito de compras!")
+
+
+        }else if (numeroSesiones === 3) {
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            return toast.success("Sesiones añadidas  al carrito de compras!")
+
+
+        }else if (numeroSesiones === 6) {
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
+            return toast.success("Sesiones añadidas  al carrito de compras!")
+
+        }else {
+
+            return  toast.error("Debe seleccionar la cantidad de sesiones.")
+
+        }
+
+    }
+
+    function comparAhora(productoSeleccionado, cantidadSesiones) {
         try {
             if (!productoSeleccionado) {
                 return toast.error("Debe haber seleccionado el producto para poder realziar la compra inmediata");
             }else{
-                agregarAlCarrito(productoSeleccionado);
+                agregarSesiones(productoSeleccionado, cantidadSesiones)
                 router.push("/carrito");
 
             }
 
         }catch(err) {
             console.log(err)
-            return toast.error("No se puede comprar este Articulo por problemas tecnicos. Contacte al vendedor para concretar la venta.")
-        }
+            return  toast.error("Debe seleccionar la cantidad de sesiones.")        }
 
     }
 
@@ -78,6 +124,19 @@ export default function ProductoDetalle() {
     }, [id_producto]);
 
 
+    useEffect(() => {
+        if (producto?.subcategoria == null) return; // null o undefined
+
+        if (producto?.subcategoria === 23){
+            setZonaIndividual(true);
+        }else if(producto?.subcategoria === 26){
+            setZonaIndividual(true);
+        }else {
+            setZonaIndividual(false);
+        }
+
+    }, [producto?.subcategoria]);
+
 
 
 
@@ -88,12 +147,9 @@ export default function ProductoDetalle() {
     }
 
 
-
-
-
-
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 mt-8">
+            <ToasterClient/>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <div className="flex items-start justify-center bg-white/70 backdrop-blur rounded-2xl p-4 relative">
                     <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto -mt-10">
@@ -104,8 +160,6 @@ export default function ProductoDetalle() {
                             imagen4={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${producto.imagenProductoCuarta}/${VARIANT}`}
 
                         />
-
-
 
                         <div className="hidden md:block">
                             <div className="flex items-center gap-2 mt-25 ">
@@ -130,15 +184,11 @@ export default function ProductoDetalle() {
                                 {producto.tituloProducto}
                             </h1>
 
-                            <div className="flex ">
-                                <label className="font-bold">Cantidad en Stock:</label>
-                                <p className="ml-2  font-bold">{producto.cantidadStock}</p>
-                            </div>
 
                             {/* PRECIO */}
                             <div className="flex items-baseline gap-3">
                                 <span className="text-sm uppercase tracking-wider text-slate-500">Valor</span>
-                                <label className="text-2xl md:text-3xl font-bold text-blue-600">
+                                <label className="text-2xl md:text-3xl font-bold text-purple-600">
                                     $ {producto.valorProducto}
                                 </label>
                             </div>
@@ -152,17 +202,54 @@ export default function ProductoDetalle() {
                             {/* SEPARADOR SUTIL */}
                             <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
+                            <div className="w-full flex  gap-6 ">
+                                <Select
+                                    value={cantidadSesiones}
+                                    onValueChange={value => setcantidadSesiones(value)}
+                                >
+                                    <SelectTrigger className=" w-60">
+                                        <SelectValue placeholder="Cantidad de Sesiones" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Cantidad Sesiones</SelectLabel>
+                                            <SelectItem value={1}>1</SelectItem>
+                                            <SelectItem value={3}>3</SelectItem>
+                                            <SelectItem value={6}>6</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+
+
+                                {zonaIndividual&&(
+                                    <Select
+                                        value={zonaAnatomica}
+                                        onValueChange={value => setZonaAnatomica(value)}
+                                    >
+                                        <SelectTrigger className=" w-60">
+                                            <SelectValue placeholder="Selecciona Zona" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectLabel>Zona de Depilasion</SelectLabel>
+                                                <SelectItem value={"PIERNA"}>PIERNA</SelectItem>
+                                                <SelectItem value={"BRAZO"}>BRAZO</SelectItem>
+                                                <SelectItem value={"ROSTRO"}>ROSTRO</SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+
+                                )}
+                            </div>
 
 
                             {/* ACCIONES */}
                             <div className="flex flex-col sm:flex-row gap-3 pt-2">
 
-
-
                                 <button
                                     type="button"
                                     disabled={booleanSinStock}
-                                    onClick={() => agregarAlCarrito(producto)}
+                                    onClick={() => comparAhora(producto,cantidadSesiones)}
                                     className="
     inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white
     bg-blue-600 hover:bg-blue-700 active:bg-blue-800
@@ -170,19 +257,8 @@ export default function ProductoDetalle() {
     disabled:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-500 disabled:active:bg-gray-500
 "
                                 >
-                                    Añadir Unidad al carrito
-                                </button>
-
-
-                                <button
-                                    onClick={() => comparAhora(producto)}
-
-                                    type="button"
-                                    className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-950 active:bg-black shadow-lg shadow-slate-900/20 ring-1 ring-black/10 transition"
-                                >
                                     Comprar
                                 </button>
-
 
                             </div>
 
