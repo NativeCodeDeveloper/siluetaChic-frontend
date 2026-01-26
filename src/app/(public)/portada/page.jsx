@@ -97,7 +97,7 @@ export default function Portada() {
                             />
                         </div>
                     </div>
-                    <h1 className='text-base tracking-wide'><span className='font-bold'>Tecnología Trilaser:</span>  longitudes de onda para máxima eficacia.</h1>
+                    <h1 className='text-base tracking-wide'><span className='font-bold'>Tecnología Trilaser:</span>  3 longitudes de onda para máxima eficacia.</h1>
                 </div>
 
 
@@ -171,7 +171,7 @@ export default function Portada() {
                            />
                        </div>
                    </div>
-                   <h1 className='text-2xl tracking-wide'><span className='font-bold'>Tecnología Trilaser:</span>  longitudes de onda para máxima eficacia.</h1>
+                   <h1 className='text-2xl tracking-wide'><span className='font-bold'>Tecnología Trilaser:</span>  3 longitudes de onda para máxima eficacia.</h1>
                </div>
 
 

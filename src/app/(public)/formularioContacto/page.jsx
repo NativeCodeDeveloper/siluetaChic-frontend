@@ -60,139 +60,119 @@ export default function FormularioContacto() {
 
                 {/* --- LADO IZQUIERDO (Texto comercial) --- */}
                 <div className="flex flex-col justify-center p-8 md:p-12 rounded-3xl bg-gradient-to-br from-white via-indigo-50 to-cyan-50 border border-indigo-100 shadow-[0_20px_50px_rgba(79,70,229,0.12)]">
-                    <p className="text-sm uppercase tracking-widest text-indigo-600 font-medium">
-                        Contacto especializado
-                    </p>
-
-                    <h1 className="mt-3 text-3xl md:text-4xl font-extrabold text-indigo-900 leading-tight">
-                        Cuéntanos qué necesitas o cómo podemos ayudarte.
+                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-[0.95] text-slate-900">
+                        Información de
+                        <span className="block bg-gradient-to-r from-indigo-500 to-cyan-500 bg-clip-text text-transparent">Contacto</span>
                     </h1>
 
-                    <p className="mt-4 text-gray-700 text-sm md:text-base leading-relaxed">
-                        Nuestro equipo revisa cada consulta de forma personalizada. Resolvemos dudas sobre depilación láser, sesiones, preparación previa, cuidados posteriores y resultados esperados.
-                    </p>
+                    <div className="mt-10 space-y-8">
+                        {/* Dirección */}
+                        <div className="flex items-start gap-5">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 text-white">
+                                    <path fillRule="evenodd" d="M12 2.25a7.5 7.5 0 00-7.5 7.5c0 5.318 6.02 10.9 7.2 11.94a.75.75 0 00.98 0c1.18-1.04 7.2-6.622 7.2-11.94a7.5 7.5 0 00-7.5-7.5zm0 10.5a3 3 0 110-6 3 3 0 010 6z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-lg font-bold text-slate-900">Dirección</p>
+                                <p className="mt-1 text-slate-600 text-base leading-relaxed">
+                                    Avenida Irarrázaval 1989, oficina 204 placa sur, Ñuñoa, Santiago
+                                </p>
+                            </div>
+                        </div>
 
-                    <ul className="mt-5 space-y-2 text-gray-700 text-sm md:text-base list-none">
-                        <li className="flex items-start gap-3"><span className="text-indigo-500 font-semibold">•</span> ¿Es dolorosa la depilación láser?</li>
-                        <li className="flex items-start gap-3"><span className="text-indigo-500 font-semibold">•</span> ¿Cuántas sesiones necesito y cada cuánto?</li>
-                        <li className="flex items-start gap-3"><span className="text-indigo-500 font-semibold">•</span> ¿Puedo depilarme si estoy embarazada o tomando medicamentos?</li>
-                        <li className="flex items-start gap-3"><span className="text-indigo-500 font-semibold">•</span> ¿Qué cuidados debo tener antes y después de la sesión?</li>
-                    </ul>
+                        {/* Teléfono */}
+                        <div className="flex items-start gap-5">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 text-white">
+                                    <path d="M2.25 6.75A4.5 4.5 0 016.75 2.25h.5c.84 0 1.57.58 1.74 1.4l.7 3.44a1.75 1.75 0 01-.5 1.6l-1.2 1.2a13.5 13.5 0 005.62 5.62l1.2-1.2a1.75 1.75 0 011.6-.5l3.44.7c.82.17 1.4.9 1.4 1.74v.5a4.5 4.5 0 01-4.5 4.5H18C9.44 21 3 14.56 3 6V6.75z" />
+                                </svg>
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-lg font-bold text-slate-900">Teléfono</p>
+                                <a href="tel:+56981396016" className="mt-1 inline-block text-cyan-700 font-extrabold text-xl tracking-tight hover:opacity-80">
+                                    +56 9 8139 6016
+                                </a>
+                            </div>
+                        </div>
 
-                    <div className="mt-6 inline-flex items-center gap-3 rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50 to-cyan-50 px-4 py-3 text-sm text-indigo-700 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12H8m8 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        Completa el formulario y te orientaremos para que reserves tu evaluación o aclares tus dudas.
-                    </div>
+                        {/* WhatsApp */}
+                        <div className="flex items-start gap-5">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 text-white">
+                                    <path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.9-1.5A10 10 0 1012 2zm0 18a7.9 7.9 0 01-4-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.4-5.6c-.2-.1-1.3-.6-1.5-.7s-.4-.1-.6.1-.7.7-.8.9-.3.2-.5.1a6.6 6.6 0 01-1.9-1.2 7.4 7.4 0 01-1.3-1.6c-.1-.2 0-.4.1-.5.1-.1.2-.3.3-.4.1-.1.1-.2.2-.4s0-.3 0-.4-.6-1.5-.8-2-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 2.9 2.9 0 00-.9 2.1 5 5 0 001 2.6 11.4 11.4 0 004.4 4c1.6.7 1.6.5 1.9.5a3.2 3.2 0 002.1-1.5c.2-.4.2-.8.2-.9s-.2-.2-.4-.3z" />
+                                </svg>
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-lg font-bold text-slate-900">WhatsApp</p>
+                                <a href="https://wa.me/56977173029" target="_blank" className="mt-1 inline-block text-emerald-500 font-extrabold text-xl tracking-tight hover:opacity-80">
+                                    +56977173029
+                                </a>
+                            </div>
+                        </div>
 
-                    <div className="mt-6 rounded-2xl border border-indigo-200/70 bg-white/70 p-4 backdrop-blur-sm shadow-sm">
-                      <p className="text-xs uppercase tracking-widest text-indigo-600 font-semibold">
-                        Contacto directo
-                      </p>
+                        {/* Email */}
+                        <div className="flex items-start gap-5">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7 text-white">
+                                    <path d="M2.25 6.75A4.5 4.5 0 016.75 2.25h10.5a4.5 4.5 0 014.5 4.5v10.5a4.5 4.5 0 01-4.5 4.5H6.75a4.5 4.5 0 01-4.5-4.5V6.75zm2.2.9l7.05 4.4a.75.75 0 00.8 0l7.05-4.4a3 3 0 00-2.55-1.4H7a3 3 0 00-2.55 1.4zm16.3 2.3l-6.65 4.15a2.25 2.25 0 01-2.4 0L5.05 9.95v8.8A2.25 2.25 0 007.3 21h9.4a2.25 2.25 0 002.25-2.25v-8.8z" />
+                                </svg>
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-lg font-bold text-slate-900">Email</p>
+                                <a href="mailto:silueta.chic200@gmail.com" className="mt-1 inline-block text-cyan-700 font-extrabold text-xl tracking-tight hover:opacity-80">
+                                    silueta.chic200@gmail.com
+                                </a>
+                            </div>
+                        </div>
 
-                      <div className="mt-3 flex flex-col gap-3 text-sm">
-                        <a
-                          href="mailto:silueta.chic200@gmail.com"
-                          className="inline-flex items-center gap-3 rounded-xl border border-indigo-200/60 bg-white px-4 py-3 text-slate-700 hover:text-indigo-700 hover:border-indigo-300 transition"
-                        >
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-700">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-                                  <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v.5l8 5 8-5V6H4zm16 12V8.1l-7.4 4.6a1 1 0 01-1.2 0L4 8.1V18h16z" />
-                              </svg>
-                          </span>
-                          silueta.chic200@gmail.com
-                        </a>
+                        {/* Redes */}
+                        <div className="pt-2">
+                            <p className="text-lg font-bold text-slate-900">Síguenos en Redes Sociales</p>
+                            <div className="mt-4 flex items-center gap-5">
+                                <a
+                                    href="https://www.facebook.com/profile.php?id=61586147694822"
+                                    target="_blank"
+                                    aria-label="Facebook"
+                                    className="flex h-14 w-14 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-sm hover:opacity-90"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7">
+                                        <path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-3h2.5V9.5A3.5 3.5 0 0114.3 6h2.2v3h-2.2a1 1 0 00-1 1V12h3.1l-.5 3h-2.6v7A10 10 0 0022 12z" />
+                                    </svg>
+                                </a>
 
-                        <a
-                          href="tel:+56981396016"
-                          className="inline-flex items-center gap-3 rounded-xl border border-indigo-200/60 bg-white px-4 py-3 text-slate-700 hover:text-indigo-700 hover:border-indigo-300 transition"
-                        >
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600/10 text-indigo-700">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-                                  <path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.2 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 4a1 1 0 011-1h3.4a1 1 0 011 1 11.4 11.4 0 00.6 3.6 1 1 0 01-.2 1l-2.2 2.2z" />
-                              </svg>
-                          </span>
-                          +56 9 8139 6016
-                        </a>
-                      </div>
-                    </div>
+                                <a
+                                    href="https://www.instagram.com/siluetachicoficial/"
+                                    target="_blank"
+                                    aria-label="Instagram"
+                                    className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 via-rose-500 to-amber-400 text-white shadow-sm hover:opacity-90"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7">
+                                        <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z" />
+                                    </svg>
+                                </a>
 
-                    {/* --- INFORMACIÓN DE CONTACTO --- */}
-                    <div className="mt-6 grid gap-5 rounded-2xl border border-indigo-200/70 bg-white/80 p-5 text-sm backdrop-blur-sm shadow-sm">
+                                <a
+                                    href="https://www.tiktok.com/@silueta.chic?_r=1&_t=ZM-91rfsGhFSQN"
+                                    target="_blank"
+                                    aria-label="TikTok"
+                                    className="flex h-14 w-14 items-center justify-center rounded-full bg-black text-white shadow-sm hover:opacity-90"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-7 w-7">
+                                        <path d="M21 8.3a6.7 6.7 0 01-3.9-1.3v7.1a6.3 6.3 0 11-5.3-6.2v3.4a2.9 2.9 0 102.3 2.8V2h3a6.7 6.7 0 003.9 3.9v2.4z" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
 
                         {/* Horario */}
-                        <div>
-                            <p className="text-xs uppercase tracking-widest text-indigo-600 font-semibold mb-2">
-                                Horario de atención
-                            </p>
-                            <ul className="space-y-1 text-gray-700">
-                                <li><span className="font-medium">Lunes a Viernes:</span> 9:00 AM – 7:00 PM</li>
-                                <li><span className="font-medium">Sábados:</span> 10:00 AM – 2:00 PM</li>
-                                <li><span className="font-medium">Domingos:</span> Cerrado</li>
-                            </ul>
-                        </div>
-
-                        {/* Dirección */}
-                        <div>
-                            <p className="text-xs uppercase tracking-widest text-indigo-600 font-semibold mb-1">
-                                Ubicación
-                            </p>
-                            <p className="text-gray-700">
-                                Avenida Irarrázaval 1989, Oficina 204, Placa Sur, Ñuñoa
-                            </p>
-                        </div>
-
-                        {/* Redes sociales */}
-                        <div>
-                            <p className="text-xs uppercase tracking-widest text-indigo-600 font-semibold mb-2">
-                                Síguenos en redes sociales
-                            </p>
-                            <div className="flex flex-wrap gap-3">
-    <a
-        href="https://www.instagram.com/siluetachicoficial/"
-        target="_blank"
-        aria-label="Instagram"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-            <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z" />
-        </svg>
-    </a>
-
-    <a
-        href="https://www.facebook.com/profile.php?id=61586147694822"
-        target="_blank"
-        aria-label="Facebook"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-            <path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-3h2.5V9.5A3.5 3.5 0 0114.3 6h2.2v3h-2.2a1 1 0 00-1 1V12h3.1l-.5 3h-2.6v7A10 10 0 0022 12z" />
-        </svg>
-    </a>
-
-    <a
-        href="https://www.tiktok.com/@silueta.chic?_r=1&_t=ZM-91rfsGhFSQN"
-        target="_blank"
-        aria-label="TikTok"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-            <path d="M21 8.3a6.7 6.7 0 01-3.9-1.3v7.1a6.3 6.3 0 11-5.3-6.2v3.4a2.9 2.9 0 102.3 2.8V2h3a6.7 6.7 0 003.9 3.9v2.4z" />
-        </svg>
-    </a>
-
-    <a
-        href="https://wa.me/56977173029"
-        target="_blank"
-        aria-label="WhatsApp"
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition"
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-            <path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.9-1.5A10 10 0 1012 2zm0 18a7.9 7.9 0 01-4-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.4-5.6c-.2-.1-1.3-.6-1.5-.7s-.4-.1-.6.1-.7.7-.8.9-.3.2-.5.1a6.6 6.6 0 01-1.9-1.2 7.4 7.4 0 01-1.3-1.6c-.1-.2 0-.4.1-.5.1-.1.2-.3.3-.4.1-.1.1-.2.2-.4s0-.3 0-.4-.6-1.5-.8-2-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 2.9 2.9 0 00-.9 2.1 5 5 0 001 2.6 11.4 11.4 0 004.4 4c1.6.7 1.6.5 1.9.5a3.2 3.2 0 002.1-1.5c.2-.4.2-.8.2-.9s-.2-.2-.4-.3z" />
-        </svg>
-    </a>
-</div>
+                        <div className="mt-10 rounded-3xl bg-white/70 p-7 shadow-sm border border-slate-200">
+                            <p className="text-2xl font-bold text-slate-900">Horario de Atención</p>
+                            <div className="mt-5 space-y-3 text-slate-700 text-lg">
+                                <p><span className="font-extrabold">Lunes a Viernes:</span> 9:00 AM – 7:00 PM</p>
+                                <p><span className="font-extrabold">Sábados:</span> 10:00 AM – 2:00 PM</p>
+                                <p><span className="font-extrabold">Domingos:</span> Cerrado</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -202,7 +182,7 @@ export default function FormularioContacto() {
                     <div className="w-full bg-white/95 border border-gray-100 rounded-3xl shadow-[0_30px_80px_rgba(79,70,229,0.18)] p-6 md:p-8">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h2 className="text-2xl font-semibold text-indigo-800">Agenda tu consulta</h2>
+                                <h2 className="text-2xl font-semibold text-indigo-800">Agenda tu contacto</h2>
                                 <p className="text-sm text-gray-500">Cuéntanos tu duda y te ayudaremos a elegir el tratamiento y resolver tus preguntas.</p>
                             </div>
                         </div>

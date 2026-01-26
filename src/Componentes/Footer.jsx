@@ -49,8 +49,7 @@ export default function FooterSiluetaChic() {
                     <div>
                         <h3 className="text-lg font-semibold text-white">Silueta.Chic</h3>
                         <p className="mt-4 text-sm leading-6 text-neutral-400">
-                            Especialistas en depilación triláser avanzada. Tecnología de última
-                            generación para resultados visibles y duraderos.
+                            Especialistas en Depilación Triláser avanzada sin dolor en el corazón de Ñuñoa. Tecnología de última generación para resultados visibles, seguros y duraderos desde la primera sesión.
                         </p>
 
                         <div className="mt-6 flex items-center gap-3">
@@ -76,10 +75,9 @@ export default function FooterSiluetaChic() {
                         <ul className="mt-4 space-y-3 text-sm text-neutral-400">
                             {[
                                 ["Inicio", "/"],
-                                ["Catalogo", "/catalogo"],
-                                ["Agenda", "/AgendaProceso"],
-                                ["Dudas", "/dudas"],
-                                ["Contacto", "/contacto"],
+                                ["Depilacion Mujer", "/catalogo"],
+                                ["Depilacion Hombre", "/catalogo"],
+                                ["Agenda tus Sesiones", "/AgendaProceso"],
                             ].map(([label, href]) => (
                                 <li key={label}>
                                     <Link
@@ -98,9 +96,10 @@ export default function FooterSiluetaChic() {
                         <h3 className="text-lg font-semibold text-white">Información</h3>
                         <ul className="mt-4 space-y-3 text-sm text-neutral-400">
                             {[
-                                ["Cuidados Pre y Post", "/cuidados"],
-                                ["Prohibiciones", "/prohibiciones"],
-                                ["Contacto", "/contacto"],
+                                ["Cuidados Previos", "/dudas"],
+                                ["Cuidados Posteriores", "/dudas"],
+                                ["Preguntas frecuentes", "/dudas"],
+                                ["Prohibiciones", "/dudas"],
                             ].map(([label, href]) => (
                                 <li key={label}>
                                     <Link href={href} className="transition hover:text-indigo-600">

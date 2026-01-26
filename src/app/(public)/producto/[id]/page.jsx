@@ -50,7 +50,7 @@ export default function ProductoDetalle() {
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            return toast.success("Sesiones añadidas  al carrito de compras!")
+
 
 
         }else if (numeroSesiones === 6) {
@@ -60,30 +60,24 @@ export default function ProductoDetalle() {
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            return toast.success("Sesiones añadidas  al carrito de compras!")
+
 
         }else {
 
-            return  toast.error("Debe seleccionar la cantidad de sesiones.")
+            return;
 
         }
 
     }
 
     function comparAhora(productoSeleccionado, cantidadSesiones) {
-        try {
-            if (!productoSeleccionado) {
-                return toast.error("Debe haber seleccionado el producto para poder realziar la compra inmediata");
-            }else{
-                agregarSesiones(productoSeleccionado, cantidadSesiones)
-                router.push("/carrito");
-
+            if (!productoSeleccionado || !cantidadSesiones) {
+                return toast.error("Debe seleccionar la cantidad de Sesiones.");
             }
-
-        }catch(err) {
-            console.log(err)
-            return  toast.error("Debe seleccionar la cantidad de sesiones.")        }
-
+            let producto = productoSeleccionado
+            let sesiones = cantidadSesiones
+                agregarSesiones(producto, sesiones)
+                router.push("/carrito");
     }
 
 
@@ -150,6 +144,7 @@ export default function ProductoDetalle() {
 
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 mt-8">
+            <ToasterClient/>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <div className="flex items-start justify-center bg-white/70 backdrop-blur rounded-2xl p-4 relative">
                     <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto -mt-10">
@@ -252,7 +247,7 @@ export default function ProductoDetalle() {
                                     onClick={() => comparAhora(producto,cantidadSesiones)}
                                     className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-lg shadow-blue-600/20 ring-1 ring-emerald-700/20 transition disabled:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-500 disabled:active:bg-gray-500"
                                 >
-                                    Comprar
+                                    agregar al carrito
                                 </button>
 
                                 <Link href="/catalogo">
