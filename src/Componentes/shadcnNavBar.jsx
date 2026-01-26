@@ -22,9 +22,10 @@ export function ShadcnNavBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative h-16 flex items-center justify-between">
           {/* Brand */}
-          <div className="flex items-center gap-3 mt-1">
-            <Image src={'/icono1.png'} alt={'icono'} height={100} width={100} />
-              <Image src={'/icono4.png'} alt={'icono'} height={150} width={150}  className='mt-3'/>
+          <div className="flex items-center= mt-1">
+            <Image src={'/icono1.png'} alt={'icono'} height={100} width={100}  className='mr-10  hidden md:block'/>
+              <Image src={'/icono4.png'} alt={'icono'} height={150} width={150}  className='mt-3 hidden md:block'/>
+              <Image src={'/icono4.png'} alt={'icono'} height={150} width={150}  className=' mt-3 block md:hidden mr-20'/>
           </div>
           {/* Links desktop */}
           <nav className="hidden lg:flex items-center gap-8">
@@ -87,7 +88,6 @@ export function ShadcnNavBar() {
             {[  {titulo : 'Inicio' , href : '/'},
                 {titulo : 'Agenda tu Hora' , href : '/AgendaProceso'},
                 {titulo : 'Comprar' , href : '/catalogo'},
-                {titulo : 'Servicios' , href : '/servicios'},
                 {titulo : 'Dudas' , href : '/dudas'},
                 {titulo : 'Contacto' , href : '/formularioContacto'}].map((item) => (
               <Link

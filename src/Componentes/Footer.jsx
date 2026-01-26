@@ -47,27 +47,38 @@ export default function FooterSiluetaChic() {
                 <div className="grid gap-10 md:grid-cols-4">
                     {/* Brand */}
                     <div>
-                        <h3 className="text-lg font-semibold text-white">Silueta.Chic</h3>
+                        <h3 className="text-lg font-semibold text-white">Silueta Chic Estudio</h3>
                         <p className="mt-4 text-sm leading-6 text-neutral-400">
                             Especialistas en Depilación Triláser avanzada sin dolor en el corazón de Ñuñoa. Tecnología de última generación para resultados visibles, seguros y duraderos desde la primera sesión.
                         </p>
 
-                        <div className="mt-6 flex items-center gap-3">
-                            {socials.map((s) => {
-                                const Icon = s.icon;
-                                return (
-                                    <a
-                                        key={s.name}
-                                        href={s.href}
-                                        aria-label={s.name}
-                                        className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white/90 ring-1 ring-white/10 transition hover:bg-white/15 hover:text-indigo-600"
-                                    >
-                                        <Icon className="h-5 w-5" />
-                                    </a>
-                                );
-                            })}
+                        <div className="mt-6 flex items-center gap-4">
+                            {/* Social icons */}
+                            <div className="flex items-center gap-3">
+                                {socials.map((s) => {
+                                    const Icon = s.icon;
+                                    return (
+                                        <a
+                                            key={s.name}
+                                            href={s.href}
+                                            aria-label={s.name}
+                                            className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white/90 ring-1 ring-white/10 transition hover:bg-white/15 hover:text-indigo-600"
+                                        >
+                                            <Icon className="h-5 w-5" />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Brand icon */}
+                            <img
+                                src="/icono1.png"
+                                alt="Silueta Chic"
+                                className="h-40 w-auto object-contain opacity-90"
+                            />
                         </div>
                     </div>
+
 
                     {/* Quick links */}
                     <div>
@@ -110,6 +121,7 @@ export default function FooterSiluetaChic() {
                         </ul>
                     </div>
 
+
                     {/* Contact */}
                     <div>
                         <h3 className="text-lg font-semibold text-white">Contacto</h3>
@@ -118,8 +130,8 @@ export default function FooterSiluetaChic() {
                             <li className="flex gap-3">
                                 <MapPin className="mt-0.5 h-5 w-5 flex-none text-white/80" />
                                 <span>
-                  Avenida Irarrázaval 1989, Oficina 204 placa sur, Ñuñoa
-                </span>
+                     Avenida Irarrázaval 1989, Oficina 204 placa sur, Ñuñoa
+                      </span>
                             </li>
 
                             <li className="flex items-center gap-3">
@@ -150,6 +162,10 @@ export default function FooterSiluetaChic() {
                                     WhatsApp
                                 </a>
                             </li>
+
+
+
+
                         </ul>
                     </div>
                 </div>

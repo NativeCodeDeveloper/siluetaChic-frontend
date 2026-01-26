@@ -91,7 +91,6 @@ export default function PostPortada() {
 
 
                   <li>
-                      <span className='font-bold text-cyan-600'>Traducción para el cliente: </span>
                       Sentirás una sensación de frescura constante que anestesia la zona, protegiendo tu piel de quemaduras y haciendo que la sesión sea segura, cómoda y relajante.
                   </li>
 
@@ -120,7 +119,6 @@ export default function PostPortada() {
                 La depilación Trilaser no es solo "quitar vellos", es transformar cómo te sientes:
             </p>
 
-
               <ul className="mt-6 space-y-4 text-left text-[15px] leading-relaxed text-gray-600">
 
                   <li>                <span className='font-bold text-cyan-600'> Piel de Seda (Nivel Salud):  </span>
@@ -138,14 +136,6 @@ export default function PostPortada() {
                       <span className='font-bold text-amber-600'> Seguridad Clínica </span>
                       Olvídate de planificar tu ropa según si te depilaste o no. Usa ese vestido, ve a la piscina o levanta los brazos con total confianza en cualquier momento.
                   </li>
-
-
-
-
-
-
-
-
 
               </ul>
           </div>
