@@ -159,7 +159,6 @@ export default function Dudas(){
                               <Syringe className="w-10 h-10 text-indigo-600 mb-4" />
                               <h1 className="text-4xl font-bold">Vacunas</h1>
                               <p className="text-lg mt-5 text-gray-500 tracking-wide">Si te vacunaste debes esperar 15 días post inyección.</p>
-
                           </div>
 
 

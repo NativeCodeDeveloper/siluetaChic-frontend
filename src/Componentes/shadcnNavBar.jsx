@@ -22,7 +22,7 @@ export function ShadcnNavBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative h-16 flex items-center justify-between">
           {/* Brand */}
-          <div className="flex items-center= mt-1">
+          <div className="flex items-center gap-3 mt-1 p-5">
             <Image src={'/icono1.png'} alt={'icono'} height={100} width={100}  className='hidden md:block'/>
               <Image src={'/icono4.png'} alt={'icono'} height={150} width={150}  className='mt-3 hidden md:block'/>
               <Image src={'/icono4.png'} alt={'icono'} height={150} width={150}  className=' mt-3 block md:hidden mr-20'/>
