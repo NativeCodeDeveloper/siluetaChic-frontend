@@ -66,8 +66,8 @@ export default function Dudas(){
 
               <div className="flex flex-col justify-center items-center p-6 gap-3 ">
                   <button onClick={()=> activarCuidadosPrevios()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-white font-semibold tracking-wide bg-purple-400
-                hover:bg-purple-600
+                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-purple-500 font-semibold tracking-wide
+                hover:bg-purple-400 hover:text-white border-purple-400
                 "> Cuidados Previos </button>
 
                   <button onClick={()=> activarCuidadosPosteriores()}
