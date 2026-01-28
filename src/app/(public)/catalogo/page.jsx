@@ -6,6 +6,7 @@ import MediaCardImage from "@/Componentes/MediaCardImage";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import {useCarritoGlobal} from "@/ContextosGlobales/CarritoContext";
 import {useRouter} from "next/navigation";
+
 import {
     Select,
     SelectContent,
@@ -24,6 +25,64 @@ export default function Catalogo(){
     const [hombres, sethombres] = useState(false);
     const [listaSubcategoria, setListaSubcategoria] = useState([]);
     const [subCategoria, setSubCategoria] = useState(undefined);
+    const [listasubsubCategoria, setlistasubsubCategoria] = useState([]);
+    
+
+    function irProductosPorCategoria(id_subcategoria) {
+        router.push(`/producto/${id_subcategoria}`);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    async function listarSubSubcategoriasCatalogo(id_subcategoria) {
+        try {
+            const res = await fetch(`${API}/subsubcategorias/seleccionarPorSubSubCategoriaPorIdSubCategoria`, {
+                method: "POST",
+                headers: {Accept: "application/json",
+                    "Content-Type": "application/json"},
+                body: JSON.stringify({id_subcategoria}),
+                mode: "cors"
+            })
+
+            if(!res.ok){
+                return;
+            }
+
+            const dataSubSubcategoria = await res.json();
+            if (Array.isArray(dataSubSubcategoria)){
+                setlistasubsubCategoria(dataSubSubcategoria);
+            }else {
+                setlistasubsubCategoria([])
+            }
+
+        }catch (e) {
+            return toast.error('No ha sido posible listar las subcategorias contacte  a soporte de NativeCode: ERROR :' + e);
+        }
+    }
+
+
+    useEffect(() => {
+        if (subCategoria) {
+            listarSubSubcategoriasCatalogo(subCategoria);
+        } else {
+            setlistasubsubCategoria([]);
+        }
+
+    },[subCategoria])
+
+
+
+
+
+
 
     const router = useRouter();
 
@@ -386,10 +445,10 @@ export default function Catalogo(){
 
 
             <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-8 px-6 md:grid-cols-3">
-                {listaProductos.map((producto) => (
+                {listasubsubCategoria.map((subsubcategoria) => (
                     <div
-                        key={producto.id_producto}
-                        className="group relative flex h-full w-full max-w-sm flex-col overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-indigo-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                        key={subsubcategoria.id_subsubcategoria}
+                        className="group relative flex h-full w-full max-w-[420px] flex-col overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-indigo-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
                     >
                         {/* Glow / gradient border */}
                         <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
@@ -398,37 +457,46 @@ export default function Catalogo(){
                         <div className="h-1 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400" />
 
                         <div className="relative flex h-full flex-col p-6 sm:p-8">
+                            {/* Imagen estandarizada */}
                             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-50 via-indigo-50 to-cyan-50 ring-1 ring-indigo-100">
-                                <MediaCardImage
-                                    imagenProducto={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${producto.imagenProducto}/card`}
-                                    tituloProducto={producto.tituloProducto}
-                                />
-                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-indigo-900/10 via-transparent to-transparent" />
-                            </div>
-
-                            <div className="mt-5 flex items-start justify-between gap-4">
-                                <div className="min-w-0">
-                                    <h1 className=" text-lg font-extrabold tracking-tight text-slate-900">
-                                        {producto.tituloProducto}
-                                    </h1>
-                                        <div className=" px-3 py-2">
-                                            <p className="text-xs font-semibold text-slate-500">Valor</p>
-                                            <p className="text-base font-extrabold text-indigo-600">
-                                                {formatoCLP(producto.valorProducto)}
-                                            </p>
-                                        </div>
+                                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10]">
+                                    <img
+                                        src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${subsubcategoria.imagenReferencial}/card`}
+                                        alt={subsubcategoria.descripcionSubSubCategoria || 'imagen'}
+                                        className="absolute inset-0 h-full w-full object-cover"
+                                        loading="lazy"
+                                    />
                                 </div>
-
-
+                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent" />
+                                {/* Badge */}
+                                <div className="absolute left-4 top-4">
+                                    <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-[11px] font-extrabold tracking-[0.22em] text-slate-800 ring-1 ring-slate-200 backdrop-blur">
+                                        TRILASER
+                                    </span>
+                                </div>
                             </div>
 
-                            <div className="mt-auto flex gap-3">
+                            {/* Texto */}
+                            <div className="mt-5 flex flex-1 flex-col">
+                                <h1 className="text-lg font-extrabold tracking-tight text-slate-900">
+                                    {subsubcategoria.descripcionSubSubCategoria}
+                                </h1>
+                                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                                    Depilación láser segura y efectiva. Resultados visibles desde la primera sesión.
+                                </p>
+                                <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+                                {/* Botón único */}
                                 <button
-                                    onClick={() => verEspecificacionProducto(producto.id_producto)}
-                                    className="w-full rounded-2xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-extrabold tracking-wide text-indigo-600 shadow-sm transition-all duration-200 hover:border-indigo-300 hover:bg-indigo-50 hover:shadow-md active:scale-[0.99]">
-                                    Comprar
+                                    type="button"
+                                    onClick={() => irProductosPorCategoria(subsubcategoria.id_subsubcategoria)}
+                                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 px-5 py-3 text-sm font-extrabold tracking-wide text-white shadow-lg shadow-indigo-500/20 transition-all hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+                                >
+                                    <ShoppingCartIcon className="h-5 w-5" />
+                                    COMPRAR
                                 </button>
-
+                                <p className="mt-3 text-center text-[11px] text-slate-500">
+                                    Verás los servicios disponibles para esta categoría.
+                                </p>
                             </div>
                         </div>
                     </div>

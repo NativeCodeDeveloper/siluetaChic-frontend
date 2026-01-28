@@ -38,7 +38,12 @@ export default function Dashboard() {
     const [categoriaProductoSeleccion, setcategoriaProductoSeleccion] = useState("");
     const [tituloSimilar, settituloSimilar] = useState("");
     const [listaSubcategorias, setlistaSubcategorias] = useState([]);
+    const [listaSubSubCategorias, setlistaSubSubCategorias] = useState([]);
+    const [listaEspecificacionesProducto, setlistaEspecificacionesProducto] = useState([]);
+    const [valor_previo, setvalor_previo] = useState("");
     const [subcategorias, setsubcategorias] = useState("");
+    const [subsubcategorias, setsubsubcategorias] = useState("");
+    const [especificacionProducto, setespecificacionProducto] = useState("");
 
     // Previews locales para mostrar las imágenes seleccionadas (no mostrar URLs en inputs)
     const [preview1, setPreview1] = useState("");
@@ -68,6 +73,42 @@ export default function Dashboard() {
     // --- Validación/compresión de imágenes antes de subir ---
     const MAX_IMG_DIMENSION = 1600; // px (ancho o alto)
     const MAX_IMG_BYTES_BEFORE_COMPRESS = 1600 * 1024; // ~1.6 MB
+
+
+
+    async function seleccionarEspecificacionesProductos(numero_id_subsubcategoria){
+        let id_subsubcategoria = Number(numero_id_subsubcategoria);
+        try {
+
+            const res = await fetch(`${API}/especificacionProducto/seleccionarEspecificacionPorSubSubCategoria`,{
+                method: "POST",
+                headers: {Accept: "application/json",
+                    "Content-Type": "application/json"},
+                body: JSON.stringify({id_subsubcategoria}),
+                mode: "cors"
+            })
+
+            if (!res.ok){
+                console.error("Error en respuesta:", res.status);
+                return toast.error("Ha ocurrido un error en servidor contacte a soporte TI de NativeCode")
+
+            }else{
+
+                const dataBackend = await res.json();
+                if (dataBackend) {
+                    setlistaEspecificacionesProducto(dataBackend);
+                } else {
+                    setlistaEspecificacionesProducto([]);
+                }
+            }
+
+        }catch (error) {
+            console.error("Error en seleccionarEspecificacionesProductos:", error);
+            return toast.error("Ha ocurrido un error en servidor contacte a soporte TI de NativeCode")
+
+        }
+    }
+
 
     function getImageDimensions(file) {
         return new Promise((resolve, reject) => {
@@ -170,7 +211,69 @@ export default function Dashboard() {
     }
 
 
-async function listarSubcategorias(id_categoriaProducto) {
+
+
+
+    async function listarSubSubcategorias(id_subcategoria) {
+        try {
+            const res = await fetch(`${API}/subsubcategorias/seleccionarPorSubSubCategoriaPorIdSubCategoria`, {
+                method: "POST",
+                headers: {Accept: "application/json",
+                    "Content-Type": "application/json"},
+                body: JSON.stringify({id_subcategoria}),
+                mode: "cors"
+            })
+
+            if(!res.ok){
+                return;
+            }
+
+            const dataSubSubcategoria = await res.json();
+            if (Array.isArray(dataSubSubcategoria)){
+                setlistaSubSubCategorias(dataSubSubcategoria);
+            }else {
+                setlistaSubSubCategorias([])
+            }
+
+
+        }catch (e) {
+            return toast.error('No ha sido posible listar las subcategorias contacte  a soporte de NativeCode: ERROR :' + e);
+        }
+    }
+
+
+    useEffect(() => {
+        if (subcategorias) {
+            listarSubSubcategorias(subcategorias);
+        } else {
+            setlistaSubSubCategorias([]);
+        }
+        // Limpiar subsubcategoria y especificación cuando cambia la subcategoria
+        setsubsubcategorias("");
+        setespecificacionProducto("");
+        setlistaEspecificacionesProducto([]);
+    },[subcategorias])
+
+
+    // Cargar especificaciones (zona de depilación) cuando cambia la subsubcategoria
+    useEffect(() => {
+        // Si no hay subsubcategoria seleccionada, no consultamos y limpiamos el listado
+        if (!subsubcategorias) {
+            setlistaEspecificacionesProducto([]);
+            setespecificacionProducto("");
+            return;
+        }
+
+        (async () => {
+            await seleccionarEspecificacionesProductos(subsubcategorias);
+        })();
+    }, [subsubcategorias]);
+
+
+
+
+
+    async function listarSubcategorias(id_categoriaProducto) {
         try {
             const res = await fetch(`${API}/subcategorias/seleccionarPorCategoria`, {
                 method: "POST",
@@ -193,7 +296,17 @@ async function listarSubcategorias(id_categoriaProducto) {
 }
 
 useEffect(() => {
-    listarSubcategorias(categoriaProducto)
+    if (categoriaProducto) {
+        listarSubcategorias(categoriaProducto);
+    } else {
+        setlistaSubcategorias([]);
+    }
+    // Limpiar subcategoria, subsubcategoria y especificación cuando cambia la categoria
+    setsubcategorias("");
+    setsubsubcategorias("");
+    setespecificacionProducto("");
+    setlistaSubSubCategorias([]);
+    setlistaEspecificacionesProducto([]);
 },[categoriaProducto])
 
 
@@ -393,14 +506,16 @@ useEffect(() => {
 
 
     //FUNCION PARA ACTUALIZAR PRODUCTO
-    async function actualizarProducto(tituloProducto, descripcionProducto, valorProducto,categoriaProducto,subcategorias, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta, id_producto) {
+    async function actualizarProducto(tituloProducto, descripcionProducto, valorProducto, valor_previo, categoriaProducto,subcategorias, subsubcategoria, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta, especificacionProducto, id_producto) {
         try {
             if (
                 !tituloProducto ||
                 !descripcionProducto ||
                 !valorProducto ||
+                !valor_previo ||
                 !categoriaProducto ||
                 !subcategorias ||
+                !subsubcategoria ||
                 !imagenProducto||
                 !id_producto
             ) {
@@ -415,13 +530,17 @@ useEffect(() => {
                     tituloProducto,
                     descripcionProducto,
                     valorProducto,
+                    valor_previo,
                     categoriaProducto,
-                    subcategoria : subcategorias,
+                    subcategoria: subcategorias,
+                    subsubcategoria: subsubcategoria,
                     imagenProducto,
                     imagenProductoSegunda,
                     imagenProductoTercera,
                     imagenProductoCuarta,
-                    id_producto })
+                    especificacionProducto,
+                    id_producto,
+                })
             })
 
             if (!res.ok) {
@@ -501,12 +620,15 @@ useEffect(() => {
                 tituloProducto,
                 descripcionProducto,
                 valorProducto,
+                valor_previo,
                 categoriaProducto,
                 subcategorias,
+                subsubcategorias,
                 finalImage1,
                 finalImage2,
                 finalImage3,
                 finalImage4,
+                especificacionProducto,
                 productoSeleccionado.id_producto
             );
 
@@ -528,7 +650,10 @@ useEffect(() => {
         settituloProducto("");
         setdescripcionProducto("");
         setvalorProducto("");
+        setvalor_previo("");
         setcategoriaProducto("");
+        setsubcategorias("");
+        setsubsubcategorias("");
 
         // Limpiar URLs y archivos
         setimagenProducto("");
@@ -605,10 +730,14 @@ useEffect(() => {
             settituloProducto(data.tituloProducto);
             setdescripcionProducto(data.descripcionProducto);
             setvalorProducto(data.valorProducto);
+            setvalor_previo(data.valor_previo || "");
             setimagenProducto(data.imagenProducto);
             setImagenProductoSegunda(data.imagenProductoSegunda || "");
             setImagenProductoTercera(data.imagenProductoTercera || "");
             setImagenProductoCuarta(data.imagenProductoCuarta || "");
+            setcategoriaProducto(data.categoriaProducto);
+            setsubcategorias(data.subcategoria || "");
+            setsubsubcategorias(data.subsubcategoria || "");
             // Mostrar toast al seleccionar producto para edición
             toast.success("👉 Se ha Seleccionado un producto para edicion ✅");
         } catch (error) {
@@ -713,9 +842,18 @@ useEffect(() => {
                 return;
             }
 
-
             if (!subcategorias) {
                 toast.error("Debe seleccionar una subcategoria");
+                return;
+            }
+
+            if (!subsubcategorias) {
+                toast.error("Debe seleccionar una sub-subcategoria");
+                return;
+            }
+
+            if (!valor_previo || Number(valor_previo) <= 0) {
+                toast.error("El campo 'Valor antiguo' debe ser mayor que 0");
                 return;
             }
 
@@ -782,17 +920,21 @@ useEffect(() => {
             }
 
             const valorNumero = Number(valorProducto);
+            const valorPrevioNumero = Number(valor_previo);
 
             const data = {
                 tituloProducto,
                 descripcionProducto,
                 valorProducto: valorNumero,
-                imagenProducto: finalImageUrl ,
+                valor_previo: valorPrevioNumero,
+                imagenProducto: finalImageUrl,
                 imagenProductoSegunda: finalImageUrl2 || "",
                 imagenProductoTercera: finalImageUrl3 || "",
                 imagenProductoCuarta: finalImageUrl4 || "",
                 categoriaProducto: categoriaProducto,
-                subcategoria : subcategorias
+                subcategoria: subcategorias,
+                subsubcategoria: subsubcategorias,
+                especificacionProducto: especificacionProducto,
             };
 
             let res, out;
@@ -821,6 +963,10 @@ useEffect(() => {
             settituloProducto("");
             setdescripcionProducto("");
             setvalorProducto("");
+            setvalor_previo("");
+            setsubcategorias("");
+            setsubsubcategorias("");
+            setespecificacionProducto("");
             setimagenProducto("");
             setImagenProductoSegunda("");
             setImagenProductoTercera("");
@@ -954,7 +1100,69 @@ useEffect(() => {
 
 
 
-                            {/* Título del producto */}
+
+
+
+
+
+
+                                {/* SubSubCategoría del producto */}
+                                <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                                    <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                    <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
+                                     Sub-subcategoria Producto
+                                    </label>
+                                    <select
+                                        value={subsubcategorias}
+                                        onChange={(e) => setsubsubcategorias(e.target.value)}
+                                        className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 hover:border-blue-300 cursor-pointer transition"
+                                    >
+                                        <option value="" disabled>Seleccione</option>
+                                        {listaSubSubCategorias.map((subsubcategoria) => (
+                                            <option
+                                                key={subsubcategoria.id_subsubcategoria}
+                                                value={subsubcategoria.id_subsubcategoria}
+                                            >
+                                                {subsubcategoria.descripcionSubSubCategoria}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+
+
+                                {/* SubSubCategoría del producto */}
+                                <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                                    <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                    <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
+                                        Zona de depilación
+                                    </label>
+                                    <select
+                                        value={especificacionProducto}
+                                        onChange={(e) => setespecificacionProducto(e.target.value)}
+                                        className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 hover:border-blue-300 cursor-pointer transition"
+                                    >
+                                        <option value="" disabled>Seleccione</option>
+                                        {listaEspecificacionesProducto.map((especificacionProducto) => (
+                                            <option
+                                                key={especificacionProducto.id_EspecificacionProducto}
+                                                value={especificacionProducto.id_EspecificacionProducto}
+                                            >
+                                                {especificacionProducto.descripcionEspecificacion}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+
+
+
+
+
+
+
+
+                                {/* Título del producto */}
                             <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
                                 {/* Indicador visual lateral dinámico */}
                                 <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
@@ -986,7 +1194,7 @@ useEffect(() => {
                             <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
                                 <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
                                 <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
-                                    Valor Producto
+                                    Valor Actual
                                 </label>
                                 <input
                                     type="number"
@@ -998,7 +1206,27 @@ useEffect(() => {
                                 />
                             </div>
 
-                            {/* Imágenes del producto */}
+
+
+
+                                {/* Valor del producto */}
+                                <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
+                                    <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
+                                    <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
+                                        Valor Antiguo
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={valor_previo}
+                                        onChange={(e) => setvalor_previo( e.target.value)}
+                                        name="valorProductoe"
+                                        id="valorProductoe"
+                                        className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 transition"
+                                    />
+                                </div>
+
+
+                                {/* Imágenes del producto */}
                             <div className="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
                               <div className="flex items-start justify-between gap-3">
                                 <div>

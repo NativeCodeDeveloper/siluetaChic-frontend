@@ -1,5 +1,5 @@
 'use client'
-import {useState, useEffect} from "react";
+import {useState, useEffect, use} from "react";
 import {useParams} from "next/navigation";
 import {useCarritoGlobal} from "@/ContextosGlobales/CarritoContext";
 import {toast} from "react-hot-toast";
@@ -23,11 +23,15 @@ import Link from "next/link";
 export default function ProductoDetalle() {
 
 
+
+
     //USO DE CARRITO GLOBAL DE CONTEXT PARA EL USO EN TODA LA APLICACION DE ARRAY DE OBJETOS GLOBALES
     const [, setCarrito] = useCarritoGlobal();
     const [zonaIndividual, setZonaIndividual] = useState(true);
-    const [cantidadSesiones, setcantidadSesiones] = useState(undefined);
-    const [zonaAnatomica, setZonaAnatomica] = useState(undefined);
+    const [cantidadSesiones, setcantidadSesiones] = useState('');
+    const [listaProductos, setlistaProductos] = useState([]);
+    const [productoSeleccionado, setproductoSeleccionado] = useState('');
+    const [dataProductoSeleccionado, setdataProductoSeleccionado] = useState({});
     const router = useRouter();
 
 
@@ -38,46 +42,38 @@ export default function ProductoDetalle() {
 
 
 
+
     function agregarSesiones(productoSeleccionado, cantidadSesiones) {
-        let numeroSesiones = Number(cantidadSesiones)
+        const numeroSesiones = Number(cantidadSesiones);
 
         if (numeroSesiones === 1) {
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-           return  toast.success("Sesiones añadidas al carrito de compras!")
-
-
-        }else if (numeroSesiones === 3) {
+            return toast.success("Sesiones añadidas al carrito de compras!")
+        } else if (numeroSesiones === 3) {
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-
-
-
-        }else if (numeroSesiones === 6) {
+        } else if (numeroSesiones === 6) {
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
             setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-
-
-        }else {
-
+        } else {
             return;
-
         }
-
     }
 
     function comparAhora(productoSeleccionado, cantidadSesiones) {
-            if (!productoSeleccionado || !cantidadSesiones) {
-                return toast.error("Debe seleccionar la cantidad de Sesiones.");
-            }
-            let producto = productoSeleccionado
-            let sesiones = cantidadSesiones
-                agregarSesiones(producto, sesiones)
-                router.push("/carrito");
+        if (!productoSeleccionado) {
+            return toast.error("Debe seleccionar una zona.");
+        }
+        if (!cantidadSesiones) {
+            return toast.error("Debe seleccionar la cantidad de sesiones.");
+        }
+        agregarSesiones(productoSeleccionado, cantidadSesiones);
+        router.push("/carrito");
     }
 
 
@@ -86,7 +82,7 @@ export default function ProductoDetalle() {
 
     //SE USA EL PARAM DE USEPARAMS NAVEGATE DE NBEXT PARA SUAR EL ID
     const params = useParams();
-    const id_producto = params?.id;
+    const id_subsubcategoria = params?.id;
 
     // CONSTANTE API QUE APUNTA AL SERVIDOR BACKEND PARA CONECTAR CON LOS ENDPOINDS EN VIEWS
     const API = process.env.NEXT_PUBLIC_API_URL;
@@ -105,18 +101,26 @@ export default function ProductoDetalle() {
             });
             if (!res.ok) {
                 return alert("No se ha podido renderizar el producto seleccionado, porfavor conatcte a soporte TI de NativeCode.cl")
-            }else {
+            } else {
                 const dataSeleccion = await res.json();
-                setProducto(dataSeleccion);
+                setdataProductoSeleccionado(dataSeleccion);
             }
-        }catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }
 
     useEffect(() => {
-        seleccionarProductoPorID(id_producto);
-    }, [id_producto]);
+        if (productoSeleccionado) {
+            seleccionarProductoPorID(productoSeleccionado);
+        }
+    }, [productoSeleccionado]);
+
+    useEffect(() => {
+        if (!dataProductoSeleccionado) return;
+        setProducto(dataProductoSeleccionado);
+    }, [dataProductoSeleccionado]);
+
 
 
     useEffect(() => {
@@ -142,6 +146,68 @@ export default function ProductoDetalle() {
     }
 
 
+
+
+
+    async function seleccinarProductosporSubSubCategoria(subsubcategoria){
+        try {
+            const res = await fetch(`${API}/producto/seleccionarPorSubSubcategoria `, {
+                method: "POST",
+                headers: {Accept: 'application/json',
+                    'Content-Type' : 'application/json'},
+                mode: 'cors',
+                body: JSON.stringify({subsubcategoria})
+            })
+
+            if (!res.ok) {
+                return toast.error('Ha ocurrido un error porfavor contacte al administrador.')
+            }
+
+            const dataListadoProducto = await res.json();
+
+            if(Array.isArray(dataListadoProducto)){
+                setlistaProductos(dataListadoProducto);
+            }else {
+                setlistaProductos([])
+            }
+
+        }catch (error) {
+            return toast.error('No ha sido posible cargar los productos. Contacte al administrador del sistema.')
+        }
+    }
+
+    useEffect(() => {
+        seleccinarProductosporSubSubCategoria(id_subsubcategoria)
+    }, [id_subsubcategoria]);
+
+
+
+    function calcularPrecio(valorPorDefecto, cantidadSesiones){
+        if (!valorPorDefecto) {
+            valorPorDefecto = 0;
+        }
+        const sesiones = Number(cantidadSesiones) || 1;
+        const nuevo_valor = valorPorDefecto * sesiones;
+        return nuevo_valor;
+    }
+
+
+
+    function verificadorDeProducto(stringTitulo) {
+        if (!productoSeleccionado) {
+            return 'Debe seleccionar una zona o promoción';
+        }
+
+        if (!stringTitulo) {
+            return 'Debe seleccionar una zona o promoción';
+        }
+
+        return stringTitulo;
+    }
+
+
+
+
     return (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 mt-8">
             <ToasterClient/>
@@ -149,10 +215,10 @@ export default function ProductoDetalle() {
                 <div className="flex items-start justify-center bg-white/70 backdrop-blur rounded-2xl p-4 relative">
                     <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto -mt-10">
                         <CarruselProducto
-                            imagen1={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${producto.imagenProducto}/${VARIANT}`}
-                            imagen2={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${producto.imagenProductoSegunda}/${VARIANT}`}
-                            imagen3={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${producto.imagenProductoTercera}/${VARIANT}`}
-                            imagen4={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${producto.imagenProductoCuarta}/${VARIANT}`}
+                            imagen1={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${dataProductoSeleccionado.imagenProducto}/${VARIANT}`}
+                            imagen2={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${dataProductoSeleccionado.imagenProductoSegunda}/${VARIANT}`}
+                            imagen3={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${dataProductoSeleccionado.imagenProductoTercera}/${VARIANT}`}
+                            imagen4={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${dataProductoSeleccionado.imagenProductoCuarta}/${VARIANT}`}
 
                         />
 
@@ -176,16 +242,34 @@ export default function ProductoDetalle() {
                         <>
                             {/* TÍTULO DEL PRODUCTO */}
                             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-slate-900">
-                                {producto.tituloProducto}
+                                {verificadorDeProducto(producto.tituloProducto)}
                             </h1>
 
 
                             {/* PRECIO */}
                             <div className="flex items-baseline gap-3">
                                 <span className="text-sm uppercase tracking-wider text-slate-500">Valor</span>
-                                <label className="text-2xl md:text-3xl font-bold text-purple-600">
-                                    $ {producto.valorProducto}
-                                </label>
+               <label className="text-2xl md:text-3xl font-bold text-purple-600">
+                   {new Intl.NumberFormat('es-CL', {
+                       style: 'currency',
+                       currency: 'CLP',
+                       maximumFractionDigits: 0
+                   }).format(calcularPrecio(producto.valorProducto, cantidadSesiones))}
+               </label>
+                            </div>
+                            <div className="flex items-baseline gap-3 opacity-80">
+                                <span className="text-xs uppercase tracking-wider text-slate-400">
+                                    Valor previo
+                                </span>
+
+
+                                <span className="relative text-base md:text-lg font-medium text-slate-400 opacity-90 after:content-[''] after:absolute after:left-0 after:right-0 after:top-1/2 after:h-[2px] after:bg-slate-400 after:-translate-y-1/2">
+                                    {new Intl.NumberFormat('es-CL', {
+                                        style: 'currency',
+                                        currency: 'CLP',
+                                        maximumFractionDigits: 0
+                                    }).format(calcularPrecio(producto.valor_previo, cantidadSesiones))}
+                                </span>
                             </div>
 
                             {/* DESCRIPCIÓN */}
@@ -208,34 +292,53 @@ export default function ProductoDetalle() {
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectLabel>Cantidad Sesiones</SelectLabel>
-                                            <SelectItem value={1}>1</SelectItem>
-                                            <SelectItem value={3}>3</SelectItem>
-                                            <SelectItem value={6}>6</SelectItem>
+                                            <SelectItem value="1">1</SelectItem>
+                                            <SelectItem value="3">3</SelectItem>
+                                            <SelectItem value="6">6</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
 
-
-                                {zonaIndividual&&(
-                                    <Select
-                                        value={zonaAnatomica}
-                                        onValueChange={value => setZonaAnatomica(value)}
-                                    >
-                                        <SelectTrigger className="w-full sm:w-60">
-                                            <SelectValue placeholder="Selecciona Zona" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Zona de Depilasion</SelectLabel>
-                                                <SelectItem value={"PIERNA"}>PIERNA</SelectItem>
-                                                <SelectItem value={"BRAZO"}>BRAZO</SelectItem>
-                                                <SelectItem value={"ROSTRO"}>ROSTRO</SelectItem>
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-
-                                )}
+                                <Select
+                                    value={productoSeleccionado}
+                                    onValueChange={(value) => setproductoSeleccionado(value)}
+                                >
+                                    <SelectTrigger className="w-full sm:w-60">
+                                        <SelectValue placeholder="Selecciona Zona" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {listaProductos.length > 0 ? (
+                                                listaProductos.map((producto) => (
+                                                    <SelectItem
+                                                        key={producto.id_producto}
+                                                        value={String(producto.id_producto)}
+                                                    >
+                                                        {producto.tituloProducto}
+                                                    </SelectItem>
+                                                ))
+                                            ) : (
+                                                <div className="px-3 py-2 text-sm text-gray-500 pointer-events-none select-none">
+                                                    No se ha seleccionado una categoría
+                                                </div>
+                                            )}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                             {/* ACCIONES */}
@@ -243,8 +346,8 @@ export default function ProductoDetalle() {
 
                                 <button
                                     type="button"
-                                    disabled={booleanSinStock}
-                                    onClick={() => comparAhora(producto,cantidadSesiones)}
+                                    disabled={booleanSinStock || !productoSeleccionado || !cantidadSesiones}
+                                    onClick={() => comparAhora(producto, cantidadSesiones)}
                                     className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-lg shadow-blue-600/20 ring-1 ring-emerald-700/20 transition disabled:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-500 disabled:active:bg-gray-500"
                                 >
                                     agregar al carrito

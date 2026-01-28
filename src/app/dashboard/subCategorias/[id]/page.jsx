@@ -1,9 +1,10 @@
 "use client";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import {useState,useEffect} from "react";
 import {ShadcnButton} from "@/Componentes/shadcnButton";
 import {toast} from "react-hot-toast";
 import ToasterClient from "@/Componentes/ToasterClient";
+import {router} from "next/client";
 import {
     Table,
     TableBody,
@@ -26,6 +27,13 @@ export default function SubCategoria(){
     const [descripcionSubcategoria, setDescripcionSubcategoria] = useState("");
     const [dataSeleccion, setDataSeleccion] = useState([]);
     const [id_subcategoria, setIdSubcategoria] = useState(0);
+    const router = useRouter();
+
+
+    function irSubSubCategoria(id) {
+        router.push(`/dashboard/subsubcategoria/${id}`);
+    }
+
 
 
 
@@ -377,6 +385,13 @@ export default function SubCategoria(){
                                             <ShadcnButton
                                                 nombre={'Eliminar Subcategoria'}
                                                 funcion={(e)=> eliminarSubcategoria(subcategoria.id_subcategoria) }
+                                            />
+                                        </TableCell>
+
+                                        <TableCell className="py-3">
+                                            <ShadcnButton
+                                                nombre={'Sub-Subcategorias'}
+                                                funcion={(e)=> irSubSubCategoria(subcategoria.id_subcategoria) }
                                             />
                                         </TableCell>
                                     </TableRow>

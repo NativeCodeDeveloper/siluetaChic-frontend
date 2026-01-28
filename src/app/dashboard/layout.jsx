@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Inicio
+                                Inicio Panel
                             </Link>
 
                             <Link
@@ -37,7 +37,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Pedidos
+                                Compras en Linea
                             </Link>
 
                             <Link
@@ -45,7 +45,16 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Productos
+                                Productos / Servicios
+                            </Link>
+
+
+                            <Link
+                                href="/dashboard/EspecificacionProductos"
+                                className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
+                            >
+                                <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
+                                Zonas de Depilacion
                             </Link>
 
                             <Link
@@ -53,7 +62,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Cupones
+                                Cupones Descuentos
                             </Link>
 
                             <Link
@@ -61,7 +70,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Agenda
+                                Ingreso Agendamientos
                             </Link>
 
 
@@ -72,7 +81,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Calendario
+                                Calendario de Citas
                             </Link>
 
                             <Link
@@ -80,7 +89,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Reservaciones
+                                Estado de Reservaciones
                             </Link>
 
                             <Link
@@ -88,7 +97,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Categorías
+                                Categorías Productos/Servicios
                             </Link>
 
                             <Link
@@ -96,7 +105,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Publicaciones
+                                Publicaciones Estandar
                             </Link>
 
 
@@ -105,7 +114,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Portada
+                                Carrusel de Portada
                             </Link>
 
                             <Link
@@ -113,7 +122,7 @@ export default function DashboardLayout({ children }) {
                                 className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
                             >
                                 <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Ingreso Pacientes
+                                Ingreso Pacientes en sistema
                             </Link>
 
 
