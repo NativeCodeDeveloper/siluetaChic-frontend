@@ -49,13 +49,6 @@ export default function DashboardLayout({ children }) {
                             </Link>
 
 
-                            <Link
-                                href="/dashboard/EspecificacionProductos"
-                                className="group flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium text-white hover:bg-blue-400/15 transition"
-                            >
-                                <span className="h-1.5 w-1.5 rounded-full bg-white/40 group-hover:bg-blue-400 transition" />
-                                Zonas de Depilacion
-                            </Link>
 
                             <Link
                                 href="/dashboard/cupones"

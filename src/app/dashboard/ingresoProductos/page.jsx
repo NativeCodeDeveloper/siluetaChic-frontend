@@ -39,11 +39,10 @@ export default function Dashboard() {
     const [tituloSimilar, settituloSimilar] = useState("");
     const [listaSubcategorias, setlistaSubcategorias] = useState([]);
     const [listaSubSubCategorias, setlistaSubSubCategorias] = useState([]);
-    const [listaEspecificacionesProducto, setlistaEspecificacionesProducto] = useState([]);
     const [valor_previo, setvalor_previo] = useState("");
     const [subcategorias, setsubcategorias] = useState("");
     const [subsubcategorias, setsubsubcategorias] = useState("");
-    const [especificacionProducto, setespecificacionProducto] = useState("");
+
 
     // Previews locales para mostrar las imágenes seleccionadas (no mostrar URLs en inputs)
     const [preview1, setPreview1] = useState("");
@@ -250,24 +249,10 @@ export default function Dashboard() {
         }
         // Limpiar subsubcategoria y especificación cuando cambia la subcategoria
         setsubsubcategorias("");
-        setespecificacionProducto("");
-        setlistaEspecificacionesProducto([]);
     },[subcategorias])
 
 
-    // Cargar especificaciones (zona de depilación) cuando cambia la subsubcategoria
-    useEffect(() => {
-        // Si no hay subsubcategoria seleccionada, no consultamos y limpiamos el listado
-        if (!subsubcategorias) {
-            setlistaEspecificacionesProducto([]);
-            setespecificacionProducto("");
-            return;
-        }
 
-        (async () => {
-            await seleccionarEspecificacionesProductos(subsubcategorias);
-        })();
-    }, [subsubcategorias]);
 
 
 
@@ -304,9 +289,7 @@ useEffect(() => {
     // Limpiar subcategoria, subsubcategoria y especificación cuando cambia la categoria
     setsubcategorias("");
     setsubsubcategorias("");
-    setespecificacionProducto("");
     setlistaSubSubCategorias([]);
-    setlistaEspecificacionesProducto([]);
 },[categoriaProducto])
 
 
@@ -506,7 +489,7 @@ useEffect(() => {
 
 
     //FUNCION PARA ACTUALIZAR PRODUCTO
-    async function actualizarProducto(tituloProducto, descripcionProducto, valorProducto, valor_previo, categoriaProducto,subcategorias, subsubcategoria, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta, especificacionProducto, id_producto) {
+    async function actualizarProducto(tituloProducto, descripcionProducto, valorProducto, valor_previo, categoriaProducto,subcategorias, subsubcategoria, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta, id_producto) {
         try {
             if (
                 !tituloProducto ||
@@ -538,7 +521,7 @@ useEffect(() => {
                     imagenProductoSegunda,
                     imagenProductoTercera,
                     imagenProductoCuarta,
-                    especificacionProducto,
+                    especificacionProducto : 1,
                     id_producto,
                 })
             })
@@ -628,7 +611,6 @@ useEffect(() => {
                 finalImage2,
                 finalImage3,
                 finalImage4,
-                especificacionProducto,
                 productoSeleccionado.id_producto
             );
 
@@ -934,7 +916,7 @@ useEffect(() => {
                 categoriaProducto: categoriaProducto,
                 subcategoria: subcategorias,
                 subsubcategoria: subsubcategorias,
-                especificacionProducto: especificacionProducto,
+                especificacionProducto: 1,
             };
 
             let res, out;
@@ -966,7 +948,6 @@ useEffect(() => {
             setvalor_previo("");
             setsubcategorias("");
             setsubsubcategorias("");
-            setespecificacionProducto("");
             setimagenProducto("");
             setImagenProductoSegunda("");
             setImagenProductoTercera("");
@@ -1131,28 +1112,7 @@ useEffect(() => {
 
 
 
-                                {/* SubSubCategoría del producto */}
-                                <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
-                                    <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
-                                    <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
-                                        Zona de depilación
-                                    </label>
-                                    <select
-                                        value={especificacionProducto}
-                                        onChange={(e) => setespecificacionProducto(e.target.value)}
-                                        className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 hover:border-blue-300 cursor-pointer transition"
-                                    >
-                                        <option value="" disabled>Seleccione</option>
-                                        {listaEspecificacionesProducto.map((especificacionProducto) => (
-                                            <option
-                                                key={especificacionProducto.id_EspecificacionProducto}
-                                                value={especificacionProducto.id_EspecificacionProducto}
-                                            >
-                                                {especificacionProducto.descripcionEspecificacion}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
+
 
 
 
