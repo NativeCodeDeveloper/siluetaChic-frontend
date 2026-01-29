@@ -214,12 +214,12 @@ export default function ProductoDetalle() {
 
 
 
-    return (
-        <div className="w-full flex justify-center mt-8">
+return (
+        <div className="w-full flex justify-center mt-6">
             <ToasterClient/>
-            <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
-                <div className="flex items-start justify-center bg-white/70 backdrop-blur rounded-2xl p-4 relative w-full max-w-2xl mx-auto">
-                    <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto -mt-10">
+            <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div className="flex items-start justify-center bg-slate-50/60 backdrop-blur rounded-2xl border border-slate-200 p-3 relative w-full max-w-2xl mx-auto overflow-hidden">
+                    <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto pt-2">
                         <CarruselProducto
                             imagen1={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${dataProductoSeleccionado.imagenProducto}/${VARIANT}`}
                             imagen2={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${dataProductoSeleccionado.imagenProductoSegunda}/${VARIANT}`}
@@ -229,12 +229,14 @@ export default function ProductoDetalle() {
                         />
 
                         <div className="hidden md:block">
-                            <div className="flex items-center gap-2 mt-25 ">
-                                <img
-                                    src="/MP_RGB_HANDSHAKE_color_horizontal.svg"
-                                    alt="Mercado Pago"
-
-                                />
+                            <div className="mt-4 flex items-center justify-center">
+                                <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2">
+                                    <img
+                                        src="/MP_RGB_HANDSHAKE_color_horizontal.svg"
+                                        alt="Mercado Pago"
+                                        className="h-6 w-auto opacity-80 grayscale"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -242,7 +244,7 @@ export default function ProductoDetalle() {
                 </div>
 
 
-                <div className="space-y-6 w-full max-w-2xl mx-auto">
+                <div className="space-y-4 w-full max-w-2xl mx-auto">
 
                     {producto && (
                         <>
@@ -285,9 +287,9 @@ export default function ProductoDetalle() {
 
 
                             {/* SEPARADOR SUTIL */}
-                            <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+                            <div className="h-px bg-slate-200/70" />
 
-                            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 p-5">
+                            <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 p-4 rounded-2xl border border-slate-200 bg-slate-50/60">
                                 <Select
                                     value={cantidadSesiones}
                                     onValueChange={value => setcantidadSesiones(value)}
@@ -349,54 +351,46 @@ export default function ProductoDetalle() {
 
                             {/* ACCIONES */}
                             <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full">
-
                                 <button
                                     type="button"
                                     disabled={booleanSinStock || !productoSeleccionado || !cantidadSesiones}
                                     onClick={() => comparAhora(producto, cantidadSesiones)}
-                                    className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-lg shadow-blue-600/20 ring-1 ring-emerald-700/20 transition disabled:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-500 disabled:active:bg-gray-500"
+                                    className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-slate-950 shadow-sm ring-1 ring-slate-900/10 transition disabled:bg-slate-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-slate-400 disabled:active:bg-slate-400"
                                 >
-                                    agregar al carrito
+                                    Agregar al carrito
                                 </button>
 
                                 <Link href="/catalogo">
                                     <button
-                                        className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-lg shadow-blue-600/20 ring-1 ring-emerald-700/20 transition"
+                                        className="inline-flex w-full sm:w-auto sm:flex-1 min-h-12 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-slate-900 bg-white border border-slate-200 hover:bg-slate-50 active:bg-slate-100 shadow-sm transition"
                                     >
                                         Volver a Catalogo
                                     </button>
                                 </Link>
-
                             </div>
 
-
-
-
                             {/* BENEFICIOS / SELLOS DE CONFIANZA */}
-                            <div className="mt-6 rounded-2xl border border-sky-200 bg-white text-slate-900 px-4 py-4 shadow-sm">
-                                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-sky-600 mb-4 text-center sm:text-left">
-                                    Compra segura y respaldo garantizado
+                            <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50/60 text-slate-900 px-4 py-4 shadow-sm">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600 mb-3 text-center sm:text-left">
+                                    Compra segura y respaldo
                                 </p>
-                                <div className="flex flex-col sm:grid sm:grid-cols-3 gap-4 sm:gap-6">
-                                    {/* Pago seguro */}
-                                    <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-1 sm:gap-2 p-3 rounded-xl border border-sky-100 bg-sky-50/30">
-                                        <p className="text-base font-semibold leading-tight">Pago 100% seguro</p>
-                                        <p className="text-xs text-slate-500 leading-snug">
-                                            Tus datos están protegidos con cifrado avanzado y nunca se comparten con terceros.
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div className="rounded-xl border border-slate-200 bg-white px-3 py-3">
+                                        <p className="text-sm font-semibold leading-tight">Pago seguro</p>
+                                        <p className="text-xs text-slate-600 leading-snug mt-1">
+                                            Tus datos se protegen con cifrado y no se comparten.
                                         </p>
                                     </div>
-                                    {/* Medios de pago */}
-                                    <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-1 sm:gap-2 p-3 rounded-xl border border-sky-100 bg-sky-50/30">
-                                        <p className="text-base font-semibold leading-tight">Medios de pago flexibles</p>
-                                        <p className="text-xs text-slate-500 leading-snug">
-                                            Aceptamos tarjetas de crédito, débito y transferencias bancarias.
+                                    <div className="rounded-xl border border-slate-200 bg-white px-3 py-3">
+                                        <p className="text-sm font-semibold leading-tight">Medios flexibles</p>
+                                        <p className="text-xs text-slate-600 leading-snug mt-1">
+                                            Crédito, débito y transferencias disponibles.
                                         </p>
                                     </div>
-                                    {/* Soporte */}
-                                    <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-1 sm:gap-2 p-3 rounded-xl border border-sky-100 bg-sky-50/30">
-                                        <p className="text-base font-semibold leading-tight">Soporte dedicado</p>
-                                        <p className="text-xs text-slate-500 leading-snug">
-                                            Te acompañamos en todo el proceso de compra y postventa para resolver cualquier inquietud.
+                                    <div className="rounded-xl border border-slate-200 bg-white px-3 py-3">
+                                        <p className="text-sm font-semibold leading-tight">Soporte</p>
+                                        <p className="text-xs text-slate-600 leading-snug mt-1">
+                                            Acompañamiento en compra y postventa.
                                         </p>
                                     </div>
                                 </div>
@@ -407,12 +401,16 @@ export default function ProductoDetalle() {
                     )}
                 </div>
 
-
-       <div className="block md:hidden">
-           <img
-               src="/MP_RGB_HANDSHAKE_color_horizontal.svg"
-               alt="Mercado Pago"
-           />
+       <div className="block md:hidden w-full px-4 pb-6">
+           <div className="flex justify-center">
+               <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2">
+                   <img
+                       src="/MP_RGB_HANDSHAKE_color_horizontal.svg"
+                       alt="Mercado Pago"
+                       className="h-6 w-auto opacity-80 grayscale"
+                   />
+               </div>
+           </div>
        </div>
 
             </div>
