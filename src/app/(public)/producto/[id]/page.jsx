@@ -180,6 +180,12 @@ export default function ProductoDetalle() {
         seleccinarProductosporSubSubCategoria(id_subsubcategoria)
     }, [id_subsubcategoria]);
 
+    useEffect(() => {
+        if (listaProductos.length > 0 && !productoSeleccionado) {
+            setproductoSeleccionado(String(listaProductos[0].id_producto));
+        }
+    }, [listaProductos, productoSeleccionado]);
+
 
 
     function calcularPrecio(valorPorDefecto, cantidadSesiones){
@@ -209,10 +215,10 @@ export default function ProductoDetalle() {
 
 
     return (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 mt-8">
+        <div className="w-full flex justify-center mt-8">
             <ToasterClient/>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <div className="flex items-start justify-center bg-white/70 backdrop-blur rounded-2xl p-4 relative">
+            <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+                <div className="flex items-start justify-center bg-white/70 backdrop-blur rounded-2xl p-4 relative w-full max-w-2xl mx-auto">
                     <div className="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto -mt-10">
                         <CarruselProducto
                             imagen1={`https://imagedelivery.net/${CLOUDFLARE_HASH}/${dataProductoSeleccionado.imagenProducto}/${VARIANT}`}
@@ -236,7 +242,7 @@ export default function ProductoDetalle() {
                 </div>
 
 
-                <div className="space-y-6">
+                <div className="space-y-6 w-full max-w-2xl mx-auto">
 
                     {producto && (
                         <>

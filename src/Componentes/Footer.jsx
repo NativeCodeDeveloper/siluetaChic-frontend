@@ -72,7 +72,7 @@ export default function FooterSiluetaChic() {
 
                             {/* Brand icon */}
                             <img
-                                src="/icono1.png"
+                                src="/logofooter.png"
                                 alt="Silueta Chic"
                                 className="h-40 w-auto object-contain opacity-90"
                             />

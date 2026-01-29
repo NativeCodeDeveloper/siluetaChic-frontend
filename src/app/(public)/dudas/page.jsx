@@ -65,25 +65,37 @@ export default function Dudas(){
 
 
               <div className="flex flex-col justify-center items-center p-6 gap-3 ">
-                  <button onClick={()=> activarCuidadosPrevios()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-purple-500 font-semibold tracking-wide
-                hover:bg-purple-400 hover:text-white border-purple-400
-                "> Cuidados Previos </button>
+                  <button
+                      onClick={()=> activarCuidadosPrevios()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-80 font-semibold tracking-wide transition
+${estadoCuidadosPrevios 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Cuidados Previos </button>
 
-                  <button onClick={()=> activarCuidadosPosteriores()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-purple-500 font-semibold tracking-wide
-                hover:bg-purple-400 hover:text-white border-purple-400
-                "> Cuidados Posteriores </button>
+                  <button
+                      onClick={()=> activarCuidadosPosteriores()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-80 font-semibold tracking-wide transition
+${estadoCuidadosPosteriores 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Cuidados Posteriores </button>
 
-                  <button onClick={()=> activarPreguntas()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-purple-500 font-semibold tracking-wide border-purple-400
-                hover:bg-purple-400 hover:text-white
-                "> Preguntas Frecuentes </button>
+                  <button
+                      onClick={()=> activarPreguntas()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-80 font-semibold tracking-wide transition
+${estadoPreguntas 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Preguntas Frecuentes </button>
 
-                  <button onClick={()=> activarServicios()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-80 text-purple-500 font-semibold tracking-wide border-purple-400
-                hover:bg-purple-400 hover:text-white
-                "> Mas informacion </button>
+                  <button
+                      onClick={()=> activarServicios()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-80 font-semibold tracking-wide transition
+${servicios 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Mas informacion </button>
               </div>
 
 
@@ -743,26 +755,37 @@ export default function Dudas(){
 
 
               <div className="flex justify-center gap-10 p-10">
-                  <button onClick={()=> activarCuidadosPrevios()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-white font-semibold tracking-wide bg-purple-400
-                hover:bg-purple-600
-                "> Cuidados Previos </button>
+                  <button
+                      onClick={()=> activarCuidadosPrevios()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-55 font-semibold tracking-wide transition
+${estadoCuidadosPrevios 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Cuidados Previos </button>
 
-                  <button onClick={()=> activarCuidadosPosteriores()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-purple-500 font-semibold tracking-wide
-                hover:bg-purple-400 hover:text-white border-purple-400
-                "> Cuidados Posteriores </button>
+                  <button
+                      onClick={()=> activarCuidadosPosteriores()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-55 font-semibold tracking-wide transition
+${estadoCuidadosPosteriores 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Cuidados Posteriores </button>
 
-                  <button onClick={()=> activarPreguntas()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-purple-500 font-semibold tracking-wide border-purple-400
-                hover:bg-purple-400 hover:text-white
-                "> Preguntas Frecuentes </button>
+                  <button
+                      onClick={()=> activarPreguntas()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-55 font-semibold tracking-wide transition
+${estadoPreguntas 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Preguntas Frecuentes </button>
 
-
-                  <button onClick={()=> activarServicios()}
-                          className="text-base border-2 rounded-3xl h-12 shadow-lg w-55 text-purple-500 font-semibold tracking-wide border-purple-400
-                hover:bg-purple-400 hover:text-white
-                "> Mas informacion </button>
+                  <button
+                      onClick={()=> activarServicios()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-55 font-semibold tracking-wide transition
+${servicios 
+  ? "bg-purple-500 text-white border-purple-500" 
+  : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Mas informacion </button>
               </div>
 
 
