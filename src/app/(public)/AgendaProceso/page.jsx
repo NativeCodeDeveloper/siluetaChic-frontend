@@ -46,12 +46,23 @@ export default function CalendarioMensualHoras() {
         return dias;
     };
 
-    // Genera solo los bloques de atención (40 min) desde 09:00 hasta 21:00.
-    // Los inicios van separados por 50 minutos (40 atención + 10 descanso), pero los descansos no se muestran.
+    // Genera los bloques de atención (60 min) según el día de la semana
+    // Lunes a Viernes: 09:00 - 20:00
+    // Sábado: 09:00 - 16:00
+    // Domingo: No disponible
+    // Los inicios van separados por 70 minutos (60 atención + 10 descanso), pero los descansos no se muestran.
     const attentionSlots = useMemo(() => {
+        if (!fechaSeleccionada) return [];
+
+        const dayOfWeek = fechaSeleccionada.getDay(); // 0=domingo, 6=sábado
+
+        // Domingo no tiene horarios
+        if (dayOfWeek === 0) return [];
+
         const slots = [];
         const startMinutes = 9 * 60; // 09:00
-        const endMinutes = 21 * 60; // 21:00
+        // Sábado hasta 16:00, resto hasta 20:00
+        const endMinutes = dayOfWeek === 6 ? 16 * 60 : 20 * 60;
         let cursor = startMinutes;
 
         const minutesToHHMM = (min) => {
@@ -60,16 +71,16 @@ export default function CalendarioMensualHoras() {
             return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
         };
 
-        while (cursor + 40 <= endMinutes) {
+        while (cursor + 60 <= endMinutes) {
             const attStart = cursor;
-            const attEnd = cursor + 40;
+            const attEnd = cursor + 60;
             slots.push({start: minutesToHHMM(attStart), end: minutesToHHMM(attEnd)});
-            // avanzar 40 + 10 minutos (=50) para el siguiente inicio
+            // avanzar 60 + 10 minutos (=70) para el siguiente inicio
             cursor = attEnd + 10;
         }
 
         return slots;
-    }, []);
+    }, [fechaSeleccionada]);
 
     const addMinutesToHHMM = (hhmm, minutesToAdd) => {
         const [hh, mm] = hhmm.split(":").map(Number);
@@ -96,13 +107,27 @@ export default function CalendarioMensualHoras() {
             return;
         }
 
+        // Validar que no sea domingo
+        const dayOfWeek = fecha.getDay();
+        if (dayOfWeek === 0) {
+            toast.error("Las atenciones son de Lunes a Sábado.\nLun-Vie: 9:00-20:00 | Sáb: 9:00-16:00", {
+                duration: 4000,
+                style: {
+                    background: '#FEE2E2',
+                    color: '#991B1B',
+                    border: '1px solid #FCA5A5',
+                }
+            });
+            return;
+        }
+
         setFechaSeleccionada(fecha);
 
         const fechaYMD = formatDateToYMD(fecha);
 
         // Si ya hay hora seleccionada, mantenla y recalcula las cadenas en el contexto
         if (horaInicio) {
-            const horaFinAuto = addMinutesToHHMM(horaInicio, 40);
+            const horaFinAuto = addMinutesToHHMM(horaInicio, 60);
             setHoraFin(horaFinAuto);
             setFechaInicio(fechaYMD);
             setFechaFinalizacion(fechaYMD);
@@ -137,7 +162,7 @@ export default function CalendarioMensualHoras() {
             }
         }
 
-        const horaFinAuto = addMinutesToHHMM(hora, 40);
+        const horaFinAuto = addMinutesToHHMM(hora, 60);
 
         setHoraInicio(hora);
         setHoraFin(horaFinAuto);
@@ -258,6 +283,7 @@ export default function CalendarioMensualHoras() {
     // Cuando el usuario selecciona una fecha, comprobamos en paralelo los slots y guardamos los bloqueados
     useEffect(() => {
         let mounted = true;
+        const checkStart = Date.now();
 
         async function checkBlocked() {
             if (!fechaSeleccionada) {
@@ -321,10 +347,6 @@ export default function CalendarioMensualHoras() {
             }
         }
 
-        // startTimestamp para comparar con lastManualUpdateRef
-        const checkStart = Date.now();
-        // Hacemos disponible el timestamp a la función mediante closure
-        checkBlocked.checkStart = checkStart;
         checkBlocked();
 
         return () => {
@@ -336,7 +358,7 @@ export default function CalendarioMensualHoras() {
 
     /* ---------- UI ---------- */
     return (
-        <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-slate-100 px-4 py-10 sm:px-6 lg:px-8">
             <div className="mx-auto w-full max-w-3xl">
                 <header className="mb-6 flex flex-col items-center gap-2 text-center">
                     <div
@@ -358,17 +380,17 @@ export default function CalendarioMensualHoras() {
                     </p>
                 </header>
 
-                <div className="rounded-2xl border border-sky-100 bg-white p-3 shadow-sm text-slate-800">
+                <div className="rounded-2xl border border-sky-200/60 bg-white/80 p-4 shadow-lg shadow-slate-900/5 backdrop-blur supports-[backdrop-filter]:bg-white/70 text-slate-800">
                     <div className="flex items-center justify-between">
                         <h2 className="text-sm font-semibold text-slate-800">Agenda mensual</h2>
                         <span className="text-[12px] text-slate-500">Selecciona un día</span>
                     </div>
-                    <div className="mt-3 h-px w-full bg-sky-100"/>
+                    <div className="mt-3 h-px w-full bg-gradient-to-r from-transparent via-sky-200 to-transparent"/>
 
                     {/* Navegación mes */}
                     <div className="mt-3 flex items-center justify-between">
                         <button
-                            className="rounded-lg border border-sky-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 shadow-sm hover:bg-sky-50 active:scale-[0.98]"
+                            className="rounded-lg border border-sky-200/70 bg-white/80 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-md shadow-slate-900/5 hover:bg-white active:scale-[0.98] hover:shadow-lg hover:shadow-slate-900/10"
                             onClick={() => {
                                 setMesActual(new Date(mesActual.setMonth(mesActual.getMonth() - 1)));
                                 setFechaSeleccionada(null);
@@ -384,7 +406,7 @@ export default function CalendarioMensualHoras() {
                             {mesActual.toLocaleString("es-CL", {month: "long", year: "numeric"})}
                         </strong>
                         <button
-                            className="rounded-lg border border-sky-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 shadow-sm hover:bg-sky-50 active:scale-[0.98]"
+                            className="rounded-lg border border-sky-200/70 bg-white/80 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-md shadow-slate-900/5 hover:bg-white active:scale-[0.98] hover:shadow-lg hover:shadow-slate-900/10"
                             onClick={() => {
                                 setMesActual(new Date(mesActual.setMonth(mesActual.getMonth() + 1)));
                                 setFechaSeleccionada(null);
@@ -399,10 +421,10 @@ export default function CalendarioMensualHoras() {
                     </div>
 
                     {/* calendario */}
-                    <div className="mt-4 grid grid-cols-7 gap-2">
+                    <div className="mt-4 grid grid-cols-7 gap-2 rounded-xl bg-slate-900/[0.02] p-2 ring-1 ring-slate-900/5">
                         {['D', 'L', 'M', 'M', 'J', 'V', 'S'].map((d, idx) => (
                             <strong key={`weekday-${idx}`}
-                                    className="text-center text-xs font-semibold text-slate-400">{d}</strong>
+                                    className="text-center text-xs font-semibold text-slate-500">{d}</strong>
                         ))}
 
                         {dias.map((dia, i) =>
@@ -412,24 +434,26 @@ export default function CalendarioMensualHoras() {
                                 const day = new Date(dia);
                                 day.setHours(0, 0, 0, 0);
                                 const isPastDay = day < today;
+                                const isSunday = dia.getDay() === 0;
+                                const isDisabled = isPastDay || isSunday;
                                 const isSelected = fechaSeleccionada?.toDateString() === dia.toDateString();
 
                                 return (
                                     <button
                                         key={i}
                                         type="button"
-                                        disabled={isPastDay}
+                                        disabled={isDisabled}
                                         onClick={() => {
-                                            if (isPastDay) return;
+                                            if (isDisabled) return;
                                             seleccionarFecha(dia);
                                         }}
                                         className={
                                             "h-10 flex items-center justify-center rounded-md text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-sky-200 focus:ring-offset-1 " +
-                                            (isPastDay
-                                                ? "cursor-not-allowed border border-slate-200 bg-slate-100 text-slate-400"
+                                            (isDisabled
+                                                ? "cursor-not-allowed border border-slate-200/70 bg-white/60 text-slate-400 shadow-sm" + (isSunday ? " opacity-50" : "")
                                                 : isSelected
-                                                    ? "border border-sky-300 bg-sky-100 text-slate-800"
-                                                    : "border border-sky-200 bg-white text-slate-600 hover:bg-sky-50 hover:border-sky-300")
+                                                    ? "border border-sky-300 bg-gradient-to-b from-sky-100 to-white text-slate-900 shadow-md shadow-sky-900/10"
+                                                    : "border border-sky-200/80 bg-white/90 text-slate-700 shadow-sm hover:bg-white hover:border-sky-300 hover:shadow-md hover:shadow-slate-900/5")
                                         }
                                     >
                                         {dia.getDate()}
@@ -445,9 +469,11 @@ export default function CalendarioMensualHoras() {
                     {fechaSeleccionada && (
                         <div className="mt-5">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-sm font-semibold text-slate-800">Agenda (09:00–21:00)</h3>
+                                <h3 className="text-sm font-semibold text-slate-800">
+                                    Agenda ({fechaSeleccionada.getDay() === 6 ? '09:00–16:00 (Sábado)' : '09:00–20:00'})
+                                </h3>
                                 <div className="flex items-center gap-3">
-                                    <p className="text-xs text-slate-500">Bloques de 40 min</p>
+                                    <p className="text-xs text-slate-500">Bloques de 60 min</p>
                                     {checkingBlocked && (
                                         <div className="flex items-center gap-2 text-xs text-slate-500">
                                             <svg className="w-3 h-3 animate-spin text-sky-500"
@@ -463,11 +489,55 @@ export default function CalendarioMensualHoras() {
                                 </div>
                             </div>
 
-                            <div className="mt-3 space-y-2 max-h-96 overflow-y-auto pr-1">
-                                {attentionSlots.map((entry, idx) => {
-                                    const isBlocked = blockedHours.has(entry.start);
+                            <div className="mt-3 space-y-2 max-h-96 overflow-y-auto pr-1 rounded-xl bg-slate-900/[0.02] p-2 ring-1 ring-slate-900/5">
+                                {attentionSlots
+                                    .filter((entry) => {
+                                        const isBlocked = blockedHours.has(entry.start);
+
+                                        const isTodaySelected = (() => {
+                                            if (!fechaSeleccionada) return false;
+                                            const today = new Date();
+                                            const day = new Date(fechaSeleccionada);
+                                            today.setHours(0, 0, 0, 0);
+                                            day.setHours(0, 0, 0, 0);
+                                            return day.getTime() === today.getTime();
+                                        })();
+
+                                        const isPastHour = (() => {
+                                            if (!isTodaySelected) return false;
+                                            const now = new Date();
+                                            const nowMinutes = (now.getHours() * 60) + now.getMinutes();
+                                            const slotStartMinutes = hhmmToMinutes(entry.start);
+                                            return slotStartMinutes < nowMinutes;
+                                        })();
+
+                                        // Solo mostrar slots que NO estén bloqueados NI sean pasados
+                                        return !isBlocked && !isPastHour;
+                                    })
+                                    .map((entry, idx) => {
                                     const selected = horaInicio === entry.start;
 
+                                    return (
+                                        <div key={entry.start}
+                                             className={"flex items-center justify-between rounded-xl border p-3 bg-white/90 border-sky-200/50 shadow-sm hover:shadow-md hover:shadow-slate-900/5 transition"}>
+                                            <div>
+                                                <div className="text-sm font-medium text-slate-800">Atención</div>
+                                                <div className="text-xs text-slate-500">{entry.start} – {entry.end}</div>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    onClick={() => seleccionarInicio(entry.start)}
+                                                    className={"px-3 py-1 rounded-lg font-semibold shadow-sm transition active:scale-[0.98] " + (selected ? 'bg-gradient-to-r from-sky-600 to-cyan-600 text-white shadow-md shadow-sky-900/15' : 'bg-white/90 border border-sky-200/80 text-sky-700 hover:bg-white hover:shadow-md hover:shadow-slate-900/5')}
+                                                >
+                                                    {selected ? 'Seleccionada' : 'Seleccionar'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+
+                                {attentionSlots.filter((entry) => {
+                                    const isBlocked = blockedHours.has(entry.start);
                                     const isTodaySelected = (() => {
                                         if (!fechaSeleccionada) return false;
                                         const today = new Date();
@@ -476,7 +546,6 @@ export default function CalendarioMensualHoras() {
                                         day.setHours(0, 0, 0, 0);
                                         return day.getTime() === today.getTime();
                                     })();
-
                                     const isPastHour = (() => {
                                         if (!isTodaySelected) return false;
                                         const now = new Date();
@@ -484,47 +553,17 @@ export default function CalendarioMensualHoras() {
                                         const slotStartMinutes = hhmmToMinutes(entry.start);
                                         return slotStartMinutes < nowMinutes;
                                     })();
-
-                                    return (
-                                        <div key={entry.start}
-                                             className={"flex items-center justify-between rounded-md border p-3 " + (isBlocked ? 'bg-red-50 border-red-100 text-red-700' : isPastHour ? 'bg-slate-100 border-slate-200 text-slate-400' : 'bg-white border-sky-50')}>
-                                            <div>
-                                                <div
-                                                    className={"text-sm font-medium " + (isBlocked ? 'text-red-700' : 'text-slate-800')}>Atención
-                                                </div>
-                                                <div
-                                                    className={"text-xs " + (isBlocked ? 'text-red-500' : 'text-slate-500')}>{entry.start} – {entry.end}</div>
-                                            </div>
-                                            <div className="flex items-center gap-3">
-                                                {isBlocked ? (
-                                                    <span className="inline-flex items-center gap-2 text-sm text-red-600">
-                                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg"><path
-                                                            d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"
-                                                            fill="#FEE2E2"/><path
-                                                            d="M8.53 8.53l6.94 6.94M15.47 8.53l-6.94 6.94"
-                                                            stroke="#DC2626" strokeWidth="1.5" strokeLinecap="round"
-                                                            strokeLinejoin="round"/></svg>
-                                                        No disponible
-                                                    </span>
-                                                ) : isPastHour ? (
-                                                    <span className="text-sm font-semibold text-slate-400">Ya pasó</span>
-                                                ) : (
-                                                    <button
-                                                        onClick={() => seleccionarInicio(entry.start)}
-                                                        className={"px-3 py-1 rounded-md font-semibold " + (selected ? 'bg-sky-600 text-white' : 'bg-white border border-sky-200 text-sky-600 hover:bg-sky-50')}
-                                                    >
-                                                        {selected ? 'Seleccionada' : 'Seleccionar'}
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
+                                    return !isBlocked && !isPastHour;
+                                }).length === 0 && (
+                                    <div className="text-center py-8 text-slate-500">
+                                        <p className="text-sm">No hay horarios disponibles para esta fecha</p>
+                                        <p className="text-xs mt-1">Por favor selecciona otra fecha</p>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Resumen de verificación (debug) */}
-                            <div className="mt-4 text-center text-xs text-slate-500">
+                            <div className="mt-4 text-center text-xs text-slate-600">
                                 <span>Bloqueados: {checkSummary.blocked} / {checkSummary.total} slots</span>
                             </div>
                         </div>
@@ -532,7 +571,7 @@ export default function CalendarioMensualHoras() {
                 </div>
                 <br/>
 
-                <div className="flex gap-5">
+                <div className="flex gap-5 justify-center">
                     <Link href={"/"}>
                         <ShadcnButton2 nombre={"RETROCEDER"}/>
                     </Link>
@@ -542,9 +581,12 @@ export default function CalendarioMensualHoras() {
                     </Link>
                 </div>
 
-                <footer className="mt-8 text-center text-xs text-slate-500">
+                <footer className="mt-10 text-center text-xs text-slate-600">
                     <p>
                         Depilación Trilaser Indolora, Tu piel suave y libre todo el año.
+                    </p>
+                    <p className="mt-2 text-[11px] text-slate-400">
+                        Horarios: Lun-Vie 9:00-20:00 | Sáb 9:00-16:00 | Dom Cerrado
                     </p>
                 </footer>
             </div>

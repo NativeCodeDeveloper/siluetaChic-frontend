@@ -126,7 +126,7 @@ export default function FormularioReserva() {
 
             if (fechaInicio === fechaFinalizacion) {
 
-                const res = await fetch(`${API}/reservaPacientes/insertarReservaPacienteFicha`, {
+                const res = await fetch(`${API}/reservaPacientes/reservaInsercionPaciente`, {
                     method: "POST",
                     headers: {
                         Accept: "application/json",
@@ -235,8 +235,11 @@ export default function FormularioReserva() {
                             <label className="block text-xs font-semibold text-sky-600 mb-2">Rut</label>
                             <ShadcnInput
                                 value={rut}
-                                onChange={(e) => setRut(e.target.value)}
-                                placeholder="12.345.678-9"
+                                onChange={(e) => {
+                                    const value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
+                                    setRut(value);
+                                }}
+                                placeholder="12345678K (Sin puntos ni guion)"
                                 className="w-full"
                             />
                         </div>

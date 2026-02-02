@@ -337,8 +337,13 @@ export default function Paciente(){
                             <div className="mt-1">
                                 <ShadcnInput
                                     value={rut}
-                                    placeholder={"Ej: 12.345.567-8 "}
-                                    onChange={(e) => setRut(e.target.value)} className="bg-slate-50/70 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
+                                        setRut(value);
+                                    }}
+                                    placeholder="12345678K (Sin puntos ni guion)"
+                                    className="w-full"
+                                />
                             </div>
                         </div>
 

@@ -34,6 +34,56 @@ export default function Calendario() {
 
     const API = process.env.NEXT_PUBLIC_API_URL;
 
+    // Estilos CSS personalizados para mejorar la visualización de eventos
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.textContent = `
+            /* Estilos para eventos en vista mes */
+            .rbc-month-view .rbc-event {
+                min-height: 28px !important;
+                height: auto !important;
+                padding: 6px 8px !important;
+                line-height: 1.3 !important;
+                white-space: normal !important;
+                overflow: visible !important;
+                word-break: break-word !important;
+            }
+            
+            /* Estilos para eventos en vista semana y día */
+            .rbc-time-view .rbc-event {
+                min-height: 30px !important;
+                height: auto !important;
+                padding: 6px 8px !important;
+                line-height: 1.3 !important;
+                white-space: normal !important;
+                overflow: visible !important;
+                word-break: break-word !important;
+            }
+            
+            /* Aumentar altura de las celdas del mes para que quepan los nombres */
+            .rbc-month-view .rbc-day-slot {
+                min-height: 80px !important;
+            }
+            
+            /* Contenedor de eventos en mes */
+            .rbc-row-segment {
+                z-index: 1 !important;
+            }
+            
+            /* Texto del evento */
+            .rbc-event-label,
+            .rbc-event-content {
+                white-space: normal !important;
+                overflow: visible !important;
+                word-break: break-word !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
 
     const [events, setEvents] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -242,16 +292,23 @@ export default function Calendario() {
     const eventStyleGetter = (..._args) => {
         return {
             style: {
-                display: 'block',
+                display: 'flex',
+                alignItems: 'center',
                 height: 'auto',
+                minHeight: '28px',
                 maxHeight: 'none',
                 whiteSpace: 'normal',
                 overflow: 'visible',
                 textOverflow: 'clip',
-                lineHeight: '1.12',
-                padding: '4px 8px',
-                fontSize: '0.75rem',
+                lineHeight: '1.3',
+                padding: '6px 8px',
+                fontSize: '0.8rem',
                 boxSizing: 'border-box',
+                borderRadius: '4px',
+                backgroundColor: '#0284c7',
+                color: '#fff',
+                fontWeight: '500',
+                wordBreak: 'break-word',
             },
         };
     };
@@ -260,7 +317,16 @@ export default function Calendario() {
     const EventComponent = ({event}) => {
         // Usamos title para mostrar tooltip nativo con el nombre completo
         return (
-            <div title={event.title} className="break-words text-[12px] leading-tight">
+            <div
+                title={event.title}
+                className="break-words text-[13px] leading-snug w-full"
+                style={{
+                    whiteSpace: 'normal',
+                    overflow: 'visible',
+                    wordBreak: 'break-word',
+                    hyphens: 'auto',
+                }}
+            >
                 {event.title}
             </div>
         );
@@ -269,7 +335,15 @@ export default function Calendario() {
     // Componente que muestra SOLO el título (para vistas Day y Agenda)
     const TitleOnlyEvent = ({event}) => {
         return (
-            <div title={event.title} className="break-words text-[12px] leading-tight font-medium">
+            <div
+                title={event.title}
+                className="break-words text-[13px] leading-snug font-medium w-full"
+                style={{
+                    whiteSpace: 'normal',
+                    overflow: 'visible',
+                    wordBreak: 'break-word',
+                }}
+            >
                 {event.title}
             </div>
         );
