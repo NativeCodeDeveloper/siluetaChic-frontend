@@ -57,7 +57,7 @@ export default function FormularioReserva() {
 
             let horaFinalizacion = horaFin;
 
-            const res = await fetch(`${API}/reservaPacientes/insertarReserva`, {
+            const res = await fetch(`${API}/reservaPacientes/insertarReservaPacienteFicha`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -126,7 +126,7 @@ export default function FormularioReserva() {
 
             if (fechaInicio === fechaFinalizacion) {
 
-                const res = await fetch(`${API}/reservaPacientes/insertarReserva`, {
+                const res = await fetch(`${API}/reservaPacientes/insertarReservaPacienteFicha`, {
                     method: "POST",
                     headers: {
                         Accept: "application/json",

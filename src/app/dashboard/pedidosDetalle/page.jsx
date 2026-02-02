@@ -47,6 +47,7 @@ function PedidoDetalleInner(){
             })
 
             if(!res.ok){
+                toast.error('No se pudo enviar el correo de seguimiento (respuesta del servidor no válida)');
                 return false;
             }
 
@@ -54,6 +55,8 @@ function PedidoDetalleInner(){
             return respuestaBackend.message === true;
 
         }catch(error){
+            console.log(error);
+            toast.error('No se pudo enviar el correo de seguimiento: ' + (error?.message ?? 'Error desconocido'));
             return false;
         }
     }
@@ -115,14 +118,16 @@ function PedidoDetalleInner(){
         }
 
         let estado_pedido;
+        const estadoNormalizado = String(nuevoestado).trim().toUpperCase();
 
-        if(nuevoestado.includes("Pago Pendiente")){estado_pedido = "0";}
-        else if(nuevoestado.includes("Pendiente")){estado_pedido = 1;}
-        else if(nuevoestado.includes("Confirmado")){estado_pedido = 2;}
-        else if(nuevoestado.includes("Completado")){estado_pedido = 3;}
-        else if(nuevoestado.includes("Anulado")){estado_pedido = 4;}
-        else{
-            return toast.error("problema en los IF")
+        if (estadoNormalizado.includes("PAGO SIN COMPLETAR") || estadoNormalizado.includes("PAGO PENDIENTE") || estadoNormalizado.includes("PENDIENTE PAGO")) {
+            estado_pedido = '0';
+        } else if (estadoNormalizado.includes("COMPRA REALIZADA") || estadoNormalizado.includes("COMPLETADO") || estadoNormalizado.includes("CONFIRMADO")) {
+            estado_pedido = 1;
+        } else if (estadoNormalizado.includes("COMPRA ANULADA") || estadoNormalizado.includes("ANULADO")) {
+            estado_pedido = 4;
+        } else {
+            return toast.error("Estado no reconocido: " + nuevoestado);
         }
 
         try {
@@ -193,11 +198,7 @@ function PedidoDetalleInner(){
 
     const pedidoDetalle = listaDetallada || [{id_producto: 0, tituloProducto: "SIN DATO", cantidad: 0, precio_unitario: 0}]
 
-    let totalCompra =0;
-
-    pedidoDetalle.map(pedido => {
-        totalCompra += (pedido.precio_unitario * pedido.cantidad);
-    })
+    const totalCompra = pedidoDetalle.reduce((acc, pedido) => acc + (pedido.precio_unitario * pedido.cantidad), 0);
 
 
     useEffect(() => {
@@ -209,10 +210,10 @@ function PedidoDetalleInner(){
 
     return (
         <div>
+            <ToasterClient />
             {/*PANTALLAS ESCRITORIO*/}
             <div className="hidden md:block">
                 <div className="min-h-screen bg-gradient-to-b from-white to-sky-50 px-4 py-6 sm:px-10 sm:py-10">
-                    <ToasterClient />
 
                     <div className='flex justify-end '>
                         <InfoButton informacion={"En este apartado, usted puede cambiar el estado del pedido mediante el botón “Cambiar estado”. Debajo de este botón se muestra el estado actual de la compra, permitiéndole identificar fácilmente en qué etapa del proceso se encuentra.\n" +
@@ -247,12 +248,10 @@ function PedidoDetalleInner(){
                     <div className="w-100 mt-6 rounded-xl border border-sky-100 bg-white/70 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 shadow-sm">
                         <ShadcnSelect
 
-                            nombreDefault={"Estado Pedido"}
-                            value1={"Pendiente"}
-                            value2={"Confirmado"}
-                            value3={"Pago Pendiente"}
-                            value4={"Completado"}
-                            value5={"Anulado"}
+                            nombreDefault={"ESTADO COMPRA"}
+                            value1={"COMPRA REALIZADA"}
+                            value3={"PAGO SIN COMPLETAR"}
+                            value5={"COMPRA ANULADA"}
                             onChange={(value) => setnuevoEstado(value)}
                         />
 
@@ -280,12 +279,10 @@ function PedidoDetalleInner(){
                             <div className="inline-flex items-center rounded-full border border-sky-100 bg-sky-50 px-4 py-1.5 text-sm font-semibold text-sky-800">
                                 {(
                                     {
-                                        1: "Pendiente",
-                                        2: "Confirmado",
-                                        3: "Completado",
-                                        4: "Anulado"
+                                        1: "COMPRA REALIZADA",
+                                        4: "COMPRA ANULADA"
                                     }
-                                )[comprador.estado_pedido] ?? "Pago Pendiente"}
+                                )[comprador.estado_pedido] ?? "PAGO SIN COMPLETAR"}
                             </div>
                         </div>
                     ))}
@@ -304,7 +301,7 @@ function PedidoDetalleInner(){
 
                         {detalleComprador.map(comprador => (
                             <div key={comprador.id_pedido} className="space-y-3">
-                                <h3 className="text-base text-sky-800 font-medium"><span className="text-base  text-sky-500 font-semibold">Apellido</span>: {comprador.apellidosComprador}</h3>
+                                <h3 className="text-base text-sky-800 font-medium"><span className="text-base  text-sky-500 font-semibold">Nombre Completo</span>:{' ' + comprador.nombre_comprador + ' ' + comprador.apellidosComprador }  </h3>
                                 <h3 className="text-base  text-sky-800 font-medium"><span className="text-base  text-sky-500 font-semibold">Telefono</span>: {comprador.telefono_comprador}</h3>
                                 <h3 className="text-base  text-sky-800 font-medium"><span className="text-base  text-sky-500 font-semibold">Email</span>: {comprador.email_Comprador}</h3>
                                 <h3 className="text-base  text-sky-800 font-medium"><span className="text-base  text-sky-500 font-semibold">RUT</span>: {comprador.identificacion_comprador}</h3>
@@ -429,7 +426,6 @@ function PedidoDetalleInner(){
             {/*PANTALLAS CELULARES*/}
             <div className="block md:hidden">
                 <div className="min-h-screen bg-gradient-to-b from-white to-sky-50 px-4 py-6 sm:px-10 sm:py-10">
-                    <ToasterClient />
 
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-sky-100 pb-6">
                         <div className="space-y-1">
@@ -453,12 +449,10 @@ function PedidoDetalleInner(){
                     <div className="w-70 mt-6 rounded-xl border border-sky-100 bg-white/70 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 shadow-sm">
                         <ShadcnSelect
 
-                            nombreDefault={"Estado Pedido"}
-                            value1={"Pendiente"}
-                            value2={"Confirmado"}
-                            value3={"Pago Pendiente"}
-                            value4={"Completado"}
-                            value5={"Anulado"}
+                            nombreDefault={"ESTADO COMPRA"}
+                            value1={"COMPRA REALIZADA"}
+                            value3={"PAGO SIN COMPLETAR"}
+                            value5={"COMPRA ANULADA"}
                             onChange={(value) => setnuevoEstado(value)}
                         />
 
@@ -486,12 +480,10 @@ function PedidoDetalleInner(){
                             <div className="inline-flex items-center rounded-full border border-sky-100 bg-sky-50 px-4 py-1.5 text-sm font-semibold text-sky-800">
                                 {(
                                     {
-                                        1: "Pendiente",
-                                        2: "Confirmado",
-                                        3: "Completado",
-                                        4: "Anulado"
+                                        1: "COMPRA REALIZADA",
+                                        4: "COMPRA ANULADA"
                                     }
-                                )[comprador.estado_pedido] ?? "Pago Pendiente"}
+                                )[comprador.estado_pedido] ?? "PAGO SIN COMPLETAR"}
                             </div>
                         </div>
                     ))}

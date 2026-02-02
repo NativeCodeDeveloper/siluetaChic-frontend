@@ -225,21 +225,19 @@ export default function PedidosCompra() {
                     <div className='flex justify-end '>
                         <InfoButton informacion={"En este apartado, usted puede visualizar los precios y valores de las transacciones que se van realizando en el sistema, junto con su estado según el flujo de entrega del producto o servicio.\n" +
                             "El sistema contempla cinco estados, los cuales representan cada etapa del proceso de pago y entrega:\n" +
-                            "\t•\tPendiente de pago: corresponde a clientes que tuvieron la intención de pagar y llegaron hasta la pasarela de pago, pero la transacción no se concretó.\n" +
-                            "\t•\tPagado / Pendiente de entrega: indica que el pago fue realizado correctamente, pero aún está pendiente la entrega del producto o servicio.\n" +
-                            "\t•\tConfirmado: corresponde a clientes que confirmaron haber recibido el producto o servicio.\n" +
-                            "\t•\tCompletado: indica que la transacción se realizó de inicio a fin sin inconvenientes, cerrando correctamente el ciclo de pago y entrega.\n" +
-                            "\n" +
+                            "\t•\tPAGO SIN COMPLETAR: corresponde a clientes que tuvieron la intención de pagar y llegaron hasta la pasarela de pago, pero la transacción no se concretó.\n" +
+                            "\t•\tPAGO REALIZADO: indica que el pago fue realizado correctamente, pero aún está pendiente la entrega del producto o servicio.\n" +
+                            "\t•\tCOMPRA ANULADA: corresponde a un proceso opcional y manual, utilizado para anular la compra y mantener trazabilidad en caso de que un cliente exija una devolución.\n" +
                             "Para ver el detalle de cada compra, usted debe seleccionar el nombre del pedido dentro del listado, lo que lo llevará a la vista detallada de ese pedido en particular."}/>
                     </div>
                     <br/>
                     <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-100 bg-gradient-to-r from-indigo-50 via-white to-purple-50 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
                         <div className="w-full sm:max-w-xl">
                             <p className="text-xs font-semibold uppercase tracking-wide text-indigo-600">
-                                Dashboard · Ecommerce Pro
+                                Panel de Administrador · Revision de compras.
                             </p>
                             <h1 className="mt-2 text-2xl font-semibold text-gray-900 sm:text-3xl">
-                                Gestión de Pedidos
+                                Compras en linea
                             </h1>
                             <p className="mt-1 text-sm text-gray-600">
                                 Revisa, filtra y haz seguimiento al historial de pedidos generados en tu tienda.
@@ -269,12 +267,10 @@ export default function PedidosCompra() {
 
                         <div className="mt-2 w-full sm:mt-0 sm:w-auto">
                             <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end sm:gap-3">
-                                <ShadcnButton  funcion={()=> listarPedidos()} nombre={'Total Pedidos'}></ShadcnButton>
-                                <ShadcnButton  funcion={()=> filtrarPorEstado(1)} nombre={'Pendientes'}></ShadcnButton>
-                                <ShadcnButton  funcion={()=> filtrarPorEstado(2)} nombre={'Confirmados'}></ShadcnButton>
-                                <ShadcnButton  funcion={()=> filtrarPorEstado(3)} nombre={'Completados'}></ShadcnButton>
-                                <ShadcnButton  funcion={()=> filtrarPorEstado(4)} nombre={'Anulados'}></ShadcnButton>
-                                <ShadcnButton  funcion={()=> filtrarPorEstado("0")} nombre={'Pendientes Pagos'}></ShadcnButton>
+                                <ShadcnButton  funcion={()=> listarPedidos()} nombre={'VER TODOS'}></ShadcnButton>
+                                <ShadcnButton  funcion={()=> filtrarPorEstado(1)} nombre={'COMPRAS REALIZADAS'}></ShadcnButton>
+                                <ShadcnButton  funcion={()=> filtrarPorEstado(4)} nombre={'COMPRAS ANULADAS'}></ShadcnButton>
+                                <ShadcnButton  funcion={()=> filtrarPorEstado("0")} nombre={'PAGO SIN COMPLETAR'}></ShadcnButton>
                             </div>
                         </div>
                     </div>
@@ -343,19 +339,15 @@ export default function PedidosCompra() {
                                         <td className="whitespace-nowrap px-4 py-3 text-sm ">
                                          <span className={
 
-                                             pedido.estado_pedido === 1 ? "bg-red-200 rounded-lg p-2 font-bold w-24 text-center"
-                                                 :pedido.estado_pedido === 2 ? "bg-yellow-200 rounded-lg p-2 font-bold w-24 text-center"
-                                                     :pedido.estado_pedido === 3 ? "bg-green-200  rounded-lg p-2 font-bold w-24 text-center"
-                                                         :pedido.estado_pedido === 0 ? "text-blue-600 bg-blue-50 rounded-lg p-2 font-bold w-24 text-center"
+                                             pedido.estado_pedido === 1 ? "bg-green-200  rounded-lg p-2 font-bold w-24 text-center"
+                                                         :pedido.estado_pedido === 0 ? "text-red-600 bg-red-100 rounded-lg p-2 font-bold w-24 text-center"
 
-                                                             : "text-red-600 bg-red-50 rounded-lg p-2 font-bold w-24 text-center"}
+                                                             : "text-gray-600 bg-red-50 rounded-lg p-2 font-bold w-24 text-center"}
 
 
                                          >
-                                             {pedido.estado_pedido ===  1 ? "Pendiente"
-                                                 : pedido.estado_pedido === 2 ? "Confirmado"
-                                                     : pedido.estado_pedido === 3 ? "Completado"
-                                                         : pedido.estado_pedido === 0 ? "Pago Pendiente"
+                                             {pedido.estado_pedido ===  1 ? "COMPRA REALIZADA"
+                                                         : pedido.estado_pedido === 0 ? "PAGO SIN COMPLETAR"
                                                              : "Anulado"}
                                          </span>
                                         </td>

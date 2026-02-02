@@ -263,11 +263,11 @@ export default function Paciente(){
                                         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
                                                 <p className="text-xs text-slate-600">Fecha de nacimiento</p>
-                                                <p className="mt-1 font-medium text-slate-700">{formatearFecha(paciente.nacimiento)}</p>
+                                                <p className="mt-1 font-medium text-slate-700">{(formatearFecha(paciente.nacimiento)??'---')}</p>
                                             </div>
                                             <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
                                                 <p className="text-xs text-slate-600">Sexo</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.sexo}</p>
+                                                <p className="mt-1 font-semibold text-slate-900">{paciente.sexo ?? '---'}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -278,15 +278,15 @@ export default function Paciente(){
                                         <div className="flex flex-col gap-3">
                                             <div className="text-sm">
                                                 <p className="text-[11px] uppercase tracking-wide text-slate-500">Teléfono</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.telefono || '-'} </p>
+                                                <p className="mt-1 font-semibold text-slate-900">{paciente.telefono ?? '---'} </p>
                                             </div>
                                             <div className="text-sm">
                                                 <p className="text-[11px] uppercase tracking-wide text-slate-500">Correo</p>
-                                                <p className="mt-1 font-semibold text-slate-900 break-all">{paciente.correo || '-'}</p>
+                                                <p className="mt-1 font-semibold text-slate-900 break-all">{paciente.correo ?? '---'}</p>
                                             </div>
                                             <div className="text-sm">
                                                 <p className="text-[11px] uppercase tracking-wide text-slate-500">Dirección</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.direccion || '-'}</p>
+                                                <p className="mt-1 font-semibold text-slate-900">{paciente.direccion ?? '---'}</p>
                                             </div>
                                         </div>
                                     </div>
