@@ -89,14 +89,14 @@ export default function Page() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-gradient-to-tr from-emerald-400 via-sky-400 to-indigo-500 shadow-lg"></span>
             </span>
-            <span className="tracking-wider uppercase">NativeCode Developers</span>
+            <span className="tracking-wider uppercase">Automatizaciones</span>
           </div>
 
           {/* Títulos con efectos premium y gradientes sofisticados */}
           <div className="space-y-5">
             <div className="relative inline-block">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent drop-shadow-[0_4px_24px_rgba(15,23,42,0.25)]">
-                E‑Commerce
+                NativeCode
               </h1>
               {/* Resplandor sutil detrás del texto */}
               <div className="absolute -inset-2 bg-gradient-to-r from-sky-200/20 via-indigo-200/20 to-transparent blur-2xl -z-10 rounded-full" />
@@ -104,7 +104,7 @@ export default function Page() {
 
             <div className="relative inline-block">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight bg-gradient-to-br from-sky-600 via-indigo-600 to-sky-700 bg-clip-text text-transparent drop-shadow-[0_4px_32px_rgba(56,189,248,0.4)]">
-                PRO SUITE
+                AgendaClinica
               </h1>
               {/* Efecto de brillo intenso */}
               <div className="absolute -inset-4 bg-gradient-to-r from-sky-300/30 via-indigo-300/30 to-sky-300/20 blur-3xl -z-10" />
