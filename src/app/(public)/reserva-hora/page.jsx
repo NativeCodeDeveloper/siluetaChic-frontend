@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function ReservaHora() {
+export default function ReservaHora({ fechaReserva = '', horaReserva = '' }) {
   return (
     <section className="relative min-h-[70vh] w-full px-4 py-10 flex items-center justify-center bg-gradient-to-b from-slate-50 via-white to-slate-50">
       {/* Fondos decorativos */}
@@ -75,7 +75,7 @@ export default function ReservaHora() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-slate-900">Fecha y hora</p>
-                    <p className="text-sm text-slate-600">Lunes 26 Enero - 9:00 am</p>
+                    <p className="text-sm text-slate-600">{fechaReserva} - {horaReserva}</p>
                   </div>
                 </div>
 

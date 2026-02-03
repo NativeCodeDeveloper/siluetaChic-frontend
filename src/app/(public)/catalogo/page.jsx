@@ -296,6 +296,29 @@ export default function Catalogo(){
 
     }
 
+    // Modificación para mostrar por defecto las categorías de mujeres y seleccionar la primera subcategoría de mujeres
+    useEffect(() => {
+        async function cargarSubcategoriasMujerYSeleccionarPrimera() {
+            try {
+                const res = await fetch(`${API}/subcategorias/seleccionarPorCategoria`, {
+                    method: 'POST',
+                    headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+                    body: JSON.stringify({id_categoriaProducto : 49}),
+                    mode: 'cors'
+                });
+                if (!res.ok) return;
+                const backendData = await res.json();
+                setListaSubcategoria(backendData);
+                if (Array.isArray(backendData) && backendData.length > 0) {
+                    setSubCategoria(String(backendData[0].id_subcategoria));
+                }
+            } catch (error) {
+                return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+            }
+        }
+        cargarSubcategoriasMujerYSeleccionarPrimera();
+    }, []);
+
 
 
     return (
