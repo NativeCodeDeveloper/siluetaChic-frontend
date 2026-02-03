@@ -117,14 +117,13 @@ export default function DashboardHome() {
 
                         <div className="flex -mt-20  ">
                             <h1 className={`${michroma.className} text-4xl md:text-6xl font-extrabold tracking-tight text-gray-50 animate-fadeInUp mt-30`}>
-                               NativeCode
-                            </h1>
+                                NativeCode                            </h1>
 
 
 
                         </div>
                         <h2 className={`${michroma.className} mt-1 text-base md:text-xl font-medium text-gray-300 opacity-90 animate-fadeInUp delay-200`}>
-                            E - C O M M E R C E .  P R O
+                         Agendas - Fichas - Pagos Online
                         </h2>
                         <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full animate-fadeInUp delay-200">
                             <div className="rounded-2xl border border-gray-200 bg-white/80 p-4 shadow-sm text-left">
