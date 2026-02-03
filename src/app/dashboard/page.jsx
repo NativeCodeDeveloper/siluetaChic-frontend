@@ -60,7 +60,7 @@ export default function DashboardHome() {
 
                             </h1>
                             <p className={`${michroma.className}  font-extrabold tracking-tight text-gray-200 animate-fadeInUp`}>
-                                E - C O M M E R C E .  P R O
+                                Agendas - Fichas - Pagos Online
                             </p>
 
 
