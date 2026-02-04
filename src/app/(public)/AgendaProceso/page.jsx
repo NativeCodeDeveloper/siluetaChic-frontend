@@ -326,10 +326,7 @@ export default function CalendarioMensualHoras() {
                 }
                 console.debug('checkBlocked ->', {total: attentionEntries.length, blocked: blocked.size, raw: checks});
 
-                // heurística: si todas las respuestas indican no disponible, probablemente hay un problema en el backend
-                if (blocked.size === attentionEntries.length) {
-                    toast.error('Todas las horas resultaron ocupadas al verificar — revisa el backend o intenta recargar');
-                }
+
 
                 // si la hora actualmente seleccionada quedó bloqueada, limpiarla
                 if (horaInicio && blocked.has(horaInicio)) {
@@ -555,7 +552,7 @@ export default function CalendarioMensualHoras() {
                                     })();
                                     return !isBlocked && !isPastHour;
                                 }).length === 0 && (
-                                    <div className="text-center py-8 text-slate-500">
+                                    <div className="text-center py-8 text-red-500">
                                         <p className="text-sm">No hay horarios disponibles para esta fecha</p>
                                         <p className="text-xs mt-1">Por favor selecciona otra fecha</p>
                                     </div>

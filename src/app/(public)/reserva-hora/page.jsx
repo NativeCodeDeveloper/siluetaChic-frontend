@@ -1,6 +1,17 @@
+'use client'
 import Link from 'next/link';
+import {useAgenda} from "@/ContextosGlobales/AgendaContext";
 
 export default function ReservaHora({ fechaReserva = '', horaReserva = '' }) {
+
+    const {
+        fechaInicio,
+        horaInicio,
+        fechaFinalizacion,
+        horaFinalizacion   } = useAgenda();
+
+
+
   return (
     <section className="relative min-h-[70vh] w-full px-4 py-10 flex items-center justify-center bg-gradient-to-b from-slate-50 via-white to-slate-50">
       {/* Fondos decorativos */}
@@ -75,7 +86,7 @@ export default function ReservaHora({ fechaReserva = '', horaReserva = '' }) {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-slate-900">Fecha y hora</p>
-                    <p className="text-sm text-slate-600">{fechaReserva} - {horaReserva}</p>
+                    <p className="text-sm text-slate-600">{fechaInicio} - {horaInicio}</p>
                   </div>
                 </div>
 
