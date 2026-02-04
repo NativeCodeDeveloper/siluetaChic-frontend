@@ -127,12 +127,21 @@ export default function Catalogo(){
 
 
     useEffect(() => {
-        if (hombres) {
-            listarSubcategoriaHombre();
-        }else{
-            listarSubcategoriaMujer();
-        }
+        async function cargarYSeleccionarSubcategoria() {
+            let subcategorias = [];
+            if (hombres) {
+                subcategorias = await listarSubcategoriaHombre();
+            } else {
+                subcategorias = await listarSubcategoriaMujer();
+            }
 
+            if (Array.isArray(subcategorias) && subcategorias.length > 0) {
+                setSubCategoria(String(subcategorias[0].id_subcategoria));
+            } else {
+                setSubCategoria(undefined); // O null, para que no quede una subcategoría seleccionada
+            }
+        }
+        cargarYSeleccionarSubcategoria();
     },[hombres]);
 
 
@@ -168,7 +177,7 @@ export default function Catalogo(){
 
             if (!res.ok) {
 
-                return toast.error('Ha ocurrido un error al listar los productos de Mujer. Contacte a Soporte.');
+                return toast.error('Ha ocurrido un error al listar los productos de Hombre. Contacte a Soporte.');
 
             } else {
 
@@ -176,9 +185,18 @@ export default function Catalogo(){
                 setlistaProductos(resultadoData);
                 setmujeres(false);
                 sethombres(true);
+
+                // --- NUEVA LÓGICA ---
+                const subcategorias = await listarSubcategoriaHombre(); // Carga y actualiza listaSubcategoria
+                if (Array.isArray(subcategorias) && subcategorias.length > 0) {
+                    setSubCategoria(String(subcategorias[0].id_subcategoria));
+                } else {
+                    setSubCategoria(undefined);
+                }
+                // --- FIN NUEVA LÓGICA ---
             }
         }catch(err){
-            return toast.error('Ha ocurrido un error al listar los productos de Mujer. Contacte a Soporte.');
+            return toast.error('Ha ocurrido un error al listar los productos de Hombre. Contacte a Soporte.');
         }
     }
 
@@ -208,6 +226,15 @@ export default function Catalogo(){
                 setlistaProductos(resultadoData);
                 setmujeres(true);
                 sethombres(false);
+
+                // --- NUEVA LÓGICA ---
+                const subcategorias = await listarSubcategoriaMujer(); // Carga y actualiza listaSubcategoria
+                if (Array.isArray(subcategorias) && subcategorias.length > 0) {
+                    setSubCategoria(String(subcategorias[0].id_subcategoria));
+                } else {
+                    setSubCategoria(undefined);
+                }
+                // --- FIN NUEVA LÓGICA ---
             }
         }catch(err){
             return toast.error('Ha ocurrido un error al listar los productos de Mujer. Contacte a Soporte.');
@@ -255,16 +282,17 @@ export default function Catalogo(){
                 mode: 'cors'
             })
             if (!res.ok) {
-                return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
-
+                toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+                return []; // Devuelve un array vacío en caso de error
             }else{
 
                 const backendData = await res.json();
                 setListaSubcategoria(backendData);
-
+                return backendData; // Devuelve la lista
             }
         }catch(error){
-            return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+            toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+            return []; // Devuelve un array vacío en caso de error
         }
 
     }
@@ -282,42 +310,22 @@ export default function Catalogo(){
                 mode: 'cors'
             })
             if (!res.ok) {
-                return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
-
+                toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+                return []; // Devuelve un array vacío en caso de error
             }else{
 
                 const backendData = await res.json();
                 setListaSubcategoria(backendData);
-
+                return backendData; // Devuelve la lista
             }
         }catch(error){
-            return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+            toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
+            return []; // Devuelve un array vacío en caso de error
         }
 
     }
 
-    // Modificación para mostrar por defecto las categorías de mujeres y seleccionar la primera subcategoría de mujeres
-    useEffect(() => {
-        async function cargarSubcategoriasMujerYSeleccionarPrimera() {
-            try {
-                const res = await fetch(`${API}/subcategorias/seleccionarPorCategoria`, {
-                    method: 'POST',
-                    headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
-                    body: JSON.stringify({id_categoriaProducto : 49}),
-                    mode: 'cors'
-                });
-                if (!res.ok) return;
-                const backendData = await res.json();
-                setListaSubcategoria(backendData);
-                if (Array.isArray(backendData) && backendData.length > 0) {
-                    setSubCategoria(String(backendData[0].id_subcategoria));
-                }
-            } catch (error) {
-                return toast.error("No se pueden listar subcategorias porque no hay hay respuesta desde el servidor.")
-            }
-        }
-        cargarSubcategoriasMujerYSeleccionarPrimera();
-    }, []);
+
 
 
 

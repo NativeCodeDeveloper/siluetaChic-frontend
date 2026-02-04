@@ -3,11 +3,12 @@
 import * as React from "react"
 import {CalendarIcon} from "lucide-react"
 import { es } from "date-fns/locale"
+import { format, parseISO } from "date-fns"
 
 import {Button} from "@/components/ui/button"
 import {Calendar} from "@/components/ui/calendar"
 import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
+import {Label}from "@/components/ui/label"
 import {
     Popover,
     PopoverContent,
@@ -16,21 +17,13 @@ import {
 
 function formatDate(date) {
     if (!date) return ""
-
-    // Formato legible en español (ej: "15 de enero de 2026")
-    return date.toLocaleDateString("es-CL", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-    })
+    // Usar date-fns para formatear
+    return format(date, "dd 'de' MMMM 'de' yyyy", { locale: es });
 }
 
 function formatISODateOnly(date) {
-    if (!date) return null
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, "0")
-    const day = String(date.getDate()).padStart(2, "0")
-    return `${year}-${month}-${day}`
+    if (!date) return undefined // undefined en lugar de null para consistencia con selected prop
+    return format(date, "yyyy-MM-dd"); // Formato ISO para el backend
 }
 
 function isValidDate(date) {
@@ -40,17 +33,29 @@ function isValidDate(date) {
     return !isNaN(date.getTime())
 }
 
-export function Calendar28({nombre, onChange}) {
-    const [open, setOpen] = React.useState(false)
+export function Calendar28({ nombre, onChange, value }) {
+    const [open, setOpen] = React.useState(false);
 
-    // Fecha base (evita re-crear instancias distintas en renders inesperados)
-    const initialDate = React.useMemo(() => new Date(2025, 5, 1), []) // 1 de junio 2025 (mes 5 = junio)
+    // Estado interno para el objeto Date utilizado por el componente Calendar
+    // Si la prop 'value' existe, se analiza para crear un objeto Date. De lo contrario, null.
+    const internalDate = React.useMemo(() => {
+        if (value) {
+            const parsedDate = parseISO(value); // Usar parseISO
+            return isValidDate(parsedDate) ? parsedDate : undefined;
+        }
+        return undefined;
+    }, [value]); // Se recalcula cuando cambia la prop 'value'
 
-    const [date, setDate] = React.useState(initialDate)
-    const [month, setMonth] = React.useState(initialDate)
+    // Estado interno para la cadena de visualización en el campo Input
+    const displayValue = React.useMemo(() => formatDate(internalDate), [internalDate]);
 
-    // `value` es el texto del input (puede diferir mientras el usuario escribe)
-    const [value, setValue] = React.useState(formatDate(initialDate))
+    // Estado interno para el mes que se muestra en el calendario, permitiendo la navegación
+    const [displayMonth, setDisplayMonth] = React.useState(internalDate || new Date());
+
+    // Sincronizar displayMonth cuando internalDate cambia (por ejemplo, cuando se selecciona una nueva fecha)
+    React.useEffect(() => {
+        setDisplayMonth(internalDate || new Date());
+    }, [internalDate]);
 
     return (
         <div className="flex flex-col gap-3">
@@ -61,13 +66,14 @@ export function Calendar28({nombre, onChange}) {
                 <Input
                     id="date"
                     readOnly
-                    value={value}
-                    placeholder="01 de junio de 2025"
+                    value={displayValue} // Usar el displayValue derivado
+                    placeholder="Seleccione una fecha" // Placeholder más genérico
                     className="bg-white text-slate-900 border border-gray-200 rounded-md pr-10 py-2 shadow-sm"
+                    onClick={() => setOpen(true)} // Añadir esto para abrir el Popover al hacer clic en el Input
                     onKeyDown={(e) => {
                         if (e.key === "ArrowDown") {
-                            e.preventDefault()
-                            setOpen(true)
+                            e.preventDefault();
+                            setOpen(true);
                         }
                     }}
                 />
@@ -79,7 +85,7 @@ export function Calendar28({nombre, onChange}) {
                             className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
                         >
                             <CalendarIcon className="size-3.5"/>
-                            <span className="sr-only">Select date</span>
+                            <span className="sr-only">Seleccionar fecha</span>
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent
@@ -89,32 +95,28 @@ export function Calendar28({nombre, onChange}) {
                         sideOffset={10}
                     >
                         <Calendar
+                            key={displayMonth ? displayMonth.toISOString() : 'no-date'} // Añadir esta key
                             mode="single"
-                            selected={date}
+                            selected={internalDate} // Usar el internalDate derivado de la prop
                             captionLayout="dropdown"
                             locale={es}
-                            month={month}
+                            month={displayMonth} // Usar el estado interno para la navegación
                             onMonthChange={(nextMonth) => {
-                                if (!isValidDate(nextMonth)) return
-                                setMonth((prev) =>
-                                    prev?.getTime?.() === nextMonth?.getTime?.() ? prev : nextMonth
-                                )
+                                if (!isValidDate(nextMonth)) return;
+                                setDisplayMonth(nextMonth); // Actualizar el estado del mes visible
                             }}
                             onSelect={(selectedDate) => {
-                                if (!isValidDate(selectedDate)) return
+                                if (!isValidDate(selectedDate)) return;
 
-                                setDate(selectedDate)
-                                setMonth(selectedDate)
-                                setValue(formatDate(selectedDate))
-                                setOpen(false)
+                                setOpen(false);
 
-                                // 🔹 Devuelve la fecha en formato YYYY-MM-DD
-                                onChange?.(formatISODateOnly(selectedDate))
+                                // Pasa la cadena ISO al componente padre
+                                onChange?.(formatISODateOnly(selectedDate));
                             }}
                         />
                     </PopoverContent>
                 </Popover>
             </div>
         </div>
-    )
+    );
 }

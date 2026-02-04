@@ -54,6 +54,15 @@ export default function AgendaCitas() {
                 return toast.error("Debe seleccionar un rango de fechas para filtrar")
             }
 
+            // Validación para asegurar que fechaInicio no sea posterior a fechaFinalizacion
+            // Es importante convertir las cadenas ISO a objetos Date para la comparación
+            const start = new Date(fechaInicio);
+            const end = new Date(fechaFinalizacion);
+
+            if (start > end) {
+                return toast.error("La fecha de inicio no puede ser posterior a la fecha de término.");
+            }
+
             const res = await fetch(`${API}/reservaPacientes/buscarEntreFechas`, {
                 method: "POST",
                 headers: {
@@ -65,29 +74,21 @@ export default function AgendaCitas() {
             });
 
             if (!res.ok) {
-                return toast.error("Debe ingresar Fechas para filtrar.");
-
+                return toast.error("Error al buscar citas. Por favor, intente de nuevo.");
             } else {
-
                 const respuestaBackend = await res.json();
 
-                if (respuestaBackend) {
+                if (respuestaBackend && Array.isArray(respuestaBackend) && respuestaBackend.length > 0) {
                     setdataLista(respuestaBackend);
-                    return toast.success("No se encontraron citas en el periodo Seleccionado")
-
-                } else if (respuestaBackend.message === 'sindata') {
-
-                    return toast.error("No se han encontrado similitudes de nombres")
-
+                    return toast.success(`Se encontraron ${respuestaBackend.length} citas en el período seleccionado.`);
                 } else {
-
-                    return toast.error("No se han encontrado similitudes de nombres")
+                    setdataLista([]); // Clear the list if no data is found
+                    return toast.success("No se encontraron citas en el período seleccionado.");
                 }
             }
-
         } catch (error) {
             console.log(error);
-            return toast.error("No ha sido posible buscar la similitud por nombres, porfavor contacte a soporte Tecnico de Medify");
+            return toast.error("Error inesperado al buscar citas. Por favor, contacte a soporte técnico.");
         }
 
     }
@@ -371,8 +372,6 @@ export default function AgendaCitas() {
                                     <SelectItem value="reservada">Reservada</SelectItem>
                                     <SelectItem value="anulada">Anulada</SelectItem>
                                     <SelectItem value="confirmada">Confirmada</SelectItem>
-                                    <SelectItem value="completada">Completada</SelectItem>
-                                    <SelectItem value="pendiente pago">Pendiente</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
