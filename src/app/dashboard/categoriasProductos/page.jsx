@@ -272,13 +272,7 @@ return (
                                           >
                                               Seleccionar
                                           </button>
-                                          <button
-                                              className="inline-flex items-center rounded-lg border border-rose-600/80 bg-rose-50 px-3 py-1.5 text-[11px] font-semibold text-rose-700 hover:bg-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-100 active:scale-[0.99] transition disabled:opacity-60 disabled:cursor-not-allowed"
-                                              onClick={() => eliminarCategorias(categoria.id_categoriaProducto)}
-                                              disabled={isLoading}
-                                          >
-                                              Eliminar
-                                          </button>
+
                                       </div>
                                   </div>
                               ))
@@ -386,13 +380,7 @@ return (
                                           >
                                               Subcategoria
                                           </button>
-                                          <button
-                                              className="inline-flex items-center rounded-lg border border-rose-600/80 bg-rose-50 px-3 py-1.5 text-[11px] font-semibold text-rose-700 hover:bg-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-100 active:scale-[0.99] transition disabled:opacity-60 disabled:cursor-not-allowed"
-                                              onClick={() => eliminarCategorias(categoria.id_categoriaProducto)}
-                                              disabled={isLoading}
-                                          >
-                                              Eliminar
-                                          </button>
+
                                       </div>
                                   </div>
                               ))
