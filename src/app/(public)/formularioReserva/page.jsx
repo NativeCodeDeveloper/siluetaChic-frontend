@@ -90,8 +90,10 @@ export default function FormularioReserva() {
                 setTelefono("");
                 setRut("");
                 setEmail("");
-                router.push('/reserva-hora')
-                return toast.success("Se ha ingresado correctamente el agendamiento")
+                toast.success("Se ha ingresado correctamente el agendamiento");
+                setTimeout(() => {
+                    router.push(`/reserva-hora?fecha=${encodeURIComponent(fechaInicio)}&hora=${encodeURIComponent(horaInicio)}&email=${encodeURIComponent(email)}`);
+                }, 1500);
 
             } else if (respuestaBackendAgenda.message === "conflicto" || respuestaBackendAgenda.message.includes("conflicto")) {
                 return toast.error("No puede agendar una hora que ya esta ocupada")

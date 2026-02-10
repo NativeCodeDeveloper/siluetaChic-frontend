@@ -1,14 +1,12 @@
 'use client'
 import Link from 'next/link';
-import {useAgenda} from "@/ContextosGlobales/AgendaContext";
+import {useSearchParams} from "next/navigation";
 
-export default function ReservaHora({ fechaReserva = '', horaReserva = '' }) {
-
-    const {
-        fechaInicio,
-        horaInicio,
-        fechaFinalizacion,
-        horaFinalizacion   } = useAgenda();
+export default function ReservaHora() {
+    const searchParams = useSearchParams();
+    const fechaInicio = searchParams.get('fecha') || '';
+    const horaInicio = searchParams.get('hora') || '';
+    const emailPaciente = searchParams.get('email') || '';
 
 
 

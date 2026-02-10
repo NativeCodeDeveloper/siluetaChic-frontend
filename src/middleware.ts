@@ -1,4 +1,5 @@
 
+
 /*
 
 // frontend/src/middleware.ts
@@ -17,8 +18,7 @@ matcher: ['/dashboard/:path*'], // o simplemente [] si quieres que no aplique a 
 
 
 
-    */
-
+   */
 
 
 
@@ -37,7 +37,7 @@ const isProtectedRoute = createRouteMatcher(['/dashboard/:path*'])
 
 const ALLOWED_EMAILS = new Set([
     'siluetachicestudio@gmail.com',
-    'soporte@nativecode.com',
+    'soporte@nativecode.cl',
 ])
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
@@ -115,6 +115,7 @@ export const config = {
         '/sign-up/:path*'
     ],
 }
+
 
 
 
