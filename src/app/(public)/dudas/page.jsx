@@ -1,25 +1,44 @@
 'use client'
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import ServicioPage from "@/app/(public)/servicios/page";
-import { Sun, Scissors, Ban, Droplets, Beaker, Pill, Syringe, ShowerHead, UserRound } from 'lucide-react';
+import { Sun, Scissors, Ban, Droplets, Beaker, Pill, Syringe, ShowerHead, UserRound, ShieldAlert, PenTool, Baby, AlertTriangle, HeartPulse, Microscope } from 'lucide-react';
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import {useSearchParams, useRouter} from "next/navigation"
 
 export default function Dudas(){
     const [estadoCuidadosPrevios, setEstadoCuidadosPrevios] = useState(true);
     const [estadoCuidadosPosteriores, setEstadoCuidadosPosteriores] = useState(false);
     const [estadoPreguntas, setEstadoPreguntas] = useState(false);
     const [servicios, setServicios] = useState(false);
+    const [prohibiciones, setProhibiciones] = useState(false);
+
+    const searchParams = useSearchParams();
+    const seleccionFooter = searchParams.get("seleccionFooter");
+
+    useEffect(() => {
+        if (seleccionFooter === 'prohibiciones') {
+            activarProhibiciones()
+        }else if (seleccionFooter === 'posteriores') {
+            activarCuidadosPosteriores()
+        }else if (seleccionFooter === 'frecuentes') {
+            activarPreguntas()
+        }else{
+            activarCuidadosPrevios()
+        }
+    },[seleccionFooter])
+
 
     function activarCuidadosPrevios(){
         setEstadoCuidadosPrevios(true);
         setEstadoPreguntas(false);
         setEstadoCuidadosPosteriores(false);
         setServicios(false);
+        setProhibiciones(false);
     }
 
     function activarServicios(){
@@ -27,6 +46,7 @@ export default function Dudas(){
         setEstadoPreguntas(false);
         setEstadoCuidadosPosteriores(false);
         setServicios(true);
+        setProhibiciones(false);
     }
 
 
@@ -35,6 +55,7 @@ export default function Dudas(){
         setEstadoPreguntas(false);
         setEstadoCuidadosPosteriores(true);
         setServicios(false);
+        setProhibiciones(false);
     }
 
 
@@ -43,6 +64,16 @@ export default function Dudas(){
         setEstadoPreguntas(true);
         setEstadoCuidadosPosteriores(false);
         setServicios(false);
+        setProhibiciones(false);
+    }
+
+
+    function activarProhibiciones(){
+        setEstadoCuidadosPrevios(false);
+        setEstadoPreguntas(false);
+        setEstadoCuidadosPosteriores(false);
+        setServicios(false);
+        setProhibiciones(true);
     }
 
 
@@ -80,6 +111,17 @@ ${estadoCuidadosPosteriores
   ? "bg-purple-500 text-white border-purple-500" 
   : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
                   > Cuidados Posteriores </button>
+
+
+                  <button
+                      onClick={()=> activarProhibiciones()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-80 font-semibold tracking-wide transition
+${estadoCuidadosPosteriores
+                          ? "bg-purple-500 text-white border-purple-500"
+                          : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Prohibiciones </button>
+
+
 
                   <button
                       onClick={()=> activarPreguntas()}
@@ -195,7 +237,94 @@ ${servicios
               )}
 
 
+              {prohibiciones&&(
+                  <div className="flex flex-col items-center px-4 sm:px-10 md:px-40 lg:px-80">
+                      <h1 className="text-4xl font-bold mb-8 text-center text-gray-900">
+                          <span className="bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-transparent bg-clip-text">Prohibiciones</span>
+                          {" "}para la Depilación Triláser
+                      </h1>
+                      <div className="w-full space-y-4">
 
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Piel Bronceada o Exposición Solar Reciente</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      Esta es la prohibición más estricta. No se debe realizar el tratamiento sobre piel bronceada (por sol o cabinas UVA), ya que el aumento de melanina en la piel absorbe excesivamente la energía del láser. Esto conlleva un alto riesgo de quemaduras graves, ampollas y cambios permanentes en la pigmentación (manchas oscuras o claras). Se requiere evitar la exposición solar intensa y el uso de autobronceadores en el área a tratar por un período considerable (30 días) antes de la sesión.
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Uso de Medicamentos Fotosensibles</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      <p>Queda prohibida la depilación láser mientras el paciente esté tomando o utilizando fármacos que aumenten la sensibilidad de la piel a la luz (fotosensibilizantes). Antes y durante los tratamientos de depilación láser, hay que evitar ingerir medicamentos denominados fotosensibilizantes, los cuales al aplicar el láser podrían irritar y enrojecer la piel e incluso hasta provocar quemaduras.</p>
+                                      <p className="mt-3">Es fundamental que antes de cada sesión informes qué tipo de remedios estás consumiendo, para que el operador del láser evalúe tu situación.</p>
+                                      <p className="mt-3">Analgésicos y antiinflamatorios, como el Ibuprofeno y Naproxeno; antiácidos como el Omeprazol o la Ranitidina; antibióticos, como el Ciprofloxacino o la Azitromicina; antihistamínicos como Ebastina o Loratadina, entre otros, no debes estar ingiriéndolos previo a una sesión de láser.</p>
+                                      <ul className="mt-3 list-disc pl-5 space-y-1">
+                                          <li>Antibióticos (especialmente las tetraciclinas).</li>
+                                          <li>Derivados de la Vitamina A (como la Isotretinoína o el ácido Retinoico) utilizados para el acné.</li>
+                                          <li>Ciertos antidepresivos, ansiolíticos y otros medicamentos.</li>
+                                      </ul>
+                                      <p className="mt-3">Es indispensable informar al especialista de salud sobre cualquier medicación, ya que algunos fármacos requieren la suspensión del tratamiento láser hasta varios meses después de finalizar su ingesta.</p>
+                                      <p className="mt-3 font-semibold">Se recomienda siempre consultar con tu médico tratante sobre qué tratamiento pudiera ser viable ante tu patología o si autoriza el uso de la depilación láser según tu condición clínica.</p>
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Lesiones e Infecciones Activas en la Piel</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      <p>El tratamiento está contraindicado en áreas que presenten:</p>
+                                      <ul className="mt-3 list-disc pl-5 space-y-1">
+                                          <li>Heridas, quemaduras, o lesiones cutáneas abiertas.</li>
+                                          <li>Infecciones activas como herpes (se debe esperar a que el brote desaparezca y, a veces, se requiere medicación preventiva).</li>
+                                          <li>Brotes activos de psoriasis o eccema en la zona.</li>
+                                      </ul>
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Enfermedades Graves y Condiciones Hormonales</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      <ul className="list-disc pl-5 space-y-1">
+                                          <li>Cáncer de piel o pacientes que están bajo tratamiento oncológico activo.</li>
+                                          <li>Epilepsia.</li>
+                                          <li>Vitíligo y Psoriasis (aunque el Triláser puede ser más versátil, estas condiciones requieren evaluación médica estricta).</li>
+                                      </ul>
+                                      <p className="mt-3 font-semibold">Se recomienda siempre consultar con tu médico tratante sobre qué tratamiento pudiera ser viable ante tu patología o si autoriza el uso de la depilación láser según tu condición clínica.</p>
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Presencia de Tatuajes o Maquillaje Permanente</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      El láser impactaría el pigmento del tatuaje, provocando quemaduras graves, alteraciones en el dibujo o cicatrices. Estas áreas deben ser cubiertas o evitadas por completo.
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Embarazo</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      Aunque no hay evidencia de daño fetal, el embarazo es una contraindicación absoluta por principio de precaución y por los cambios hormonales que podrían afectar la respuesta de la piel. En la lactancia, aunque la prohibición es relativa, muchos centros recomiendan posponer el tratamiento.
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <div className="w-full rounded-xl shadow-lg bg-amber-50/80 border border-amber-200 px-6 py-5 mt-4">
+                              <p className="text-gray-700 text-base md:text-lg font-semibold">Nota Importante: Es fundamental que todo paciente realice una consulta médica previa y proporcione su historial completo para que el profesional pueda evaluar si el Triláser es seguro y eficaz para su tipo de piel (fototipo) y vello.</p>
+                          </div>
+
+                      </div>
+                  </div>
+              )}
 
               {estadoCuidadosPosteriores&&(
                   <div>
@@ -771,6 +900,19 @@ ${estadoCuidadosPosteriores
   : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
                   > Cuidados Posteriores </button>
 
+
+
+                  <button
+                      onClick={()=> activarProhibiciones()}
+                      className={`text-base border-2 rounded-3xl h-12 shadow-lg w-55 font-semibold tracking-wide transition
+${prohibiciones
+                          ? "bg-purple-500 text-white border-purple-500"
+                          : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
+                  > Prohibiciones </button>
+
+
+
+
                   <button
                       onClick={()=> activarPreguntas()}
                       className={`text-base border-2 rounded-3xl h-12 shadow-lg w-55 font-semibold tracking-wide transition
@@ -786,7 +928,101 @@ ${servicios
   ? "bg-purple-500 text-white border-purple-500" 
   : "text-purple-500 border-purple-400 hover:bg-purple-400 hover:text-white"}`}
                   > Mas informacion </button>
+
+
+
+
+
               </div>
+
+              {prohibiciones&&(
+                  <div className="flex flex-col items-center px-4 sm:px-10 md:px-40 lg:px-80">
+                      <h1 className="text-4xl font-bold mb-8 text-center text-gray-900">
+                          <span className="bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-transparent bg-clip-text">Prohibiciones</span>
+                          {" "}para la Depilación Triláser
+                      </h1>
+                      <div className="w-full space-y-4">
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Piel Bronceada o Exposición Solar Reciente</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      Esta es la prohibición más estricta. No se debe realizar el tratamiento sobre piel bronceada (por sol o cabinas UVA), ya que el aumento de melanina en la piel absorbe excesivamente la energía del láser. Esto conlleva un alto riesgo de quemaduras graves, ampollas y cambios permanentes en la pigmentación (manchas oscuras o claras). Se requiere evitar la exposición solar intensa y el uso de autobronceadores en el área a tratar por un período considerable (30 días) antes de la sesión.
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Uso de Medicamentos Fotosensibles</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      <p>Queda prohibida la depilación láser mientras el paciente esté tomando o utilizando fármacos que aumenten la sensibilidad de la piel a la luz (fotosensibilizantes). Antes y durante los tratamientos de depilación láser, hay que evitar ingerir medicamentos denominados fotosensibilizantes, los cuales al aplicar el láser podrían irritar y enrojecer la piel e incluso hasta provocar quemaduras.</p>
+                                      <p className="mt-3">Es fundamental que antes de cada sesión informes qué tipo de remedios estás consumiendo, para que el operador del láser evalúe tu situación.</p>
+                                      <p className="mt-3">Analgésicos y antiinflamatorios, como el Ibuprofeno y Naproxeno; antiácidos como el Omeprazol o la Ranitidina; antibióticos, como el Ciprofloxacino o la Azitromicina; antihistamínicos como Ebastina o Loratadina, entre otros, no debes estar ingiriéndolos previo a una sesión de láser.</p>
+                                      <ul className="mt-3 list-disc pl-5 space-y-1">
+                                          <li>Antibióticos (especialmente las tetraciclinas).</li>
+                                          <li>Derivados de la Vitamina A (como la Isotretinoína o el ácido Retinoico) utilizados para el acné.</li>
+                                          <li>Ciertos antidepresivos, ansiolíticos y otros medicamentos.</li>
+                                      </ul>
+                                      <p className="mt-3">Es indispensable informar al especialista de salud sobre cualquier medicación, ya que algunos fármacos requieren la suspensión del tratamiento láser hasta varios meses después de finalizar su ingesta.</p>
+                                      <p className="mt-3 font-semibold">Se recomienda siempre consultar con tu médico tratante sobre qué tratamiento pudiera ser viable ante tu patología o si autoriza el uso de la depilación láser según tu condición clínica.</p>
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Lesiones e Infecciones Activas en la Piel</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      <p>El tratamiento está contraindicado en áreas que presenten:</p>
+                                      <ul className="mt-3 list-disc pl-5 space-y-1">
+                                          <li>Heridas, quemaduras, o lesiones cutáneas abiertas.</li>
+                                          <li>Infecciones activas como herpes (se debe esperar a que el brote desaparezca y, a veces, se requiere medicación preventiva).</li>
+                                          <li>Brotes activos de psoriasis o eccema en la zona.</li>
+                                      </ul>
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Enfermedades Graves y Condiciones Hormonales</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      <ul className="list-disc pl-5 space-y-1">
+                                          <li>Cáncer de piel o pacientes que están bajo tratamiento oncológico activo.</li>
+                                          <li>Epilepsia.</li>
+                                          <li>Vitíligo y Psoriasis (aunque el Triláser puede ser más versátil, estas condiciones requieren evaluación médica estricta).</li>
+                                      </ul>
+                                      <p className="mt-3 font-semibold">Se recomienda siempre consultar con tu médico tratante sobre qué tratamiento pudiera ser viable ante tu patología o si autoriza el uso de la depilación láser según tu condición clínica.</p>
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Presencia de Tatuajes o Maquillaje Permanente</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      El láser impactaría el pigmento del tatuaje, provocando quemaduras graves, alteraciones en el dibujo o cicatrices. Estas áreas deben ser cubiertas o evitadas por completo.
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <Accordion className="w-full rounded-xl shadow-lg bg-white/90 border border-gray-200" type="single" collapsible>
+                              <AccordionItem value="item-1">
+                                  <AccordionTrigger className="text-lg md:text-xl font-semibold px-6 py-4 bg-gradient-to-r from-cyan-100 via-white to-indigo-100 rounded-t-xl text-gray-800 w-full text-left">Embarazo</AccordionTrigger>
+                                  <AccordionContent className="px-6 py-5 text-gray-700 text-base md:text-lg bg-white rounded-b-xl border-t border-gray-100">
+                                      Aunque no hay evidencia de daño fetal, el embarazo es una contraindicación absoluta por principio de precaución y por los cambios hormonales que podrían afectar la respuesta de la piel. En la lactancia, aunque la prohibición es relativa, muchos centros recomiendan posponer el tratamiento.
+                                  </AccordionContent>
+                              </AccordionItem>
+                          </Accordion>
+
+                          <div className="w-full rounded-xl shadow-lg bg-amber-50/80 border border-amber-200 px-6 py-5 mt-4">
+                              <p className="text-gray-700 text-base md:text-lg font-semibold">Nota Importante: Es fundamental que todo paciente realice una consulta médica previa y proporcione su historial completo para que el profesional pueda evaluar si el Triláser es seguro y eficaz para su tipo de piel (fototipo) y vello.</p>
+                          </div>
+
+                      </div>
+                  </div>
+              )}
 
 
               {estadoCuidadosPrevios&&(

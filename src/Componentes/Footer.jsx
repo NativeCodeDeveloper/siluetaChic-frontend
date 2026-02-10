@@ -87,7 +87,7 @@ export default function FooterSiluetaChic() {
                             {[
                                 ["Inicio", "/"],
                                 ["Depilacion Mujer", "/catalogo"],
-                                ["Depilacion Hombre", "/catalogo"],
+                                ["Depilacion Hombre", "/catalogo?seccion=hombre"],
                                 ["Agenda tus Sesiones", "/AgendaProceso"],
                             ].map(([label, href]) => (
                                 <li key={label}>
@@ -107,10 +107,10 @@ export default function FooterSiluetaChic() {
                         <h3 className="text-lg font-semibold text-white">Información</h3>
                         <ul className="mt-4 space-y-3 text-sm text-neutral-400">
                             {[
-                                ["Cuidados Previos", "/dudas"],
-                                ["Cuidados Posteriores", "/dudas"],
-                                ["Preguntas frecuentes", "/dudas"],
-                                ["Prohibiciones", "/dudas"],
+                                ["Cuidados Previos", "/dudas?seleccionFooter=previos"],
+                                ["Cuidados Posteriores", "/dudas?seleccionFooter=posteriores"],
+                                ["Preguntas frecuentes", "/dudas?seleccionFooter=frecuentes"],
+                                ["Prohibiciones", "/dudas?seleccionFooter=prohibiciones"],
                             ].map(([label, href]) => (
                                 <li key={label}>
                                     <Link href={href} className="transition hover:text-indigo-600">

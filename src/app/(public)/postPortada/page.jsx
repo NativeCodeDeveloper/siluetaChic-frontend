@@ -127,14 +127,14 @@ export default function PostPortada() {
 
                   <li>
                       <span className='font-bold text-purple-600'> Seguridad y Libertad (Autoestima):  </span>
-                      Nuestra tecnología es apta para todos los fototipos de piel (del I al VI), garantizando un tratamiento efectivo sin riesgo de lesiones pigmentarias.
+                      Olvídate de planificar tu ropa según si te depilaste o no. Usa ese vestido, ve a la piscina o levanta los brazos con total confianza en cualquier momento.
                   </li>
 
 
 
                   <li>
                       <span className='font-bold text-amber-600'> Seguridad Clínica </span>
-                      Olvídate de planificar tu ropa según si te depilaste o no. Usa ese vestido, ve a la piscina o levanta los brazos con total confianza en cualquier momento.
+                      Nuestra tecnología es apta para todos los fototipos de piel (del I al VI), garantizando un tratamiento efectivo sin riesgo de lesiones pigmentarias.
                   </li>
 
               </ul>

@@ -5,7 +5,7 @@ import {toast} from "react-hot-toast";
 import MediaCardImage from "@/Componentes/MediaCardImage";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import {useCarritoGlobal} from "@/ContextosGlobales/CarritoContext";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 
 import {
     Select,
@@ -26,6 +26,8 @@ export default function Catalogo(){
     const [listaSubcategoria, setListaSubcategoria] = useState([]);
     const [subCategoria, setSubCategoria] = useState(undefined);
     const [listasubsubCategoria, setlistasubsubCategoria] = useState([]);
+    const searchparams = useSearchParams();
+    const seccion = searchparams.get("seccion")
     
 
     function irProductosPorCategoria(id_subcategoria) {
@@ -264,8 +266,15 @@ export default function Catalogo(){
     }
 
     useEffect(() => {
-        seleccionarProductosMujer()
-    },[])
+        if(seccion === 'hombre'){
+            seleccionarProductosHombres ()
+            setmujeres(false);
+            sethombres(true);
+        }else{
+            sethombres(false);
+            setmujeres(true);
+        }
+    },[seccion]);
 
 
 
