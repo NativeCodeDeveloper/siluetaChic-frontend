@@ -1,5 +1,5 @@
 'use client'
-import {useState, useEffect} from 'react';
+import {useState, useEffect, Suspense} from 'react';
 import ToasterClient from "@/Componentes/ToasterClient";
 import {toast} from "react-hot-toast";
 import MediaCardImage from "@/Componentes/MediaCardImage";
@@ -17,7 +17,19 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 
-export default function Catalogo(){
+
+
+export default function Catalogo() {
+    return (
+        <Suspense fallback={'...Loading'}>
+            <CatalogoSuspense/>
+        </Suspense>
+    )
+}
+
+
+
+function CatalogoSuspense(){
     const API = process.env.NEXT_PUBLIC_API_URL;
     const [_carrito, setCarrito] = useCarritoGlobal();
     const [listaProductos, setlistaProductos] = useState([]);

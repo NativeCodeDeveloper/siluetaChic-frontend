@@ -1,5 +1,5 @@
 'use client'
-import {useEffect, useState} from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import ServicioPage from "@/app/(public)/servicios/page";
 import { Sun, Scissors, Ban, Droplets, Beaker, Pill, Syringe, ShowerHead, UserRound, ShieldAlert, PenTool, Baby, AlertTriangle, HeartPulse, Microscope } from 'lucide-react';
 import {
@@ -10,7 +10,16 @@ import {
 } from "@/components/ui/accordion"
 import {useSearchParams, useRouter} from "next/navigation"
 
-export default function Dudas(){
+
+export default function Dudas() {
+    return (
+        <Suspense fallback={'...Loading'}>
+            <DudasSuspense/>
+        </Suspense>
+    )
+}
+
+function DudasSuspense(){
     const [estadoCuidadosPrevios, setEstadoCuidadosPrevios] = useState(true);
     const [estadoCuidadosPosteriores, setEstadoCuidadosPosteriores] = useState(false);
     const [estadoPreguntas, setEstadoPreguntas] = useState(false);
