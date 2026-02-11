@@ -105,13 +105,20 @@ export default function Calendario() {
     const [dataAgenda, setDataAgenda] = useState([] || []);
 
 
+    function formatearFechaLocal(d) {
+        const y = d.getFullYear()
+        const m = String(d.getMonth() + 1).padStart(2, "0")
+        const day = String(d.getDate()).padStart(2, "0")
+        return `${y}-${m}-${day}`
+    }
+
     const manejarFechaHoraInicio = (dateTime) => {
-        setfechaInicio(dateTime.toISOString().split("T")[0])
+        setfechaInicio(formatearFechaLocal(dateTime))
         setHoraInicio(dateTime.toTimeString().slice(0, 8))
     }
 
     const manejarFechaHoraFinalizacion = (dateTime) => {
-        setfechaFinalizacion(dateTime.toISOString().split("T")[0])
+        setfechaFinalizacion(formatearFechaLocal(dateTime))
         setHoraFinalizacion(dateTime.toTimeString().slice(0, 8))
     }
 

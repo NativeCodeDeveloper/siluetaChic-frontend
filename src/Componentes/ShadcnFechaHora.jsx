@@ -24,8 +24,8 @@ export default function ShadcnFechaHora({onChange}) {
 
         const [hh = 0, mm = 0, ss = 0] = time.split(":").map(Number)
 
-        const d = new Date(date)
-        d.setHours(hh, mm, ss, 0)
+        // Construir desde año/mes/día locales para evitar desfase por timezone
+        const d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hh, mm, ss, 0)
         return d
     }, [date, time])
 
