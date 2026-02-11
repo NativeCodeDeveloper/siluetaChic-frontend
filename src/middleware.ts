@@ -1,7 +1,8 @@
 
 
-/*
-// frontend/src/middleware.ts
+// ----------------------------------------------------------
+// MIDLEWARE SIN RESTRICCIONES NO BLOQUEOS (ABIERTO TOTAL)
+// ----------------------------------------------------------
 import { NextResponse, type NextRequest } from 'next/server'
 
 // Middleware sin lógica — solo deja pasar todo
@@ -14,18 +15,15 @@ export const config = {
 matcher: ['/dashboard/:path*'], // o simplemente [] si quieres que no aplique a ninguna
 }
 
-   */
 
 
+/*
+
+// ----------------------------------------------------------
+// MIDLEWARE CON RESTRICCIONES (PRODUCCION SOLAMENTE)
+// ----------------------------------------------------------
 
 
-
-
-
-
-
-// TypeScript
-// archivo: `frontend/src/middleware.ts`
 import { clerkMiddleware, clerkClient, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -119,3 +117,4 @@ export const config = {
 
 
 
+*/
