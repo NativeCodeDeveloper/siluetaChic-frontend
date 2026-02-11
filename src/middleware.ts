@@ -1,5 +1,4 @@
 
-
 /*
 
 // frontend/src/middleware.ts
@@ -115,6 +114,7 @@ export const config = {
         '/sign-up/:path*'
     ],
 }
+
 
 
 

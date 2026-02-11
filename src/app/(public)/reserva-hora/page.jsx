@@ -1,14 +1,12 @@
 'use client'
-import Link from 'next/link';
+import {Suspense} from "react";
 import {useSearchParams} from "next/navigation";
 
-export default function ReservaHora() {
+function ReservaHoraContent() {
     const searchParams = useSearchParams();
     const fechaInicio = searchParams.get('fecha') || '';
     const horaInicio = searchParams.get('hora') || '';
     const emailPaciente = searchParams.get('email') || '';
-
-
 
   return (
     <section className="relative min-h-[70vh] w-full px-4 py-10 flex items-center justify-center bg-gradient-to-b from-slate-50 via-white to-slate-50">
@@ -120,10 +118,7 @@ export default function ReservaHora() {
               </div>
             </div>
 
-            <p className="mt-6 text-center text-sm font-semibold text-slate-900">
-              Enviamos la información de tu reserva a
-              <span className="block mt-1 text-indigo-600">cvvvargas@gmail.com</span>
-            </p>
+
 
             <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <p className="text-sm font-semibold text-slate-900">
@@ -161,5 +156,13 @@ export default function ReservaHora() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function ReservaHora() {
+  return (
+    <Suspense fallback={<div className="min-h-[70vh] flex items-center justify-center">Cargando...</div>}>
+      <ReservaHoraContent />
+    </Suspense>
   );
 }
