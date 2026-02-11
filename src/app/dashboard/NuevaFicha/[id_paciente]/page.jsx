@@ -30,7 +30,7 @@ export default function NuevaFicha() {
     const [tipoAtencion, setTipoAtencion] = useState("");
     const [motivoConsulta, setMotivoConsulta] = useState("");
     const [signosVitales, setSignosVitales] = useState("");
-    const [observaciones, setObservaciones] = useState("");
+    const [observacionesPrecio, setObservacionesPrecio] = useState("");
     const [anotacionConsulta, setAnotacionConsulta] = useState("");
     const [anamnesis, setAnamnesis] = useState("");
     const [diagnostico, setDiagnostico] = useState("");
@@ -95,7 +95,7 @@ export default function NuevaFicha() {
                     setDiagnostico("");
                     setAnamnesis(" ");
                     setAnotacionConsulta(" ");
-                    setObservaciones(" ");
+                    setObservacionesPrecio(" ");
                     setSignosVitales(" ");
                     setMotivoConsulta(" ");
                     setTipoAtencion(" ");
@@ -288,6 +288,9 @@ export default function NuevaFicha() {
 
                             </div>
 
+
+
+
                             <div className="border-t border-sky-50 mt-4 pt-4">
                                 <h3 className="text-sm font-semibold text-sky-600 mb-3">Anotaciones Consulta</h3>
                                 <Textarea className="min-h-[100px] resize-none border-blue-600"
@@ -466,7 +469,7 @@ export default function NuevaFicha() {
                                 tipoAtencion,
                                 motivoConsulta,
                                 signosVitales,
-                                observaciones,
+                                observacionesPrecio,
                                 anotacionConsulta,
                                 anamnesis,
                                 diagnostico,
@@ -521,7 +524,32 @@ export default function NuevaFicha() {
                                 <div>
                                     <ShadcnInput
                                         value={tipoAtencion}
+                                        placeholder="Ej: Primera Sesion del Paciente"
                                         onChange={(e) => setTipoAtencion(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+
+
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+
+                                <div>
+                                    <h3 className="text-sm font-semibold text-sky-600">Valor Sesion</h3>
+                                    <p className="text-xs text-slate-500 mb-2">Selecciona el valor de cada sesion</p>
+
+                                </div>
+
+                                <div>
+                                    <ShadcnInput
+                                        value={observacionesPrecio}
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        placeholder="Ej: 25000"
+                                        onChange={(e) => {
+                                            const soloNumeros = e.target.value.replace(/\D/g, "");
+                                            setObservacionesPrecio(soloNumeros);
+                                        }}
                                     />
                                 </div>
                             </div>

@@ -15,7 +15,9 @@ import {
 export default function ShadcnFechaHora({onChange}) {
     const [open, setOpen] = React.useState(false)
     const [date, setDate] = React.useState(undefined)
-    const [time, setTime] = React.useState("10:30")
+    const [hour, setHour] = React.useState("10")
+    const [minute, setMinute] = React.useState("30")
+    const time = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:00`
 
     const dateTime = React.useMemo(() => {
         if (!date) return null
@@ -65,14 +67,28 @@ export default function ShadcnFechaHora({onChange}) {
 
             <div className="flex flex-col gap-3">
                 <Label className="px-1">Hora</Label>
-                {/* Input hora estilizado como botón azul con texto blanco */}
-                <Input
-                    type="time"
-                    step="1"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="w-32 bg-blue-900 text-white rounded-md px-3 py-2"
-                />
+                <div className="flex items-center gap-1">
+                    <select
+                        value={hour}
+                        onChange={(e) => setHour(e.target.value)}
+                        className="w-16 h-9 bg-blue-900 text-white rounded-md px-2 py-1 text-sm border-0 cursor-pointer"
+                    >
+                        {Array.from({length: 24}, (_, i) => (
+                            <option key={i} value={String(i)}>{String(i).padStart(2, "0")}</option>
+                        ))}
+                    </select>
+                    <span className="text-slate-700 font-bold">:</span>
+                    <select
+                        value={minute}
+                        onChange={(e) => setMinute(e.target.value)}
+                        className="w-16 h-9 bg-blue-900 text-white rounded-md px-2 py-1 text-sm border-0 cursor-pointer"
+                    >
+                        {Array.from({length: 12}, (_, i) => i * 5).map((m) => (
+                            <option key={m} value={String(m)}>{String(m).padStart(2, "0")}</option>
+                        ))}
+                    </select>
+                    <span className="text-xs text-slate-500 ml-1">hrs</span>
+                </div>
             </div>
         </div>
     )

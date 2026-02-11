@@ -47,6 +47,7 @@ export default function Paciente() {
     const [pais, setPais] = useState("");
 
 
+
     const [checked, setChecked] = useState(true);
 
 
@@ -530,11 +531,20 @@ export default function Paciente() {
                                                 #{ficha.id_ficha}</h3>
                                             <p className="mt-1 text-sm text-slate-500">{formatearFecha(ficha.fechaConsulta)}</p>
                                         </div>
-                                        <div className="text-right">
-                                            <span className="text-xs text-slate-500">Tipo:</span>
-                                            <div
-                                                className="mt-1 inline-flex items-center px-2.5 py-1 rounded-md bg-sky-50 text-sky-700 text-sm font-medium">{ficha.tipoAtencion || '-'}</div>
-                                        </div>
+                        <div>
+                            <div className="text-right">
+                                <span className="text-xs text-slate-500">Tipo:</span>
+                                <div
+                                    className="mt-1 inline-flex items-center px-2.5 py-1 rounded-md bg-sky-50 text-sky-700 text-sm font-medium">{ficha.tipoAtencion || '-'}</div>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-xs text-slate-500">Valor Sesion: </span>
+                                <div
+                                    className="mt-1 inline-flex items-center px-2.5 py-1 rounded-md bg-sky-50 text-sky-700 text-sm font-medium">{ficha.observaciones || '-'}</div>
+                            </div>
+
+
+                        </div>
                                     </div>
 
 
