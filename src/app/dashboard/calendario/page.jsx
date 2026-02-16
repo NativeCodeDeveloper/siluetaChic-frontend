@@ -1,6 +1,7 @@
 "use client"
 
 import {useState, useMemo, useEffect} from "react";
+import {useSearchParams} from "next/navigation";
 import {Calendar, dateFnsLocalizer} from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import format from "date-fns/format";
@@ -106,6 +107,22 @@ export default function Calendario() {
     const [id_reserva, setid_reserva] = useState(0);
 
     const [dataAgenda, setDataAgenda] = useState([] || []);
+
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const nombre = searchParams.get("nombre");
+        const apellido = searchParams.get("apellido");
+        const rutParam = searchParams.get("rut");
+        const telefonoParam = searchParams.get("telefono");
+        const correo = searchParams.get("correo");
+
+        if (nombre) setNombrePaciente(nombre);
+        if (apellido) setApellidoPaciente(apellido);
+        if (rutParam) setRut(rutParam);
+        if (telefonoParam) setTelefono(telefonoParam);
+        if (correo) setEmail(correo);
+    }, [searchParams]);
 
 
     function formatearFechaLocal(d) {
@@ -307,7 +324,7 @@ export default function Calendario() {
 
             if (fechaInicio === fechaFinalizacion) {
 
-                const res = await fetch(`${API}/reservaPacientes/insertarReserva`, {
+                const res = await fetch(`${API}/reservaPacientes/insertarReservaPacienteFicha`, {
                     method: "POST",
                     headers: {
                         Accept: "application/json",
@@ -458,11 +475,9 @@ export default function Calendario() {
 
     async function actualizarInformacionReserva(nombrePaciente, apellidoPaciente, rut, telefono, email, fechaInicio, horaInicio, fechaFinalizacion, horaFinalizacion, estadoReserva, id_reserva) {
         try {
-
             if (!nombrePaciente || !apellidoPaciente || !rut || !telefono || !email || !fechaInicio || !horaInicio || !fechaFinalizacion || !horaFinalizacion || !estadoReserva || !id_reserva) {
                 return toast.error("Debe llenar todos los campos para poder actualizar la reserva")
             }
-
             const res = await fetch(`${API}/reservaPacientes/actualizarReservacion`, {
                 method: "POST",
                 headers: {Accept: "application/json", "Content-Type": "application/json"},
@@ -497,8 +512,6 @@ export default function Calendario() {
                     return toast.success("Se ha actualizado la reserva correctamente")
                 }
             }
-
-
         } catch (error) {
             console.log(error);
             return toast.error(error.message);
@@ -508,7 +521,6 @@ export default function Calendario() {
 
     async function seleccionarReservaEspecifica(id_reserva) {
         try {
-
             if (!id_reserva) {
                 return toast.error("Debe seleccionar una Reserva");
             }

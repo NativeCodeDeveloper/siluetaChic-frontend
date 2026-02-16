@@ -25,7 +25,19 @@ export default function Paciente() {
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
     function nuevaFichaClinica() {
-        router.push(`/dashboard/NuevaFicha/${id_paciente}`);
+        const paciente = detallePaciente[0];
+        if (!paciente) {
+            router.push(`/dashboard/calendario`);
+            return;
+        }
+        const params = new URLSearchParams({
+            nombre: paciente.nombre || "",
+            apellido: paciente.apellido || "",
+            rut: paciente.rut || "",
+            telefono: paciente.telefono || "",
+            correo: paciente.correo || "",
+        });
+        router.push(`/dashboard/calendario?${params.toString()}`);
     }
 
 
@@ -262,6 +274,24 @@ export default function Paciente() {
         return previsionString;
     }
 
+
+
+
+    function estadoReservacion(estado) {
+        if (estado === 1) return "RESERVADA";
+        if (estado === 2) return "CONFIRMADA";
+        if (estado === 3) return "ANULADA";
+        return "SIN ESTADO";
+    }
+
+    function badgePorEstado(estado) {
+        if (estado === 1) return "bg-blue-100 text-blue-800 ring-1 ring-blue-200";
+        if (estado === 2) return "bg-green-100 text-green-800 ring-1 ring-green-200";
+        if (estado === 3) return "bg-red-100 text-red-800 ring-1 ring-red-200";
+        return "bg-slate-100 text-slate-700 ring-1 ring-slate-200";
+    }
+
+
     return (
         <div>
             <ToasterClient/>
@@ -362,50 +392,44 @@ export default function Paciente() {
 
 
                     </div>
-                    {/* Fichas Listado envuelto en contenedores div */}
+                    {/* Fichas Listado */}
                     <section className="mt-8 grid grid-cols-1 gap-4">
                         {listaFichas.length === 0 ? (
-                            <div className="text-center text-sm text-slate-500">No hay fichas cargadas para este
-                                paciente.</div>
+                            <div className="text-center text-sm text-slate-500">No hay fichas cargadas para este paciente.</div>
                         ) : (
                             listaFichas.map((ficha) => (
                                 <article key={ficha.id_ficha}
-                                         className="bg-white border border-sky-50 shadow-sm rounded-2xl p-5 sm:p-6">
-                                    <div className="flex items-start justify-between">
-                                        <div>
-                                            <h3 className="text-base font-semibold text-slate-900">Ficha
-                                                #{ficha.id_ficha}</h3>
-                                            <p className="mt-1 text-sm text-slate-500">{formatearFecha(ficha.fechaConsulta)}</p>
+                                         className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-base font-bold text-slate-900">Ficha #{ficha.id_ficha}</h3>
+                                        <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${badgePorEstado(ficha.estadoFicha)}`}>
+                                            {estadoReservacion(ficha.estadoFicha)}
+                                        </span>
+                                    </div>
+
+                                    <div className="my-3 h-px w-full bg-slate-100" />
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fecha</p>
+                                            <p className="mt-0.5 text-xs font-medium text-slate-800">{formatearFecha(ficha.fechaConsulta)}</p>
                                         </div>
-                                        <div className="text-right">
-
-
+                                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tipo</p>
+                                            <p className="mt-0.5 text-xs font-medium text-slate-800">{ficha.tipoAtencion || '-'}</p>
                                         </div>
                                     </div>
 
+                                    <div className="mt-3">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Anotación General</p>
+                                        <p className="mt-1 text-xs leading-relaxed whitespace-pre-line text-slate-700">{ficha.anotacionConsulta || '-'}</p>
+                                    </div>
 
-                                    <div className="mt-4 grid grid-cols-1 gap-4">
-                                        <div className="space-y-3">
-                                            <div>
-                                                <p className="text-xs text-slate-500">Anotacion General de Consulta</p>
-                                                <p className="mt-1 text-xs text-slate-700 whitespace-pre-line">{ficha.anotacionConsulta || '-'}</p>
-                                                <br/>
+                                    <div className="my-3 h-px w-full bg-slate-100" />
 
-                                            </div>
-
-                                            <div className="flex gap-2">
-                                                <ShadcnButton
-                                                    funcion={() => editarFichaClinica(ficha.id_ficha)}
-                                                    nombre={"Editar"}/>
-
-                                                <ShadcnButton
-                                                    funcion={() => eliminarFicha(ficha.id_ficha)}
-                                                    nombre={"Eliminar"}/>
-                                            </div>
-
-                                        </div>
-
-
+                                    <div className="flex gap-2">
+                                        <ShadcnButton funcion={() => editarFichaClinica(ficha.id_ficha)} nombre={"Editar"} />
+                                        <ShadcnButton funcion={() => eliminarFicha(ficha.id_ficha)} nombre={"Eliminar"} />
                                     </div>
                                 </article>
                             ))
@@ -510,68 +534,60 @@ export default function Paciente() {
 
                     {/*BOTONES VER FICHAS Y NUEVA FICHA*/}
                     <div className="mt-4 flex justify gap-4">
-                        <ShadcnButton nombre={"Ver Fichas"} funcion={() => listarFichasClinicasPaciente(id_paciente)}/>
+                        <ShadcnButton nombre={"Ver Historial"} funcion={() => listarFichasClinicasPaciente(id_paciente)}/>
 
                         <ShadcnButton nombre={"Nueva Ficha"} funcion={() => nuevaFichaClinica(id_paciente)}/>
 
 
                     </div>
-                    {/* Fichas Listado envuelto en contenedores div */}
+                    {/* Fichas Listado */}
                     <section className="mt-8 grid grid-cols-1 gap-4">
                         {listaFichas.length === 0 ? (
-                            <div className="text-center text-sm text-slate-500">No hay fichas cargadas para este
-                                paciente.</div>
+                            <div className="text-center text-sm text-slate-500">No hay fichas cargadas para este paciente.</div>
                         ) : (
                             listaFichas.map((ficha) => (
                                 <article key={ficha.id_ficha}
-                                         className="bg-white border border-sky-50 shadow-sm rounded-2xl p-5 sm:p-6">
-                                    <div className="flex items-start justify-between">
-                                        <div>
-                                            <h3 className="text-lg font-semibold text-slate-900">Ficha
-                                                #{ficha.id_ficha}</h3>
-                                            <p className="mt-1 text-sm text-slate-500">{formatearFecha(ficha.fechaConsulta)}</p>
+                                         className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-4">
+                                            <h3 className="text-lg font-bold text-slate-900">Ficha Nº{ficha.id_ficha}</h3>
+                                            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${badgePorEstado(ficha.estadoFicha)}`}>
+                                                {estadoReservacion(ficha.estadoFicha)}
+                                            </span>
                                         </div>
-                        <div>
-                            <div className="text-right">
-                                <span className="text-xs text-slate-500">Tipo:</span>
-                                <div
-                                    className="mt-1 inline-flex items-center px-2.5 py-1 rounded-md bg-sky-50 text-sky-700 text-sm font-medium">{ficha.tipoAtencion || '-'}</div>
-                            </div>
-                            <div className="text-right">
-                                <span className="text-xs text-slate-500">Valor Sesion: </span>
-                                <div
-                                    className="mt-1 inline-flex items-center px-2.5 py-1 rounded-md bg-sky-50 text-sky-700 text-sm font-medium">{ficha.observaciones || '-'}</div>
-                            </div>
-
-
-                        </div>
                                     </div>
 
+                                    <div className="my-4 h-px w-full bg-slate-100" />
 
-                                    <div className="mt-4 grid grid-cols-1 gap-4">
-                                        <div className="space-y-3">
-                                            <div>
-                                                <p className="text-xs text-slate-500">Anotacion General de Consulta</p>
-                                                <p className="mt-1 text-sm text-slate-700 whitespace-pre-line">{ficha.anotacionConsulta || '-'}</p>
-                                                <br/>
-
-                                            </div>
-
-                                            <div className="flex gap-5">
-
-                                                <ShadcnButton
-                                                    className="w-50"
-                                                    funcion={() => editarFichaClinica(ficha.id_ficha)}
-                                                    nombre={"Editar"}/>
-
-                                                <ShadcnButton
-                                                    funcion={() => eliminarFicha(ficha.id_ficha)}
-                                                    nombre={"Eliminar"}/>
-                                            </div>
-
+                                    <div className="grid grid-cols-4 gap-3">
+                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fecha Reservación</p>
+                                            <p className="mt-1 text-sm font-semibold text-slate-800">{formatearFecha(ficha.fechaConsulta)}</p>
                                         </div>
+                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tipo Atención</p>
+                                            <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.tipoAtencion || '-'}</p>
+                                        </div>
+                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Valor Sesión</p>
+                                            <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.observaciones || '-'}</p>
+                                        </div>
+                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Estado</p>
+                                            <p className="mt-1 text-sm font-bold text-slate-800">{estadoReservacion(ficha.estadoFicha)}</p>
+                                        </div>
+                                    </div>
 
+                                    <div className="mt-4">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Anotación General de Consulta</p>
+                                        <p className="mt-1 text-sm leading-relaxed whitespace-pre-line text-slate-700">{ficha.anotacionConsulta || '-'}</p>
+                                    </div>
 
+                                    <div className="my-4 h-px w-full bg-slate-100" />
+
+                                    <div className="flex gap-4">
+                                        <ShadcnButton funcion={() => editarFichaClinica(ficha.id_ficha)} nombre={"Editar"} />
+                                        <ShadcnButton funcion={() => eliminarFicha(ficha.id_ficha)} nombre={"Eliminar"} />
                                     </div>
                                 </article>
                             ))

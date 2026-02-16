@@ -94,16 +94,11 @@ export default function FormularioReserva() {
                 setTimeout(() => {
                     router.push(`/reserva-hora?fecha=${encodeURIComponent(fechaInicio)}&hora=${encodeURIComponent(horaInicio)}&email=${encodeURIComponent(email)}`);
                 }, 1500);
-
             } else if (respuestaBackendAgenda.message === "conflicto" || respuestaBackendAgenda.message.includes("conflicto")) {
                 return toast.error("No puede agendar una hora que ya esta ocupada")
-
             } else if (respuestaBackendAgenda.message === false) {
                 return toast.error('Asegure que no esta ocupada la Hora');
-
             }
-
-
         } catch (err) {
 
             console.error(err);
@@ -115,16 +110,12 @@ export default function FormularioReserva() {
 
 
 
-
-
     async function insertarNuevaReserva(nombrePaciente, apellidoPaciente, rut, telefono, email, fechaInicio, horaInicio, fechaFinalizacion, horaFinalizacion) {
         try {
 
             if (!nombrePaciente || !apellidoPaciente || !rut || !telefono || !email || !fechaInicio || !horaInicio || !horaFinalizacion) {
                 return toast.error('Debe llenar todos los campos');
             }
-
-
 
             if (fechaInicio === fechaFinalizacion) {
 
@@ -180,14 +171,6 @@ export default function FormularioReserva() {
 
         }
     }
-
-
-
-
-
-
-
-
 
 
     const formatoCLP = new Intl.NumberFormat("es-CL", {
@@ -279,8 +262,6 @@ export default function FormularioReserva() {
                                         </div>
                                     )
                                 }
-
-
                                 {horaInicio && (
                                     <div className="text-sm text-slate-600">
                                         <span>Hora inicio :</span> {horaInicio.toString()}
@@ -294,17 +275,11 @@ export default function FormularioReserva() {
                                     </div>
                                 )}
                             </div>
-
-
                         </div>
-
-
                     </div>
 
                     <div
                         className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-
                         <div className="flex gap-2">
                             <ShadcnButton2
                                 nombre={"FINALIZAR"}

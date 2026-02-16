@@ -289,19 +289,22 @@ export default function SubSubCategoria(){
             return;
         }
 
-        // Si ya viene como URL (ej: desde BD / Cloudflare), úsala directamente
+        // Debug: ver qué valor y tipo tiene imagenReferencial
+        console.log("imagenReferencial:", imagenReferencial, "tipo:", typeof imagenReferencial);
+
+        // Si es un string (ID de Cloudflare desde BD), construir URL completa
         if (typeof imagenReferencial === "string") {
-            setprevizualizacion(imagenReferencial);
+            setprevizualizacion(`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${imagenReferencial}/card`);
+
             return;
         }
 
-        // Si viene como FileList/Array, tomamos el primer archivo
+        // Si es un archivo local (File/Blob), crear URL temporal
         const posibleArchivo =
             imagenReferencial instanceof File || imagenReferencial instanceof Blob
                 ? imagenReferencial
                 : imagenReferencial?.[0];
 
-        // createObjectURL solo acepta Blob/File
         if (!(posibleArchivo instanceof Blob)) {
             setprevizualizacion(null);
             return;
@@ -546,13 +549,15 @@ export default function SubSubCategoria(){
                                                 {subsubcategoria.descripcionSubSubCategoria}
                                             </TableCell>
 
+
+
+
                                             <TableCell className="py-3">
                                                 <ShadcnButton
                                                     nombre={'Seleccionar para Edición'}
                                                     funcion={()=> seleccionarSubSubCategoria(subsubcategoria.id_subsubcategoria)}
                                                 />
                                             </TableCell>
-
 
 
 

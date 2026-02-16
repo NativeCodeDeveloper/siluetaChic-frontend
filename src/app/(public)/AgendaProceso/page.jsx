@@ -75,8 +75,7 @@ export default function CalendarioMensualHoras() {
             const attStart = cursor;
             const attEnd = cursor + 60;
             slots.push({start: minutesToHHMM(attStart), end: minutesToHHMM(attEnd)});
-            // avanzar 60 + 10 minutos (=70) para el siguiente inicio
-            cursor = attEnd + 10;
+            cursor = attEnd;
         }
 
         return slots;

@@ -228,17 +228,6 @@ return (
 
                         />
 
-                        <div className="hidden md:block">
-                            <div className="mt-4 flex items-center justify-center">
-                                <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2">
-                                    <img
-                                        src="/MP_RGB_HANDSHAKE_color_horizontal.svg"
-                                        alt="Mercado Pago"
-                                        className="h-6 w-auto opacity-80 grayscale"
-                                    />
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
@@ -401,17 +390,6 @@ return (
                     )}
                 </div>
 
-       <div className="block md:hidden w-full px-4 pb-6">
-           <div className="flex justify-center">
-               <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2">
-                   <img
-                       src="/MP_RGB_HANDSHAKE_color_horizontal.svg"
-                       alt="Mercado Pago"
-                       className="h-6 w-auto opacity-80 grayscale"
-                   />
-               </div>
-           </div>
-       </div>
 
             </div>
         </div>
