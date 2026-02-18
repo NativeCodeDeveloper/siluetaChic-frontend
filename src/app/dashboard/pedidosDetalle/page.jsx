@@ -1,4 +1,8 @@
 'use client'
+
+// Forzar renderizado dinámico para evitar problemas en build
+export const dynamic = 'force-dynamic';
+
 import {useSearchParams} from "next/navigation";
 import ToasterClient from "@/Componentes/ToasterClient";
 import {toast} from "react-hot-toast";

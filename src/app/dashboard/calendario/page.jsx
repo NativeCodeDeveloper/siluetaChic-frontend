@@ -1,5 +1,8 @@
 "use client"
 
+// Forzar renderizado dinámico para evitar problemas en build
+export const dynamic = 'force-dynamic';
+
 import {useState, useMemo, useEffect, Suspense} from "react";
 import {useSearchParams} from "next/navigation";
 import {Calendar, dateFnsLocalizer} from "react-big-calendar";
