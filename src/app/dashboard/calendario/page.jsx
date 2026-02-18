@@ -1,6 +1,6 @@
 "use client"
 
-import {useState, useMemo, useEffect} from "react";
+import {useState, useMemo, useEffect, Suspense} from "react";
 import {useSearchParams} from "next/navigation";
 import {Calendar, dateFnsLocalizer} from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -33,7 +33,7 @@ const localizer = dateFnsLocalizer({
     locales,
 });
 
-export default function Calendario() {
+function CalendarioContent() {
 
     const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -822,3 +822,17 @@ export default function Calendario() {
         </div>
     );
 }
+
+export default function Calendario() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center h-screen">
+            <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto"></div>
+                <p className="mt-4 text-slate-600">Cargando calendario...</p>
+            </div>
+        </div>}>
+            <CalendarioContent />
+        </Suspense>
+    );
+}
+
