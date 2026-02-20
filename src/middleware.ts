@@ -1,5 +1,5 @@
 
-
+/*
 
 
 
@@ -17,8 +17,9 @@ return NextResponse.next()
 export const config = {
 matcher: ['/dashboard/:path*'], // o simplemente [] si quieres que no aplique a ninguna
 }
-/*
 
+
+*/
 
 
 
@@ -117,7 +118,6 @@ export const config = {
     ],
 }
 
-*/
 
 
 

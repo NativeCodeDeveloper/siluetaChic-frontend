@@ -5,23 +5,29 @@ const CATEGORIA_HOMBRE = 48;
 // Subcategorías que fuerzan 1 sola sesión (mujer)
 const SUBCATEGORIAS_SOLO_UNA_SESION = [24, 26];
 
-// TODO: Los multiplicadores están expresados como fracción decimal (0.x).
-// Si el negocio los define como porcentaje (51.25%), dividir por 100 antes de usar.
-// Por defecto se implementan como fracción: 0.5125 = el precio por sesión es 51.25% del base.
-
-// Tabla de multiplicadores: categoria -> subsubcategoria -> sesiones -> multiplicador
-const TABLA_MULTIPLICADORES = {
+// Precios promocionales TOTALES fijos por zona y sesiones.
+// Fuente: DEPILACION.xlsx (hojas MUJER y HOMBRE, columnas PROMOCION).
+// Estructura: categoria -> subsubcategoria -> sesiones -> precio total fijo
+const PRECIOS_PROMOCION = {
     [CATEGORIA_MUJER]: {
-        31: { 3: 0.5125, 6: 0.3844 },  // XS
-        32: { 3: 0.5206, 6: 0.4165 },  // S
-        33: { 3: 0.4543, 6: 0.3787 },  // M
-        34: { 3: 0.4443, 6: 0.3332 },  // L
+        // XS — base normal: $13.000
+        31: { 3: 19990, 6: 29990 },
+        // S — base normal: $16.000
+        32: { 3: 24990, 6: 39990 },
+        // M — base normal: $22.000
+        33: { 3: 29990, 6: 49990 },
+        // L — base normal: $30.000
+        34: { 3: 39990, 6: 59990 },
     },
     [CATEGORIA_HOMBRE]: {
-        38: { 3: 0.5550, 6: 0.4443 },  // XS
-        39: { 3: 0.5830, 6: 0.4166 },  // S
-        40: { 3: 0.5950, 6: 0.4170 },  // M
-        41: { 3: 0.5550, 6: 0.3930 },  // L
+        // XS — base normal: $15.000
+        38: { 3: 24990, 6: 39990 },
+        // S — base normal: $20.000
+        39: { 3: 34990, 6: 49990 },
+        // M — base normal: $28.000
+        40: { 3: 49990, 6: 69990 },
+        // L — base normal: $36.000
+        41: { 3: 59990, 6: 84990 },
     },
 };
 
@@ -39,11 +45,15 @@ export function esSoloUnaSesion(producto) {
 }
 
 /**
- * Calcula el precio final por sesión según producto y cantidad de sesiones.
+ * Calcula el precio final total según producto y cantidad de sesiones.
+ *
+ * - 1 sesión: retorna valorProducto (sin descuento)
+ * - 3 o 6 sesiones: busca el precio fijo promocional en la tabla
+ * - Fallback: valorProducto * sesiones (sin descuento) si no hay precio fijo
  *
  * @param {Object} producto - Objeto con categoriaProducto, subcategoria, subsubcategoria, valorProducto
  * @param {number|string} sesiones - 1, 3 o 6
- * @returns {number} Precio final total (precio_por_sesion * sesiones)
+ * @returns {number} Precio final total
  */
 export function calcularPrecioFinal(producto, sesiones) {
     if (!producto || typeof producto !== 'object') {
@@ -72,31 +82,19 @@ export function calcularPrecioFinal(producto, sesiones) {
         return valorBase;
     }
 
-    // Buscar multiplicador en la tabla
+    // Buscar precio fijo promocional en la tabla
     const categoria = producto.categoriaProducto;
     const subsubcategoria = producto.subsubcategoria;
 
-    const tablaCategoria = TABLA_MULTIPLICADORES[categoria];
-    if (!tablaCategoria) {
-        console.warn('[calcularPrecioFinal] Sin tabla para categoría:', categoria, '— usando precio base * sesiones');
-        return valorBase * numSesiones;
+    const precioFijo = PRECIOS_PROMOCION[categoria]?.[subsubcategoria]?.[numSesiones];
+
+    if (precioFijo != null) {
+        return precioFijo;
     }
 
-    const tablaZona = tablaCategoria[subsubcategoria];
-    if (!tablaZona) {
-        console.warn('[calcularPrecioFinal] Sin tabla para subsubcategoria:', subsubcategoria, '— usando precio base * sesiones');
-        return valorBase * numSesiones;
-    }
-
-    const multiplicador = tablaZona[numSesiones];
-    if (multiplicador == null) {
-        console.warn('[calcularPrecioFinal] Sin multiplicador para', numSesiones, 'sesiones — usando precio base * sesiones');
-        return valorBase * numSesiones;
-    }
-
-    // Precio por sesión con descuento * cantidad de sesiones
-    const precioPorSesion = Math.round(valorBase * multiplicador);
-    return precioPorSesion * numSesiones;
+    // Fallback: sin tabla de precios, cobrar precio base * sesiones
+    console.warn('[calcularPrecioFinal] Sin precio promocional para cat:', categoria, 'subsubcat:', subsubcategoria, 'ses:', numSesiones, '— usando precio base * sesiones');
+    return valorBase * numSesiones;
 }
 
-export { SUBCATEGORIAS_SOLO_UNA_SESION, SESIONES_VALIDAS, TABLA_MULTIPLICADORES };
+export { SUBCATEGORIAS_SOLO_UNA_SESION, SESIONES_VALIDAS, PRECIOS_PROMOCION };

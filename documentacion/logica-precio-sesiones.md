@@ -12,36 +12,38 @@ Anteriormente el calculo era simplemente `valorProducto * cantidadSesiones`, sin
 
 | Archivo | Accion | Proposito |
 |---|---|---|
-| `src/FuncionesTranversales/calcularPrecioFinal.js` | Creado | Funcion pura + tabla de multiplicadores |
-| `src/FuncionesTranversales/calcularPrecioFinal.test.js` | Creado | 16 tests ejecutables con Node |
+| `src/FuncionesTranversales/calcularPrecioFinal.js` | Creado | Funcion pura + tabla de precios promocionales |
+| `src/FuncionesTranversales/calcularPrecioFinal.test.js` | Creado | 33 tests ejecutables con Node |
 | `src/app/(public)/producto/[id]/page.jsx` | Modificado | Integracion de la nueva logica en la UI |
 
 ---
 
 ## Arquitectura de la solucion
 
-### 1. Tabla de multiplicadores (mapping)
+### 1. Tabla de precios fijos promocionales
 
-Se definio un objeto plano que mapea `categoria -> subsubcategoria -> sesiones -> multiplicador`:
+Se usan los **precios totales fijos** directamente del Excel (`DEPILACION.xlsx`, columnas PROMOCION), en vez de multiplicadores aproximados. Esto garantiza que los precios cuadren al peso exacto con la planilla del negocio.
 
 ```javascript
-const TABLA_MULTIPLICADORES = {
+const PRECIOS_PROMOCION = {
     49: {  // MUJER
-        31: { 3: 0.5125, 6: 0.3844 },  // XS
-        32: { 3: 0.5206, 6: 0.4165 },  // S
-        33: { 3: 0.4543, 6: 0.3787 },  // M
-        34: { 3: 0.4443, 6: 0.3332 },  // L
+        31: { 3: 19990, 6: 29990 },  // XS (base: $13.000)
+        32: { 3: 24990, 6: 39990 },  // S  (base: $16.000)
+        33: { 3: 29990, 6: 49990 },  // M  (base: $22.000)
+        34: { 3: 39990, 6: 59990 },  // L  (base: $30.000)
     },
     48: {  // HOMBRE
-        38: { 3: 0.5550, 6: 0.4443 },  // XS
-        39: { 3: 0.5830, 6: 0.4166 },  // S
-        40: { 3: 0.5950, 6: 0.4170 },  // M
-        41: { 3: 0.5550, 6: 0.3930 },  // L
+        38: { 3: 24990, 6: 39990 },  // XS (base: $15.000)
+        39: { 3: 34990, 6: 49990 },  // S  (base: $20.000)
+        40: { 3: 49990, 6: 69990 },  // M  (base: $28.000)
+        41: { 3: 59990, 6: 84990 },  // L  (base: $36.000)
     },
 };
 ```
 
-**Por que un objeto y no ifs?** Es mas facil de mantener. Agregar una nueva zona o cambiar un multiplicador es editar un solo numero en la tabla, sin tocar logica.
+**Por que precios fijos y no multiplicadores?**
+
+Los precios del negocio terminan en cifras comerciales ($X9.990). Usando multiplicadores con 4 decimales, las diferencias por redondeo llegaban hasta $102 en algunas zonas (Hombre L, 6 sesiones). Los precios fijos eliminan ese problema y coinciden exactamente con el Excel.
 
 ### 2. Funcion `calcularPrecioFinal(producto, sesiones)`
 
@@ -51,23 +53,17 @@ Es una funcion pura (sin efectos secundarios) que:
 2. **Normaliza sesiones**: si el valor no es 1, 3 o 6, lo fuerza a 1
 3. **Fuerza 1 sesion** para mujer subcategoria 24 o 26 (regla de negocio)
 4. **Si sesiones = 1**: retorna `valorProducto` sin descuento
-5. **Si sesiones = 3 o 6**: busca el multiplicador en la tabla
-6. **Fallback**: si no encuentra la combinacion en la tabla, retorna `valorProducto * sesiones` (precio sin descuento) y emite un `console.warn`
+5. **Si sesiones = 3 o 6**: busca el precio fijo en la tabla
+6. **Fallback**: si no encuentra la combinacion en la tabla, retorna `valorProducto * sesiones` (sin descuento) y emite un `console.warn`
 
-**Formula del precio final:**
-
-```
-precioFinal = Math.round(valorProducto * multiplicador) * cantidadSesiones
-```
-
-Ejemplo concreto - Mujer zona XS, 3 sesiones, valor base $100.000:
+Ejemplo concreto - Mujer zona XS, 3 sesiones:
 
 ```
-precioPorSesion = Math.round(100000 * 0.5125) = $51.250
-precioFinal = 51.250 * 3 = $153.750
+valorProducto = $13.000
+precioFinal = $19.990 (precio fijo de la tabla)
 ```
 
-Vs. el precio sin descuento: `100.000 * 3 = $300.000`
+Vs. el precio sin descuento: `$13.000 * 3 = $39.000`
 
 ### 3. Funcion `esSoloUnaSesion(producto)`
 
@@ -135,16 +131,30 @@ Despues:
 
 ```javascript
 precioFinal
-// => valorProducto * multiplicador * sesiones (con descuento segun tabla)
+// => precio fijo promocional de la tabla, o valorProducto si es 1 sesion
 ```
 
 ---
 
-## Nota sobre los multiplicadores
+## Tabla completa de precios (referencia Excel)
 
-Los multiplicadores estan expresados como fraccion decimal. Por ejemplo `0.5125` significa que el precio por sesion es el 51.25% del valor base.
+### Mujer (categoriaProducto = 49)
 
-Si en el futuro el negocio define los multiplicadores como porcentaje entero (ej: `51.25`), se debe dividir por 100 antes de usarlos. Hay un `TODO` en el codigo fuente marcando esto.
+| Zona | Subsubcat | Base 1 ses | Total 3 ses | Total 6 ses |
+|------|-----------|------------|-------------|-------------|
+| XS   | 31        | $13.000    | $19.990     | $29.990     |
+| S    | 32        | $16.000    | $24.990     | $39.990     |
+| M    | 33        | $22.000    | $29.990     | $49.990     |
+| L    | 34        | $30.000    | $39.990     | $59.990     |
+
+### Hombre (categoriaProducto = 48)
+
+| Zona | Subsubcat | Base 1 ses | Total 3 ses | Total 6 ses |
+|------|-----------|------------|-------------|-------------|
+| XS   | 38        | $15.000    | $24.990     | $39.990     |
+| S    | 39        | $20.000    | $34.990     | $49.990     |
+| M    | 40        | $28.000    | $49.990     | $69.990     |
+| L    | 41        | $36.000    | $59.990     | $84.990     |
 
 ---
 
@@ -158,26 +168,43 @@ Ejecutar con:
 node src/FuncionesTranversales/calcularPrecioFinal.test.js
 ```
 
-### Casos cubiertos (16 tests)
+### Casos cubiertos (33 tests)
 
-| Caso | Sesiones | Resultado esperado |
-|---|---|---|
-| Mujer XS (31) | 1 | valorProducto |
-| Mujer XS (31) | 3 | `round(100000 * 0.5125) * 3 = 153750` |
-| Mujer XS (31) | 6 | `round(100000 * 0.3844) * 6 = 230640` |
-| Mujer L (34) | 1 | valorProducto |
-| Mujer L (34) | 6 | `round(200000 * 0.3332) * 6 = 399840` |
-| Hombre M (40) | 1 | valorProducto |
-| Hombre M (40) | 3 | `round(150000 * 0.5950) * 3 = 267750` |
-| Hombre M (40) | 6 | `round(150000 * 0.4170) * 6 = 375300` |
-| Mujer subcat 26 | 3 | forzado a 1 sesion = valorProducto |
-| Mujer subcat 26 | 6 | forzado a 1 sesion = valorProducto |
-| Mujer subcat 26 | esSoloUnaSesion | true |
-| Mujer subcat 24 | 6 | forzado a 1 sesion = valorProducto |
-| Mujer subcat 24 | esSoloUnaSesion | true |
-| Producto null | 3 | 0 |
-| valorProducto NaN | 3 | 0 |
-| Sesiones invalidas (5) | 5 | fallback a 1 sesion = valorProducto |
+| Grupo | Caso | Sesiones | Precio esperado |
+|---|---|---|---|
+| Mujer XS | base $13.000 | 1 | $13.000 |
+| Mujer XS | | 3 | $19.990 |
+| Mujer XS | | 6 | $29.990 |
+| Mujer S | base $16.000 | 1 | $16.000 |
+| Mujer S | | 3 | $24.990 |
+| Mujer S | | 6 | $39.990 |
+| Mujer M | base $22.000 | 1 | $22.000 |
+| Mujer M | | 3 | $29.990 |
+| Mujer M | | 6 | $49.990 |
+| Mujer L | base $30.000 | 1 | $30.000 |
+| Mujer L | | 3 | $39.990 |
+| Mujer L | | 6 | $59.990 |
+| Hombre XS | base $15.000 | 1 | $15.000 |
+| Hombre XS | | 3 | $24.990 |
+| Hombre XS | | 6 | $39.990 |
+| Hombre S | base $20.000 | 1 | $20.000 |
+| Hombre S | | 3 | $34.990 |
+| Hombre S | | 6 | $49.990 |
+| Hombre M | base $28.000 | 1 | $28.000 |
+| Hombre M | | 3 | $49.990 |
+| Hombre M | | 6 | $69.990 |
+| Hombre L | base $36.000 | 1 | $36.000 |
+| Hombre L | | 3 | $59.990 |
+| Hombre L | | 6 | $84.990 |
+| Forzar 1 ses | Mujer subcat 26 pide 3 | forzado a 1 | $80.000 |
+| Forzar 1 ses | Mujer subcat 26 pide 6 | forzado a 1 | $80.000 |
+| Forzar 1 ses | esSoloUnaSesion subcat 26 | - | true |
+| Forzar 1 ses | Mujer subcat 24 pide 6 | forzado a 1 | $50.000 |
+| Forzar 1 ses | esSoloUnaSesion subcat 24 | - | true |
+| Invalidos | producto null | 3 | $0 |
+| Invalidos | valorProducto NaN | 3 | $0 |
+| Invalidos | sesiones = 5 | forzado a 1 | $13.000 |
+| Fallback | sin tabla (cat 99) | 3 | base * 3 |
 
 ---
 
@@ -196,3 +223,11 @@ node src/FuncionesTranversales/calcularPrecioFinal.test.js
 | Hombre S | subsubcategoria 39 |
 | Hombre M | subsubcategoria 40 |
 | Hombre L | subsubcategoria 41 |
+
+---
+
+## Cambio de multiplicadores a precios fijos
+
+Inicialmente se implementaron multiplicadores porcentuales (ej: `0.5125`). Al validar contra el Excel, se detectaron diferencias de hasta $102 por errores de redondeo y precision. Se reemplazo por precios fijos totales del Excel, que cuadran al peso exacto.
+
+Si en el futuro se necesita volver a multiplicadores, usar al menos 10 decimales y la formula `Math.round(valorProducto * multiplicador * sesiones)` para evitar redondeo intermedio.
