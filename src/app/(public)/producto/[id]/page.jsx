@@ -14,9 +14,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import {number} from "zod";
+
 import ToasterClient from "@/Componentes/ToasterClient";
 import Link from "next/link";
+import { calcularPrecioFinal, esSoloUnaSesion } from "@/FuncionesTranversales/calcularPrecioFinal";
 
 
 
@@ -32,6 +33,7 @@ export default function ProductoDetalle() {
     const [listaProductos, setlistaProductos] = useState([]);
     const [productoSeleccionado, setproductoSeleccionado] = useState('');
     const [dataProductoSeleccionado, setdataProductoSeleccionado] = useState({});
+    const [precioFinal, setPrecioFinal] = useState(0);
     const router = useRouter();
 
 
@@ -188,14 +190,21 @@ export default function ProductoDetalle() {
 
 
 
-    function calcularPrecio(valorPorDefecto, cantidadSesiones){
-        if (!valorPorDefecto) {
-            valorPorDefecto = 0;
+    // Derivado: si el producto solo admite 1 sesión
+    const soloUnaSesion = esSoloUnaSesion(producto);
+
+    // Forzar sesiones a 1 cuando el producto no admite 3/6
+    useEffect(() => {
+        if (soloUnaSesion && cantidadSesiones !== '1') {
+            setcantidadSesiones('1');
         }
-        const sesiones = Number(cantidadSesiones) || 1;
-        const nuevo_valor = valorPorDefecto * sesiones;
-        return nuevo_valor;
-    }
+    }, [soloUnaSesion, cantidadSesiones]);
+
+    // Recalcular precio final cuando cambian producto o sesiones
+    useEffect(() => {
+        const precio = calcularPrecioFinal(producto, cantidadSesiones);
+        setPrecioFinal(precio);
+    }, [producto, cantidadSesiones]);
 
 
 
@@ -246,26 +255,24 @@ return (
                             {/* PRECIO */}
                             <div className="flex items-baseline gap-3">
                                 <span className="text-sm uppercase tracking-wider text-slate-500">Valor</span>
-               <label className="text-2xl md:text-3xl font-bold text-purple-600">
-                   {new Intl.NumberFormat('es-CL', {
-                       style: 'currency',
-                       currency: 'CLP',
-                       maximumFractionDigits: 0
-                   }).format(calcularPrecio(producto.valorProducto, cantidadSesiones))}
-               </label>
+                                <label className="text-2xl md:text-3xl font-bold text-purple-600">
+                                    {new Intl.NumberFormat('es-CL', {
+                                        style: 'currency',
+                                        currency: 'CLP',
+                                        maximumFractionDigits: 0
+                                    }).format(precioFinal)}
+                                </label>
                             </div>
                             <div className="flex items-baseline gap-3 opacity-80">
                                 <span className="text-xs uppercase tracking-wider text-slate-400">
                                     Valor previo
                                 </span>
-
-
                                 <span className="relative text-base md:text-lg font-medium text-slate-400 opacity-90 after:content-[''] after:absolute after:left-0 after:right-0 after:top-1/2 after:h-[2px] after:bg-slate-400 after:-translate-y-1/2">
                                     {new Intl.NumberFormat('es-CL', {
                                         style: 'currency',
                                         currency: 'CLP',
                                         maximumFractionDigits: 0
-                                    }).format(calcularPrecio(producto.valor_previo, cantidadSesiones))}
+                                    }).format((producto.valor_previo || 0) * (Number(cantidadSesiones) || 1))}
                                 </span>
                             </div>
 
@@ -282,6 +289,7 @@ return (
                                 <Select
                                     value={cantidadSesiones}
                                     onValueChange={value => setcantidadSesiones(value)}
+                                    disabled={soloUnaSesion}
                                 >
                                     <SelectTrigger className="w-full sm:w-60">
                                         <SelectValue placeholder="Cantidad de Sesiones" />
@@ -290,8 +298,8 @@ return (
                                         <SelectGroup>
                                             <SelectLabel>Cantidad Sesiones</SelectLabel>
                                             <SelectItem value="1">1</SelectItem>
-                                            <SelectItem value="3">3</SelectItem>
-                                            <SelectItem value="6">6</SelectItem>
+                                            <SelectItem value="3" disabled={soloUnaSesion}>3</SelectItem>
+                                            <SelectItem value="6" disabled={soloUnaSesion}>6</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>

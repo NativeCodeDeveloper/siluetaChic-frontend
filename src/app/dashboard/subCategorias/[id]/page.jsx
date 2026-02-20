@@ -383,13 +383,6 @@ export default function SubCategoria(){
 
                                         <TableCell className="py-3">
                                             <ShadcnButton
-                                                nombre={'Eliminar Subcategoria'}
-                                                funcion={(e)=> eliminarSubcategoria(subcategoria.id_subcategoria) }
-                                            />
-                                        </TableCell>
-
-                                        <TableCell className="py-3">
-                                            <ShadcnButton
                                                 nombre={'Sub-Subcategorias'}
                                                 funcion={(e)=> irSubSubCategoria(subcategoria.id_subcategoria) }
                                             />
