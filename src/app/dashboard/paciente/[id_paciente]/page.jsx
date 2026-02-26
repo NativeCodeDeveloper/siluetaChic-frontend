@@ -37,6 +37,7 @@ export default function Paciente(){
     const [correo, setCorreo] = useState("");
     const [direccion, setDireccion] = useState("");
     const[pais, setPais] = useState("");
+    const[observaciones, setObservaciones] = useState("");
 
     function volverAingreso(){
         router.push("/dashboard/GestionPaciente");
@@ -52,14 +53,16 @@ export default function Paciente(){
 
 
     //FUNCION PARA LA ACTUALIZACION DE DATOS DEL PACIENTE
-    async function actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,id_paciente ) {
+    async function actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,observaciones,id_paciente ) {
 
         let prevision_id = null;
 
-        if (prevision.includes("NO APLICA")) {
+        if (prevision.includes("ALTA")) {
             prevision_id = 1
-        }else if (prevision.includes("ISAPRE")) {
+        }else if (prevision.includes("TRATAMIENTO")) {
             prevision_id = 2
+        }else if (prevision.includes("ABANDONO")) {
+            prevision_id = 3
         }else {
             prevision_id = 0
         }
@@ -85,6 +88,7 @@ export default function Paciente(){
                     correo,
                     direccion,
                     pais,
+                    observaciones,
                     id_paciente})
             })
 
@@ -105,6 +109,7 @@ export default function Paciente(){
                     setRut("");
                     setSexo("");
                     setPais("");
+                    setObservaciones("");
                     await buscarPacientePorId(id_paciente);
                     return toast.success("Datos del paciente actualizados con Exito!");
 
@@ -166,6 +171,7 @@ export default function Paciente(){
             setCorreo(paciente.correo);
             setDireccion(paciente.direccion);
             setPais(paciente.pais);
+            setObservaciones(paciente.observaciones || "");
         }
     }, [detallePaciente]);
 
@@ -177,9 +183,11 @@ export default function Paciente(){
         let previsionString = null;
 
         if(id_prevision === 1){
-            previsionString = "NO APLICA"
+            previsionString = "ALTA"
         }else if(id_prevision === 2){
-            previsionString = "ISAPRE"
+            previsionString = "TRATAMIENTO"
+        } else if(id_prevision === 3){
+            previsionString = "ABANDONO"
         }else{
             previsionString = "SIN DEFINIR"
         }
@@ -256,7 +264,7 @@ export default function Paciente(){
                                                 <p className="mt-1 text-xs sm:text-sm text-slate-600">RUT: <span className="font-semibold text-slate-800">{paciente.rut}</span></p>
                                             </div>
                                             <div className="text-right">
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-900">{previsionDeterminacion(paciente.prevision_id)}</span>
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-900">Estado del Tratamiento: {previsionDeterminacion(paciente.prevision_id)}</span>
                                             </div>
                                         </div>
 
@@ -288,6 +296,14 @@ export default function Paciente(){
                                                 <p className="text-[11px] uppercase tracking-wide text-slate-500">Dirección</p>
                                                 <p className="mt-1 font-semibold text-slate-900">{paciente.direccion ?? '---'}</p>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Número de Ficha */}
+                                    <div className="px-4 sm:px-5 pb-4">
+                                        <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
+                                            <p className="text-xs text-slate-600">Número de Ficha</p>
+                                            <p className="mt-1 font-medium text-slate-700">{paciente.observaciones ?? '---'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -360,10 +376,12 @@ export default function Paciente(){
 
 
                         <div className="">
-                            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Seleccione Previsión</label>
+                            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Estado de Tratamiento</label>
                             <div className="mt-1">
-                                <ShadcnSelect nombreDefault={"Seleccion Prevision"}
-                                              value1={"NO APLICA"}
+                                <ShadcnSelect nombreDefault={"Seleccione Estado"}
+                                              value1={"ALTA"}
+                                              value2={"TRATAMIENTO"}
+                                              value3={"ABANDONO"}
                                               onChange={(value) => setPrevision(value)}/>
                             </div>
                         </div>
@@ -425,12 +443,23 @@ export default function Paciente(){
                             </div>
                         </div>
 
+                        <div className="">
+                            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Número de Ficha</label>
+                            <div className="mt-1">
+                                <ShadcnInput
+                                    value={observaciones}
+                                    placeholder={"Ej: 12345"}
+                                    onChange={(e) => setObservaciones(e.target.value)}
+                                    className="bg-slate-50/70 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                            </div>
+                        </div>
+
                         <div className="sm:col-span-2 flex justify-center sm:justify-end pt-2">
 
                             <button
                                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-sky-700 to-blue-600 text-white font-semibold shadow-md hover:from-sky-800 hover:to-blue-700 transition focus:outline-none focus:ring-2 focus:ring-sky-300 focus:ring-offset-2"
                                 type={"button"}
-                                onClick={()=> actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,id_paciente )}
+                                onClick={()=> actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,observaciones,id_paciente )}
                             >Actualizar</button>
 
                         </div>

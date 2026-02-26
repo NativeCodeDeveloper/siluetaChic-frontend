@@ -22,6 +22,7 @@ export default function EdicionFichaClinica() {
     const [observaciones, setobservaciones] = useState("");
     const [anotacionConsulta, setanotacionConsulta] = useState("");
     const [fechaConsulta, setfechaConsulta] = useState("");
+    const [archivosAdjuntos, setarchivosAdjuntos] = useState("");
 
     const API = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
@@ -74,6 +75,7 @@ export default function EdicionFichaClinica() {
         setobservaciones(ficha.observaciones ?? "");
         setanotacionConsulta(ficha.anotacionConsulta ?? "");
         setfechaConsulta(ficha.fechaConsulta ? ficha.fechaConsulta.slice(0, 10) : "");
+        setarchivosAdjuntos(ficha.archivosAdjuntos ?? "");
     }
 
     async function seleccionarFichaEspecifica(id_ficha) {
@@ -110,7 +112,7 @@ export default function EdicionFichaClinica() {
 
     async function actualizarFichaConEstado() {
         try {
-            if (!tipoAtencion || !anotacionConsulta || !id_ficha || !estadoFicha) {
+            if (!tipoAtencion || !anotacionConsulta || !id_ficha || !estadoFicha || !archivosAdjuntos) {
                 return toast.error("Debe llenar todos los campos obligatorios para actualizar la ficha");
             }
 
@@ -130,7 +132,7 @@ export default function EdicionFichaClinica() {
                     anamnesis: null,
                     diagnostico: null,
                     indicaciones: null,
-                    archivosAdjuntos: null,
+                    archivosAdjuntos,
                     fechaConsulta,
                     consentimientoFirmado: null,
                     id_ficha
@@ -245,6 +247,10 @@ export default function EdicionFichaClinica() {
                         <div className="md:col-span-2">
                             <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Observaciones (Valor Sesión)</label>
                             <ShadcnInput value={observaciones} onChange={e => setobservaciones(e.target.value)} />
+                        </div>
+                        <div className="md:col-span-2">
+                            <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Medio de Pago</label>
+                            <ShadcnInput value={archivosAdjuntos} placeholder={"Ej: Efectivo, Tarjeta, Transferencia"} onChange={e => setarchivosAdjuntos(e.target.value)} />
                         </div>
                     </div>
 

@@ -35,6 +35,7 @@ export default function GestionPaciente() {
     const [correo, setCorreo] = useState("");
     const [direccion, setDireccion] = useState("");
     const [pais, setPais] = useState("");
+    const [observaciones, setobservaciones] = useState("");
 
 
     //PARAMETRO PARA BUSCAR POR SIMILITUD DE NOMBRES
@@ -136,19 +137,22 @@ export default function GestionPaciente() {
 
 
 //FUNCION PARA INSERTAR NUEVOS PACIENTES
-    async function insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais) {
+    async function insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais, observaciones) {
         try {
             let prevision_id = null;
 
-            if (prevision.includes("NO APLICA")) {
+            if (prevision.includes("ALTA")) {
                 prevision_id = 1;
-            } else if (prevision.includes("ISAPRE")) {
+            } else if (prevision.includes("TRATAMIENTO")) {
                 prevision_id = 2;
+            } else if (prevision.includes("ABANDONO")) {
+                prevision_id = 3;
+
             } else {
-                return toast.error("Debe seleccionar al menos una prevision")
+                return toast.error("Debe seleccionar al menos una estado de tratamiento")
             }
 
-            if (!nombre || !apellido || !rut || !nacimiento || !sexo || !prevision_id || !telefono || !correo || !direccion || !pais) {
+            if (!nombre || !apellido || !rut || !nacimiento || !sexo || !prevision_id || !telefono || !correo || !direccion || !pais || !observaciones) {
                 return toast.error("Debe llenar todos los campos para ingresar un nuevo paciente en las bases de datos.")
             }
 
@@ -168,7 +172,8 @@ export default function GestionPaciente() {
                     telefono,
                     correo,
                     direccion,
-                    pais
+                    pais,
+                    observaciones
                 }),
                 mode: "cors"
             })
@@ -187,6 +192,7 @@ export default function GestionPaciente() {
                     setCorreo("");
                     setDireccion("");
                     setPais("");
+                    setobservaciones("");
                     await  listarPacientes();
                     return toast.success("Paciente ingresado correctamente.");
                 }
@@ -255,7 +261,6 @@ export default function GestionPaciente() {
 
 
                 <div className="space-y-6">
-
                     {/* Form card */}
                     <div className="bg-white shadow-sm rounded-xl p-6 md:p-8 border border-sky-100">
                         <div className="flex items-center justify-between mb-4">
@@ -316,12 +321,14 @@ export default function GestionPaciente() {
 
 
                             <div className="">
-                                <label className="text-sm font-medium text-gray-700">Seleccione Previsión</label>
+                                <label className="text-sm font-medium text-gray-700">Seleccione Estado de Tratamiento</label>
                                 <div className="mt-1 w-full">
                                     <div className="w-full sm:max-w-xs">
                                         <ShadcnSelect
-                                            nombreDefault={"Seleccion Prevision"}
-                                            value1={"NO APLICA"}
+                                            nombreDefault={"Seleccione estado "}
+                                            value1={"ALTA"}
+                                            value2={"TRATAMIENTO"}
+                                            value3={"ABANDONO"}
                                             onChange={(value) => setPrevision(value)}
                                         />
                                     </div>
@@ -375,6 +382,19 @@ export default function GestionPaciente() {
                             </div>
 
 
+
+                            <div className="">
+                                <label className="text-sm font-medium text-gray-700">Numero de ficha (Interno)</label>
+                                <div className="mt-1">
+                                    <ShadcnInput
+                                        value={observaciones}
+                                        placeholder={"Ej: FC936"}
+                                        onChange={(e) => setobservaciones(e.target.value)}
+                                        className="bg-gray-50 w-full"/>
+                                </div>
+                            </div>
+
+
                             <div className="sm:col-span-2">
                                 <div className="mt-1">
                                     <ShadcnDatePicker
@@ -390,7 +410,7 @@ export default function GestionPaciente() {
                                 <button
                                     className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-900 text-white font-semibold shadow hover:bg-blue-800 transition"
                                     type={"button"}
-                                    onClick={() => insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais)}
+                                    onClick={() => insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais, observaciones)}
                                 >Ingresar
                                 </button>
 
@@ -472,7 +492,7 @@ export default function GestionPaciente() {
                                     <TableHead className="text-left font-bold text-white px-3 py-2">RUT</TableHead>
                                     <TableHead
                                         className="text-right font-bold text-white px-3 py-2">Telefono</TableHead>
-                                    <TableHead className="text-right font-bold text-white px-3 py-2">Correo</TableHead>
+                                    <TableHead className="text-right font-bold text-white px-3 py-2">Numero de Ficha Interna</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -493,7 +513,7 @@ export default function GestionPaciente() {
                                         <TableCell
                                             className="text-right text-gray-600 px-3 py-2">{paciente.telefono}</TableCell>
                                         <TableCell
-                                            className="text-right text-gray-600 px-3 py-2">{paciente.correo}</TableCell>
+                                            className="text-right text-gray-600 px-3 py-2">{paciente.observaciones}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

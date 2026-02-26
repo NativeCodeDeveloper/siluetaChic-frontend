@@ -14,6 +14,7 @@ import {CheckboxIcon} from "@radix-ui/react-icons";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {InfoButton} from "@/Componentes/InfoButton";
+import * as XLSX from "xlsx";
 
 
 export default function Paciente() {
@@ -262,20 +263,41 @@ export default function Paciente() {
 
 
     function previsionDeterminacion(id_prevision) {
-        let previsionString = null;
-
-        if (id_prevision === 1) {
-            previsionString = "NO APLICA"
-        } else if (id_prevision === 2) {
-            previsionString = "NO APLICA"
-        } else {
-            previsionString = "SIN DEFINIR"
-        }
-        return previsionString;
+        if (id_prevision === 1) return "ALTA";
+        if (id_prevision === 2) return "TRATAMIENTO";
+        if (id_prevision === 3) return "ABANDONO";
+        return "SIN DEFINIR";
     }
 
 
 
+
+    function descargarExcel() {
+        if (listaFichas.length === 0) {
+            return toast.error("No hay fichas para descargar");
+        }
+
+        const paciente = detallePaciente[0];
+        const datos = listaFichas.map((ficha) => ({
+            "Nº Ficha": ficha.id_ficha,
+            "Fecha Consulta": formatearFecha(ficha.fechaConsulta) || "-",
+            "Tipo Atención": ficha.tipoAtencion || "-",
+            "Estado": estadoReservacion(ficha.estadoFicha),
+            "Valor Sesión": ficha.observaciones || "-",
+            "Medio de Pago": ficha.archivosAdjuntos || "-",
+            "Anotación Consulta": ficha.anotacionConsulta || "-",
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(datos);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Fichas Clínicas");
+
+        const nombreArchivo = paciente
+            ? `Fichas_${paciente.nombre}_${paciente.apellido}.xlsx`
+            : `Fichas_Paciente_${id_paciente}.xlsx`;
+
+        XLSX.writeFile(wb, nombreArchivo);
+    }
 
     function estadoReservacion(estado) {
         if (estado === 1) return "RESERVADA";
@@ -337,9 +359,8 @@ export default function Paciente() {
                                             <div className="flex items-start justify-between">
                                                 <div>
 
-                                                    <span> PREVISIÓN : </span>
                                                     <span
-                                                        className="inline-flex items-center p-2 mr-2 rounded-full text-xs font-medium bg-sky-100 text-sky-800"> Previsión : {previsionDeterminacion(paciente.prevision_id)}</span>
+                                                        className="inline-flex items-center p-2 mr-2 rounded-full text-xs font-medium bg-sky-100 text-sky-800">Estado Paciente : {previsionDeterminacion(paciente.prevision_id)}</span>
 
                                                     <h2 className="text-base mt-5 font-semibold text-slate-900">{paciente.nombre} {paciente.apellido}</h2>
                                                     <p className="mt-1 text-xs text-slate-500">RUT: <span
@@ -390,6 +411,9 @@ export default function Paciente() {
 
                         <ShadcnButton nombre={"Nueva Ficha"} funcion={() => nuevaFichaClinica(id_paciente)}/>
 
+                        {listaFichas.length > 0 && (
+                            <ShadcnButton nombre={"Descargar Excel"} funcion={() => descargarExcel()}/>
+                        )}
 
                     </div>
                     {/* Fichas Listado */}
@@ -417,6 +441,13 @@ export default function Paciente() {
                                         <div className="rounded-lg border border-slate-200 bg-slate-50 p-2">
                                             <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tipo</p>
                                             <p className="mt-0.5 text-xs font-medium text-slate-800">{ficha.tipoAtencion || '-'}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2 mt-3">
+                                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-2">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Medio de Pago</p>
+                                            <p className="mt-0.5 text-xs font-medium text-slate-800">{ficha.archivosAdjuntos || '-'}</p>
                                         </div>
                                     </div>
 
@@ -494,7 +525,7 @@ export default function Paciente() {
                                                 </div>
                                                 <div className="text-right">
                                                 <span
-                                                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sky-100 text-sky-800">Previsión : {previsionDeterminacion(paciente.prevision_id)}</span>
+                                                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sky-100 text-sky-800">Estado Paciente : {previsionDeterminacion(paciente.prevision_id)}</span>
                                                 </div>
                                             </div>
 
@@ -538,6 +569,9 @@ export default function Paciente() {
 
                         <ShadcnButton nombre={"Nueva Ficha"} funcion={() => nuevaFichaClinica(id_paciente)}/>
 
+                        {listaFichas.length > 0 && (
+                            <ShadcnButton nombre={"Descargar Excel"} funcion={() => descargarExcel()}/>
+                        )}
 
                     </div>
                     {/* Fichas Listado */}
@@ -575,6 +609,13 @@ export default function Paciente() {
                                         <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                                             <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Estado</p>
                                             <p className="mt-1 text-sm font-bold text-slate-800">{estadoReservacion(ficha.estadoFicha)}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-4 gap-3 mt-3">
+                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Medio de Pago</p>
+                                            <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.archivosAdjuntos || '-'}</p>
                                         </div>
                                     </div>
 

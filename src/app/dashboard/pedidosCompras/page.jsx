@@ -7,6 +7,7 @@ import {ShadcnInput} from "@/Componentes/shadcnInput";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {InfoButton} from "@/Componentes/InfoButton";
+import * as XLSX from "xlsx";
 
 export default function PedidosCompra() {
     const [pedidos, setPedidos] = useState([]);
@@ -98,6 +99,27 @@ export default function PedidosCompra() {
         }
     }
 
+    function descargarExcel() {
+        if (pedidos.length === 0) {
+            return toast.error("No hay pedidos para descargar");
+        }
+
+        const datos = pedidos.map((pedido) => ({
+            "N° Pedido": pedido.id_pedido,
+            "Fecha": formatearFecha(pedido.fecha_pedido),
+            "Comprador": pedido.nombre_comprador + " " + pedido.apellidosComprador,
+            "Total Pagado": pedido.totalPagado,
+            "Estado": pedido.estado_pedido === 1 ? "COMPRA REALIZADA"
+                : pedido.estado_pedido === 0 ? "PAGO SIN COMPLETAR"
+                    : "ANULADO",
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(datos);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Pedidos");
+        XLSX.writeFile(wb, "Pedidos_Compras.xlsx");
+    }
+
     useEffect(() => {
         listarPedidos();
     }, [])
@@ -161,6 +183,9 @@ export default function PedidosCompra() {
                                 <ShadcnButton className="w-30 text-xs bg-purple-800"  funcion={()=> filtrarPorEstado(3)} nombre={'Completados'}></ShadcnButton>
                                 <ShadcnButton className="w-30 text-xs bg-purple-800"  funcion={()=> filtrarPorEstado(4)} nombre={'Anulados'}></ShadcnButton>
                                 <ShadcnButton className="w-30 text-xs bg-purple-800"  funcion={()=> filtrarPorEstado("0")} nombre={'Pagos Pend.'}></ShadcnButton>
+                                {pedidos.length > 0 && (
+                                    <ShadcnButton className="w-30 text-xs bg-purple-800" funcion={() => descargarExcel()} nombre={'Descargar Excel'}></ShadcnButton>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -271,6 +296,9 @@ export default function PedidosCompra() {
                                 <ShadcnButton  funcion={()=> filtrarPorEstado(1)} nombre={'COMPRAS REALIZADAS'}></ShadcnButton>
                                 <ShadcnButton  funcion={()=> filtrarPorEstado(4)} nombre={'COMPRAS ANULADAS'}></ShadcnButton>
                                 <ShadcnButton  funcion={()=> filtrarPorEstado("0")} nombre={'PAGO SIN COMPLETAR'}></ShadcnButton>
+                                {pedidos.length > 0 && (
+                                    <ShadcnButton funcion={() => descargarExcel()} nombre={'Descargar Excel'}></ShadcnButton>
+                                )}
                             </div>
                         </div>
                     </div>
