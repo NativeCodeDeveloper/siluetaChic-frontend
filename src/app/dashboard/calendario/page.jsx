@@ -111,6 +111,21 @@ function CalendarioContent() {
 
     const [dataAgenda, setDataAgenda] = useState([] || []);
 
+    function formatearRut(rutSinFormato) {
+        const limpio = rutSinFormato.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+
+        if (limpio.length < 7 || limpio.length > 9) {
+            return null;
+        }
+
+        const cuerpo = limpio.slice(0, -1);
+        const dv = limpio.slice(-1);
+
+        const cuerpoFormateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        return `${cuerpoFormateado}-${dv}`;
+    }
+
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -307,6 +322,11 @@ function CalendarioContent() {
                 return toast.error('Debe llenar todos los campos');
             }
 
+            const rutFormateado = formatearRut(rut);
+            if (!rutFormateado) {
+                return toast.error("El RUT debe tener entre 7 y 9 caracteres (sin puntos ni guión)")
+            }
+
             const ahora = new Date();
             const inicio = new Date(`${fechaInicio}T${horaInicio}`);
             const final = new Date(`${fechaFinalizacion}T${horaFinalizacion}`);
@@ -337,7 +357,7 @@ function CalendarioContent() {
                     body: JSON.stringify({
                         nombrePaciente,
                         apellidoPaciente,
-                        rut,
+                        rut: rutFormateado,
                         telefono,
                         email,
                         fechaInicio,
@@ -491,6 +511,12 @@ function CalendarioContent() {
             if (!nombrePaciente || !apellidoPaciente || !rut || !telefono || !email || !fechaInicio || !horaInicio || !fechaFinalizacion || !horaFinalizacion || !estadoReserva || !id_reserva) {
                 return toast.error("Debe llenar todos los campos para poder actualizar la reserva")
             }
+
+            const rutFormateado = formatearRut(rut);
+            if (!rutFormateado) {
+                return toast.error("El RUT debe tener entre 7 y 9 caracteres (sin puntos ni guión)")
+            }
+
             const res = await fetch(`${API}/reservaPacientes/actualizarReservacion`, {
                 method: "POST",
                 headers: {Accept: "application/json", "Content-Type": "application/json"},
@@ -498,7 +524,7 @@ function CalendarioContent() {
                 body: JSON.stringify({
                     nombrePaciente,
                     apellidoPaciente,
-                    rut,
+                    rut: rutFormateado,
                     telefono,
                     email,
                     fechaInicio,

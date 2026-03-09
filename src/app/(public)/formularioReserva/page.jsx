@@ -31,6 +31,21 @@ export default function FormularioReserva() {
     const [totalPago, setTotalPago] = useState(0);
     const router = useRouter();
 
+    function formatearRut(rutSinFormato) {
+        const limpio = rutSinFormato.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+
+        if (limpio.length < 7 || limpio.length > 9) {
+            return null;
+        }
+
+        const cuerpo = limpio.slice(0, -1);
+        const dv = limpio.slice(-1);
+
+        const cuerpoFormateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        return `${cuerpoFormateado}-${dv}`;
+    }
+
 
     useEffect(() => {
         setServicios();
@@ -55,6 +70,11 @@ export default function FormularioReserva() {
                 return toast.error("Debe completar toda la informacion para realizar la reserva")
             }
 
+            const rutFormateado = formatearRut(rut);
+            if (!rutFormateado) {
+                return toast.error("El RUT debe tener entre 7 y 9 caracteres (sin puntos ni guión)")
+            }
+
             let horaFinalizacion = horaFin;
 
             const res = await fetch(`${API}/reservaPacientes/insertarReservaPacienteFicha`, {
@@ -66,7 +86,7 @@ export default function FormularioReserva() {
                 body: JSON.stringify({
                     nombrePaciente,
                     apellidoPaciente,
-                    rut,
+                    rut: rutFormateado,
                     telefono,
                     email,
                     fechaInicio,
@@ -117,6 +137,11 @@ export default function FormularioReserva() {
                 return toast.error('Debe llenar todos los campos');
             }
 
+            const rutFormateado = formatearRut(rut);
+            if (!rutFormateado) {
+                return toast.error("El RUT debe tener entre 7 y 9 caracteres (sin puntos ni guión)")
+            }
+
             if (fechaInicio === fechaFinalizacion) {
 
                 const res = await fetch(`${API}/reservaPacientes/reservaInsercionPaciente`, {
@@ -129,7 +154,7 @@ export default function FormularioReserva() {
                     body: JSON.stringify({
                         nombrePaciente,
                         apellidoPaciente,
-                        rut,
+                        rut: rutFormateado,
                         telefono,
                         email,
                         fechaInicio,
