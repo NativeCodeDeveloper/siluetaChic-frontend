@@ -1,6 +1,7 @@
 "use client"
 
 import {useState, useMemo, useEffect} from "react";
+import {useRouter} from "next/navigation";
 import {Calendar, dateFnsLocalizer} from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import format from "date-fns/format";
@@ -33,6 +34,7 @@ const localizer = dateFnsLocalizer({
 export default function Calendario() {
 
     const API = process.env.NEXT_PUBLIC_API_URL;
+    const router = useRouter();
 
     // Estilos CSS personalizados para mejorar la visualización de eventos
     useEffect(() => {
@@ -101,6 +103,7 @@ export default function Calendario() {
     const [horaFinalizacion, setHoraFinalizacion] = useState("");
     const [estadoReserva, setEstadoReserva,] = useState("");
     const [id_reserva, setid_reserva] = useState(0);
+    const [id_paciente, setId_paciente] = useState("");
 
     const [dataAgenda, setDataAgenda] = useState([] || []);
 
@@ -171,96 +174,7 @@ export default function Calendario() {
     }, [])
 
 
-    async function insertarNuevaReserva(
-        nombrePaciente,
-        apellidoPaciente,
-        rut,
-        telefono,
-        email,
-        fechaInicio,
-        horaInicio,
-        fechaFinalizacion,
-        horaFinalizacion
-    ) {
-        try {
 
-            if (!nombrePaciente || !apellidoPaciente || !rut || !telefono || !email || !fechaInicio || !horaInicio || !horaFinalizacion) {
-                return toast.error('Debe llenar todos los campos');
-            }
-
-            const ahora = new Date();
-            const inicio = new Date(`${fechaInicio}T${horaInicio}`);
-            const final = new Date(`${fechaFinalizacion}T${horaFinalizacion}`);
-
-            if (inicio < ahora) {
-                return toast.error("No es posible agendar en fechas NO vigentes")
-            }
-
-            if (final < inicio) {
-                return toast.error("No es posible en fechas irreales")
-            }
-
-            // Validación local: si el rango se solapa con alguna reserva ya cargada, evitar llamar al servidor
-            if (isOverlapping(inicio, final)) {
-                return toast.error('La hora seleccionada ya está ocupada (verifique otras horas)');
-            }
-
-
-            if (fechaInicio === fechaFinalizacion) {
-
-                const res = await fetch(`${API}/reservaPacientes/insertarReserva`, {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    mode: "cors",
-                    body: JSON.stringify({
-                        nombrePaciente,
-                        apellidoPaciente,
-                        rut,
-                        telefono,
-                        email,
-                        fechaInicio,
-                        horaInicio,
-                        fechaFinalizacion,
-                        horaFinalizacion,
-                        estadoReserva: "reservada"
-                    })
-                })
-
-
-                const respuestaBackend = await res.json();
-
-                if (respuestaBackend.message === true) {
-                    setNombrePaciente("");
-                    setApellidoPaciente("");
-                    setTelefono("");
-                    setRut("");
-                    setEmail("");
-                    await cargarDataAgenda();
-                    return toast.success("Se ha ingresado correctamente el agendamiento")
-
-                } else if (respuestaBackend.message === "conflicto" || respuestaBackend.message.includes("conflicto")) {
-                    return toast.error("No puede agendar una hora que ya esta ocupada")
-
-                } else if (respuestaBackend.message === false) {
-                    return toast.error('Asegure que no esta ocupada la Hora');
-
-                }
-
-
-            } else {
-                return toast.error("Solo se permite agendar si es en el mismo dia")
-            }
-
-
-        } catch (error) {
-            console.log(error);
-            return toast.error('Sin respuesta del servidor contacte a soporte.');
-
-        }
-    }
 
 
     const messages = useMemo(
@@ -287,16 +201,27 @@ export default function Calendario() {
         const eventosCalendario = dataAgenda.map((cita) => ({
             // id de la reserva para poder abrir el detalle al seleccionar
             id_reserva: cita.id_reserva,
+            id_paciente: cita.id_paciente,
             title: cita.nombrePaciente + " " + cita.apellidoPaciente,
             start: convertirAFechaCalendario(cita.fechaInicio, cita.horaInicio),
             end: convertirAFechaCalendario(cita.fechaFinalizacion, cita.horaFinalizacion),
+            estadoReserva: cita.estadoReserva,
         }));
 
         setEvents(eventosCalendario);
     }, [dataAgenda]);
 
     // Permite que el contenido del evento haga wrap y no se corte en vistas con poco espacio
-    const eventStyleGetter = (..._args) => {
+    const eventStyleGetter = (event) => {
+        let backgroundColor = '#0284c7'; // azul por defecto (reservada)
+
+        const estado = (event.estadoReserva ?? '').toLowerCase();
+        if (estado === 'confirmada') {
+            backgroundColor = '#16a34a'; // verde
+        } else if (estado === 'anulada') {
+            backgroundColor = '#dc2626'; // rojo
+        }
+
         return {
             style: {
                 display: 'flex',
@@ -312,7 +237,7 @@ export default function Calendario() {
                 fontSize: '0.8rem',
                 boxSizing: 'border-box',
                 borderRadius: '4px',
-                backgroundColor: '#0284c7',
+                backgroundColor,
                 color: '#fff',
                 fontWeight: '500',
                 wordBreak: 'break-word',
@@ -357,55 +282,6 @@ export default function Calendario() {
     };
 
 
-    async function actualizarInformacionReserva(nombrePaciente, apellidoPaciente, rut, telefono, email, fechaInicio, horaInicio, fechaFinalizacion, horaFinalizacion, estadoReserva, id_reserva) {
-        try {
-
-            if (!nombrePaciente || !apellidoPaciente || !rut || !telefono || !email || !fechaInicio || !horaInicio || !fechaFinalizacion || !horaFinalizacion || !estadoReserva || !id_reserva) {
-                return toast.error("Debe llenar todos los campos para poder actualizar la reserva")
-            }
-
-            const res = await fetch(`${API}/reservaPacientes/actualizarReservacion`, {
-                method: "POST",
-                headers: {Accept: "application/json", "Content-Type": "application/json"},
-                mode: "cors",
-                body: JSON.stringify({
-                    nombrePaciente,
-                    apellidoPaciente,
-                    rut,
-                    telefono,
-                    email,
-                    fechaInicio,
-                    horaInicio,
-                    fechaFinalizacion,
-                    horaFinalizacion,
-                    estadoReserva,
-                    id_reserva
-                })
-            });
-
-            if (!res.ok) {
-                return toast.error("El servidor no responde")
-            } else {
-
-                const respuestaBackend = await res.json();
-                if (respuestaBackend.message === true) {
-                    setNombrePaciente("");
-                    setApellidoPaciente("");
-                    setTelefono("");
-                    setRut("");
-                    setEmail("");
-                    await cargarDataAgenda()
-                    return toast.success("Se ha actualizado la reserva correctamente")
-                }
-            }
-
-
-        } catch (error) {
-            console.log(error);
-            return toast.error(error.message);
-        }
-    }
-
 
     async function seleccionarReservaEspecifica(id_reserva) {
         try {
@@ -446,6 +322,7 @@ export default function Calendario() {
             setRut(reserva.rut ?? "");
             setEmail(reserva.email ?? "");
             setTelefono(reserva.telefono ?? "");
+            setId_paciente(reserva.id_paciente ?? "");
 
             // Si tu endpoint trae estos campos, los cargamos también
             setfechaInicio((reserva.fechaInicio ?? "").slice(0, 10));
@@ -491,12 +368,25 @@ export default function Calendario() {
                 <div className="mt-10">
                     <div className="bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl border border-slate-200 ring-1 ring-black/5 overflow-hidden">
                         <div className="px-6 py-4 border-b border-slate-200 bg-white">
-                            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                                 <div>
                                     <h3 className="text-sm font-semibold text-slate-900">Calendario de Reservas</h3>
                                     <p className="text-xs text-slate-500">Navega por mes/semana/día y selecciona una reserva para ver su detalle.</p>
                                 </div>
-                                <div className="text-xs text-slate-500">Vista: <span className="font-medium text-slate-700">{currentView}</span></div>
+                                <div className="flex items-center gap-4 flex-wrap">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="inline-block w-3 h-3 rounded-full bg-[#0284c7]" />
+                                      <span className="text-xs text-slate-600">Reservada</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="inline-block w-3 h-3 rounded-full bg-[#16a34a]" />
+                                      <span className="text-xs text-slate-600">Confirmada</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="inline-block w-3 h-3 rounded-full bg-[#dc2626]" />
+                                      <span className="text-xs text-slate-600">Anulada</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="p-6 h-[700px]">
@@ -541,13 +431,11 @@ export default function Calendario() {
                                 }}
 
                                 onSelectEvent={(event) => {
-                                    if (!event?.id_reserva) {
-                                        toast.error("No se encontró el ID de la reserva");
+                                    if (!event?.id_paciente) {
+                                        toast.error("No se encontró el paciente asociado a esta reserva");
                                         return;
                                     }
-                                    setid_reserva(event.id_reserva)
-                                    seleccionarReservaEspecifica(event.id_reserva)
-                                    toast.success(`Reserva: Numero # ${event.id_reserva}`);
+                                    router.push(`/dashboard/FichasPacientes/${event.id_paciente}`);
                                 }}
 
                                 /* Función que se ejecuta al seleccionar un rango de tiempo.
@@ -572,12 +460,6 @@ export default function Calendario() {
                                     ]);
                                 }}
                             />
-                            {/* Leyenda / ayuda */}
-                            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600 mt-6">
-                                <span className="inline-block w-3 h-3 rounded-sm bg-sky-600" aria-hidden="true"/>
-                                <span>Reserva</span>
-                                <span className="text-xs italic text-slate-500">Pasa el cursor sobre una reserva para ver el nombre completo</span>
-                            </div>
                         </div>
                     </div>
                 </div>

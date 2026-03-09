@@ -81,21 +81,6 @@ export default function FormularioContacto() {
                             </div>
                         </div>
 
-                        {/* Teléfono */}
-                        <div className="flex items-start gap-5">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-cyan-400 shadow-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 text-white">
-                                    <path d="M2.25 6.75A4.5 4.5 0 016.75 2.25h.5c.84 0 1.57.58 1.74 1.4l.7 3.44a1.75 1.75 0 01-.5 1.6l-1.2 1.2a13.5 13.5 0 005.62 5.62l1.2-1.2a1.75 1.75 0 011.6-.5l3.44.7c.82.17 1.4.9 1.4 1.74v.5a4.5 4.5 0 01-4.5 4.5H18C9.44 21 3 14.56 3 6V6.75z" />
-                                </svg>
-                            </div>
-                            <div className="min-w-0">
-                                <p className="text-sm sm:text-base font-bold text-slate-900">Teléfono</p>
-                                <a href="tel:+56981396016" className="mt-1 inline-block text-cyan-700 font-bold text-base sm:text-lg tracking-tight hover:opacity-80">
-                                    +56 9 8139 6016
-                                </a>
-                            </div>
-                        </div>
-
                         {/* WhatsApp */}
                         <div className="flex items-start gap-5">
                             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 shadow-sm">

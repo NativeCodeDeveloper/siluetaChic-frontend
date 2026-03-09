@@ -47,15 +47,6 @@ function CatalogoSuspense(){
     }
 
 
-
-
-
-
-
-
-
-
-
     async function listarSubSubcategoriasCatalogo(id_subcategoria) {
         try {
             const res = await fetch(`${API}/subsubcategorias/seleccionarPorSubSubCategoriaPorIdSubCategoria`, {

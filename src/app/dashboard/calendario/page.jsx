@@ -409,13 +409,23 @@ function CalendarioContent() {
             title: cita.nombrePaciente + " " + cita.apellidoPaciente,
             start: convertirAFechaCalendario(cita.fechaInicio, cita.horaInicio),
             end: convertirAFechaCalendario(cita.fechaFinalizacion, cita.horaFinalizacion),
+            estadoReserva: cita.estadoReserva,
         }));
 
         setEvents(eventosCalendario);
     }, [dataAgenda]);
 
     // Permite que el contenido del evento haga wrap y no se corte en vistas con poco espacio
-    const eventStyleGetter = (..._args) => {
+    const eventStyleGetter = (event) => {
+        let backgroundColor = '#0284c7'; // azul por defecto (reservada)
+
+        const estado = (event.estadoReserva ?? '').toLowerCase();
+        if (estado === 'confirmada') {
+            backgroundColor = '#16a34a'; // verde
+        } else if (estado === 'anulada') {
+            backgroundColor = '#dc2626'; // rojo
+        }
+
         return {
             style: {
                 display: 'flex',
@@ -431,7 +441,7 @@ function CalendarioContent() {
                 fontSize: '0.8rem',
                 boxSizing: 'border-box',
                 borderRadius: '4px',
-                backgroundColor: '#0284c7',
+                backgroundColor,
                 color: '#fff',
                 fontWeight: '500',
                 wordBreak: 'break-word',
@@ -574,12 +584,56 @@ function CalendarioContent() {
         }
     }
 
+
     useEffect(() => {
         if (id_reserva) {
             seleccionarReservaEspecifica(id_reserva);
         }
     }, [id_reserva]);
 
+
+    async function eliminarReserva(id_reserva) {
+        try {
+            if (!id_reserva) {
+                return toast.error("Debe seleccionar al menos una reserva valida para realizar la eliminacion")
+            }
+
+            const res = await fetch(`${API}/reservaPacientes/eliminarReserva`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id_reserva}),
+                mode: "cors"
+            })
+
+            if (!res.ok) {
+                return toast.error("No hay conexion con el servidor por favor contacte a Soporte");
+
+            } else {
+
+                const respuestaBackend = await res.json();
+
+                if (respuestaBackend.message === true) {
+                    setNombrePaciente("");
+                    setApellidoPaciente("");
+                    setTelefono("");
+                    setRut("");
+                    setEmail("");
+                    await cargarDataAgenda()
+                    return toast.success("Se ha eliminado con exito la reserva");
+                } else if (respuestaBackend.message === false) {
+                    return toast.success("No se ha podido eliminar la reserva. Intente mas tarde.");
+                } else {
+                    return toast.error("No hay conexion con el servidor por favor contacte a Soporte");
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            return toast.error("No hay conexion con el servidor por favor contacte a Soporte");
+        }
+    }
 
     function limpiarData() {
         setNombrePaciente("");
@@ -717,8 +771,14 @@ function CalendarioContent() {
 
                             <ShadcnButton2
                                 funcion={() => bloquearAgenda(fechaInicio, horaInicio, fechaFinalizacion, horaFinalizacion)}
-                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-red-600 text-white hover:bg-red-500 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-300"
-                                nombre={"Bloquear"}></ShadcnButton2>
+                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-amber-600 text-white hover:bg-amber-500 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-300"
+                                nombre={<span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clipRule="evenodd"/></svg>Bloquear</span>}></ShadcnButton2>
+
+                            <ShadcnButton2
+                                funcion={() => eliminarReserva(id_reserva)}
+                                className="h-10 w-full sm:w-auto px-4 rounded-lg bg-red-600 text-white hover:bg-red-500 shadow-sm transition-all duration-200 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-300"
+                                nombre={<span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.519.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clipRule="evenodd"/></svg>Eliminar</span>}></ShadcnButton2>
+
 
 
                         </div>
@@ -729,12 +789,25 @@ function CalendarioContent() {
                 <div className="mt-10">
                     <div className="bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl border border-slate-200 ring-1 ring-black/5 overflow-hidden">
                       <div className="px-6 py-4 border-b border-slate-200 bg-white">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
                           <div>
                             <h3 className="text-sm font-semibold text-slate-900">Calendario de Reservas</h3>
                             <p className="text-xs text-slate-500">Navega por mes/semana/día y selecciona una reserva para ver su detalle.</p>
                           </div>
-                          <div className="text-xs text-slate-500">Vista: <span className="font-medium text-slate-700">{currentView}</span></div>
+                          <div className="flex items-center gap-4 flex-wrap">
+                            <div className="flex items-center gap-1.5">
+                              <span className="inline-block w-3 h-3 rounded-full bg-[#0284c7]" />
+                              <span className="text-xs text-slate-600">Reservada</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="inline-block w-3 h-3 rounded-full bg-[#16a34a]" />
+                              <span className="text-xs text-slate-600">Confirmada</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="inline-block w-3 h-3 rounded-full bg-[#dc2626]" />
+                              <span className="text-xs text-slate-600">Anulada</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="p-6 h-[700px]">
@@ -810,12 +883,6 @@ function CalendarioContent() {
                                 ]);
                             }}
                         />
-                        {/* Leyenda / ayuda */}
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600 mt-6">
-                            <span className="inline-block w-3 h-3 rounded-sm bg-sky-600" aria-hidden="true"/>
-                            <span>Reserva</span>
-                            <span className="text-xs italic text-slate-500">Pasa el cursor sobre una reserva para ver el nombre completo</span>
-                        </div>
                       </div>
                     </div>
                 </div>
