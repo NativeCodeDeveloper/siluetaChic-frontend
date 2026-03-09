@@ -7,15 +7,6 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import {useCarritoGlobal} from "@/ContextosGlobales/CarritoContext";
 import {useRouter, useSearchParams} from "next/navigation";
 
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 
 
 
@@ -438,32 +429,29 @@ function CatalogoSuspense(){
 
 
 <div className="w-full mt-10 px-4">
-    <div className="mx-auto w-full max-w-md">
-        <p className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-slate-600">
+    <div className="mx-auto w-full max-w-3xl">
+        <p className="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-slate-600">
             Filtrar servicios
         </p>
 
-        <Select value={subCategoria} onValueChange={(value) => setSubCategoria(value)}>
-            <SelectTrigger className="w-full justify-between rounded-2xl border border-indigo-200/70 bg-white/90 px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-indigo-100/60 backdrop-blur hover:border-indigo-300 focus:ring-2 focus:ring-indigo-500/40">
-                <SelectValue placeholder="Selecciona una categoría" />
-            </SelectTrigger>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+            {listaSubcategoria.map((subcategoria) => (
+                <button
+                    key={subcategoria.id_subcategoria}
+                    type="button"
+                    onClick={() => setSubCategoria(String(subcategoria.id_subcategoria))}
+                    className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 ${
+                        subCategoria === String(subcategoria.id_subcategoria)
+                            ? 'bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-white shadow-lg shadow-indigo-500/20'
+                            : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:ring-indigo-300 hover:shadow-md'
+                    }`}
+                >
+                    {subcategoria.descripcionCategoria}
+                </button>
+            ))}
+        </div>
 
-            <SelectContent>
-                <SelectGroup>
-                    <SelectLabel>Filtrar por categoría</SelectLabel>
-                    {listaSubcategoria.map((subcategoria) => (
-                        <SelectItem
-                            key={subcategoria.id_subcategoria}
-                            value={String(subcategoria.id_subcategoria)}
-                        >
-                            {subcategoria.descripcionCategoria}
-                        </SelectItem>
-                    ))}
-                </SelectGroup>
-            </SelectContent>
-        </Select>
-
-        <p className="mt-2 text-center text-[11px] text-slate-500">
+        <p className="mt-3 text-center text-[11px] text-slate-500">
             Tip: elige una categoría para ver solo los servicios relacionados.
         </p>
     </div>
