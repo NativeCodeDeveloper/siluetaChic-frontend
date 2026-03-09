@@ -37,6 +37,22 @@ function CatalogoSuspense(){
         router.push(`/producto/${id_subcategoria}`);
     }
 
+    function obtenerTextoBoton() {
+        const subcategoriaActual = listaSubcategoria.find(s => String(s.id_subcategoria) === subCategoria);
+        if (!subcategoriaActual) return "COMPRAR";
+
+        const desc = (subcategoriaActual.descripcionCategoria ?? "").toLowerCase();
+
+        if (desc.includes("zona")) {
+            return "VER ZONAS";
+        }
+        if (desc.includes("pack") || desc.includes("promocion") || desc.includes("promoción")) {
+            return "VER PROMOCIONES";
+        }
+
+        return "COMPRAR";
+    }
+
 
     async function listarSubSubcategoriasCatalogo(id_subcategoria) {
         try {
@@ -523,7 +539,7 @@ function CatalogoSuspense(){
                                     className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 px-5 py-3 text-sm font-extrabold tracking-wide text-white shadow-lg shadow-indigo-500/20 transition-all hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
                                 >
                                     <ShoppingCartIcon className="h-5 w-5" />
-                                    COMPRAR
+                                    {obtenerTextoBoton()}
                                 </button>
                                 <p className="mt-3 text-center text-[11px] text-slate-500">
                                     Verás los servicios disponibles para esta categoría.
