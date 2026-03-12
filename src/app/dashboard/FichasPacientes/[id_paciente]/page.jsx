@@ -303,6 +303,7 @@ export default function Paciente() {
         if (estado === 1) return "RESERVADA";
         if (estado === 2) return "CONFIRMADA";
         if (estado === 3) return "ANULADA";
+        if (estado === 4) return "ASISTE";
         return "SIN ESTADO";
     }
 
