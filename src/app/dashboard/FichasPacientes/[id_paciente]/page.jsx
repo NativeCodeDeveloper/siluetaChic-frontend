@@ -304,6 +304,7 @@ export default function Paciente() {
         if (estado === 2) return "CONFIRMADA";
         if (estado === 3) return "ANULADA";
         if (estado === 4) return "ASISTE";
+        if (estado === 5) return "NO ASISTE";
         return "SIN ESTADO";
     }
 
