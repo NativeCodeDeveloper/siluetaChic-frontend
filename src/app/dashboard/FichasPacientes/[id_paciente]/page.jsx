@@ -312,6 +312,8 @@ export default function Paciente() {
         if (estado === 1) return "bg-blue-100 text-blue-800 ring-1 ring-blue-200";
         if (estado === 2) return "bg-green-100 text-green-800 ring-1 ring-green-200";
         if (estado === 3) return "bg-red-100 text-red-800 ring-1 ring-red-200";
+        if (estado === 4) return "bg-green-100 text-green-800 ring-1 ring-green-200";
+        if (estado === 5) return "bg-purple-100 text-purple-800 ring-1 ring-purple-200";
         return "bg-slate-100 text-slate-700 ring-1 ring-slate-200";
     }
 
