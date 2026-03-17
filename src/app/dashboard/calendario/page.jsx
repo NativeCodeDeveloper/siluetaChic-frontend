@@ -126,6 +126,20 @@ function CalendarioContent() {
         return `${cuerpoFormateado}-${dv}`;
     }
 
+    function normalizarRutInput(valor) {
+        const limpio = (valor ?? "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 9);
+
+        if (limpio.length <= 1) {
+            return limpio;
+        }
+
+        const cuerpo = limpio.slice(0, -1);
+        const dv = limpio.slice(-1);
+        const cuerpoFormateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        return `${cuerpoFormateado}-${dv}`;
+    }
+
     const searchParams = useSearchParams();
 
     useEffect(() => {
@@ -137,7 +151,7 @@ function CalendarioContent() {
 
         if (nombre) setNombrePaciente(nombre);
         if (apellido) setApellidoPaciente(apellido);
-        if (rutParam) setRut(rutParam);
+        if (rutParam) setRut(normalizarRutInput(rutParam));
         if (telefonoParam) setTelefono(telefonoParam);
         if (correo) setEmail(correo);
     }, [searchParams]);
@@ -593,7 +607,7 @@ function CalendarioContent() {
             // Seteamos los inputs desde la reserva (objeto)
             setNombrePaciente(reserva.nombrePaciente ?? "");
             setApellidoPaciente(reserva.apellidoPaciente ?? "");
-            setRut(reserva.rut ?? "");
+            setRut(normalizarRutInput(reserva.rut ?? ""));
             setEmail(reserva.email ?? "");
             setTelefono(reserva.telefono ?? "");
 
@@ -709,11 +723,8 @@ function CalendarioContent() {
                                 <label className="block text-[11px] font-semibold uppercase tracking-wide text-slate-600 mb-1">Rut</label>
                                 <ShadcnInput
                                     value={rut}
-                                    onChange={(e) => {
-                                        const value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
-                                        setRut(value);
-                                    }}
-                                    placeholder="12345678K (Sin puntos ni guion)"
+                                    onChange={(e) => setRut(normalizarRutInput(e.target.value))}
+                                    placeholder="12.345.678-K"
                                     className="w-full"
                                 />
                             </div>
@@ -931,4 +942,3 @@ export default function Calendario() {
         </Suspense>
     );
 }
-

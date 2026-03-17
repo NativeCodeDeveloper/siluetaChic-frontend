@@ -1,19 +1,12 @@
 "use client"
-import {useParams} from "next/navigation";
-import {useState, useEffect} from "react";
-import {toast} from "react-hot-toast";
+import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
 import ToasterClient from "@/Componentes/ToasterClient";
 import formatearFecha from "@/FuncionesTranversales/funcionesTranversales.js"
-import {ShadcnButton} from "@/Componentes/shadcnButton";
-import {useRouter} from "next/navigation";
-import {ShadcnInput} from "@/Componentes/shadcnInput";
-import {ShadcnSelect} from "@/Componentes/shadcnSelect";
-import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
-import * as React from "react";
-import {CheckboxIcon} from "@radix-ui/react-icons";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import {InfoButton} from "@/Componentes/InfoButton";
+import { ShadcnButton } from "@/Componentes/shadcnButton";
+import { useRouter } from "next/navigation";
+import { InfoButton } from "@/Componentes/InfoButton";
 import * as XLSX from "xlsx";
 
 
@@ -319,328 +312,164 @@ export default function Paciente() {
 
 
     return (
-        <div>
-            <ToasterClient/>
+        <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-white px-4 py-6 md:px-8 lg:px-10">
+            <ToasterClient />
 
-            {/*PANTALLAS MOVILES*/}
-            <div className="block md:hidden min-h-screen bg-gradient-to-b from-sky-50 via-white to-white py-10">
+            <div className="mx-auto w-full max-w-5xl">
+                <div className="flex justify-end">
+                    <InfoButton informacion={"En este apartado se mostrarán las fichas clínicas del paciente, ordenadas desde la más reciente a la más antigua, incluyendo tanto las fichas como sus anotaciones asociadas.\n\nPara editar una ficha clínica, debe seleccionarse el botón Editar, lo que lo llevará al formulario correspondiente donde podrá modificar la información de la ficha seleccionada.\n\nEn caso de eliminar una ficha clínica, deberá presionar el botón Eliminar. Esta acción removerá la ficha seleccionada del sistema.\n\nSi desea crear una nueva ficha clínica, debe seleccionar el botón Nueva Ficha, el cual lo dirigirá al formulario de ingreso para registrar una nueva ficha clínica."} />
+                </div>
 
-                <div className="max-w-5xl mx-auto px-4">
-                    <header className="mb-6">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div>
-                                <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900">Historial
-                                    Clínico</h1>
-                                <p className="mt-1 text-sm text-slate-500">Detalle y fichas del paciente</p>
+                <header className="mb-6 mt-4">
+                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <h1 className="text-2xl font-extrabold text-slate-900 md:text-5xl">Historial Clínico</h1>
+                            <p className="mt-1 text-sm text-slate-500">Detalle y fichas del paciente</p>
+                        </div>
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <div className="inline-flex items-center gap-3 self-start rounded-full bg-sky-50 px-3 py-2 text-sm text-sky-800 ring-1 ring-sky-200">
+                                <span className="text-xs text-slate-500">Registros:</span>
+                                <span className="font-medium">{detallePaciente.length}</span>
                             </div>
-                            <div className="flex items-center gap-3">
-                                <div className="hidden sm:flex items-center gap-3">
-                                    <span className="text-xs text-slate-500">Registros:</span>
-                                    <span
-                                        className="inline-flex items-center px-3 py-1 rounded-full bg-sky-100 text-sky-800 font-medium text-sm">{detallePaciente.length}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <ShadcnButton className="text-base" nombre={"Volver a Fichas Clinicas"}
-                                                  funcion={() => volverAFichas()}/>
-                                </div>
+                            <div className="w-full sm:w-auto">
+                                <ShadcnButton nombre={"Volver a Fichas Clinicas"} funcion={() => volverAFichas()} />
                             </div>
                         </div>
-                    </header>
-
-                    {/* CONTENEDOR CON INFORMACION DEL PACIENTE */}
-                    <div className="mb-6">
-                        {detallePaciente.length === 0 ? (
-
-                            <div
-                                className="rounded-lg border border-dashed border-slate-200 bg-white p-6 text-center text-sm text-slate-500 shadow-sm">No
-                                hay datos disponibles o se están cargando...</div>
-                        ) : (
-                            detallePaciente.map(paciente => (
-                                <article key={paciente.id_paciente}
-                                         className="bg-white rounded-2xl shadow-lg border border-sky-50 overflow-hidden">
-                                    <div className="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                        <div className="sm:col-span-2">
-                                            <div className="flex items-start justify-between">
-                                                <div>
-
-                                                    <span
-                                                        className="inline-flex items-center p-2 mr-2 rounded-full text-xs font-medium bg-sky-100 text-sky-800">Estado Paciente : {previsionDeterminacion(paciente.prevision_id)}</span>
-
-                                                    <h2 className="text-base mt-5 font-semibold text-slate-900">{paciente.nombre} {paciente.apellido}</h2>
-                                                    <p className="mt-1 text-xs text-slate-500">RUT: <span
-                                                        className="font-medium text-slate-700">{paciente.rut}</span></p>
-                                                </div>
-                                                <div className="text-right">
-                                                </div>
-                                            </div>
-
-                                            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                <div className="bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Fecha de nacimiento</p>
-                                                    <p className="mt-1 text-xs font-medium text-slate-700">{formatearFecha(paciente.nacimiento)}</p>
-                                                </div>
-
-                                                <div className="bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Sexo</p>
-                                                    <p className="mt-1 text-xs font-medium text-slate-700">{paciente.sexo}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="sm:col-span-1">
-                                            <div className="flex flex-col gap-3">
-                                                <div className=" bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Teléfono</p>
-                                                    <p className="mt-1  text-xs font-medium text-slate-700">{paciente.telefono || '-'}</p>
-                                                </div>
-                                                <div className="text-sm bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Correo</p>
-                                                    <p className="mt-1 text-xs font-medium text-slate-700 break-all">{paciente.correo || '-'}</p>
-                                                </div>
-                                                <div className="text-xs bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Dirección</p>
-                                                    <p className="mt-1 text-xs font-medium text-slate-700">{paciente.direccion || '-'}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
-                            ))
-                        )}
                     </div>
+                </header>
 
-                    {/*BOTONES VER FICHAS Y NUEVA FICHA*/}
-                    <div className="mt-4 flex justify gap-4">
-                        <ShadcnButton nombre={"Ver Fichas"} funcion={() => listarFichasClinicasPaciente(id_paciente)}/>
-
-                        <ShadcnButton nombre={"Nueva Ficha"} funcion={() => nuevaFichaClinica(id_paciente)}/>
-
-                        {listaFichas.length > 0 && (
-                            <ShadcnButton nombre={"Descargar Excel"} funcion={() => descargarExcel()}/>
-                        )}
-
-                    </div>
-                    {/* Fichas Listado */}
-                    <section className="mt-8 grid grid-cols-1 gap-4">
-                        {listaFichas.length === 0 ? (
-                            <div className="text-center text-sm text-slate-500">No hay fichas cargadas para este paciente.</div>
-                        ) : (
-                            listaFichas.map((ficha) => (
-                                <article key={ficha.id_ficha}
-                                         className="rounded-2xl border border-slate-200 bg-white shadow-sm p-5">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="text-base font-bold text-slate-900">Ficha #{ficha.id_ficha}</h3>
-                                        <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${badgePorEstado(ficha.estadoFicha)}`}>
-                                            {estadoReservacion(ficha.estadoFicha)}
-                                        </span>
-                                    </div>
-
-                                    <div className="my-3 h-px w-full bg-slate-100" />
-
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-2">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fecha</p>
-                                            <p className="mt-0.5 text-xs font-medium text-slate-800">{formatearFecha(ficha.fechaConsulta)}</p>
-                                        </div>
-                                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-2">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tipo</p>
-                                            <p className="mt-0.5 text-xs font-medium text-slate-800">{ficha.tipoAtencion || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-2 mt-3">
-                                        <div className="rounded-lg border border-slate-200 bg-slate-50 p-2">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Medio de Pago</p>
-                                            <p className="mt-0.5 text-xs font-medium text-slate-800">{ficha.archivosAdjuntos || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-3">
-                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Anotación General</p>
-                                        <p className="mt-1 text-xs leading-relaxed whitespace-pre-line text-slate-700">{ficha.anotacionConsulta || '-'}</p>
-                                    </div>
-
-                                    <div className="my-3 h-px w-full bg-slate-100" />
-
-                                    <div className="flex gap-2">
-                                        <ShadcnButton funcion={() => editarFichaClinica(ficha.id_ficha)} nombre={"Editar"} />
-                                        <ShadcnButton funcion={() => eliminarFicha(ficha.id_ficha)} nombre={"Eliminar"} />
-                                    </div>
-                                </article>
-                            ))
-                        )}
-                    </section>
-
-                </div>
-
-            </div>
-
-
-            {/*PANTALLAS ESCRITORIO*/}
-            <div className="hidden md:block min-h-screen bg-gradient-to-b from-sky-50 via-white to-white py-10">
-                <div className="max-w-5xl mx-auto px-4 flex justify-end">
-                    <InfoButton informacion={'En este apartado se mostrarán las fichas clínicas del paciente, ordenadas desde la más reciente a la más antigua, incluyendo tanto las fichas como sus anotaciones asociadas.\n' +
-                        '\n' +
-                        'Para editar una ficha clínica, debe seleccionarse el botón Editar, lo que lo llevará al formulario correspondiente donde podrá modificar la información de la ficha seleccionada.\n' +
-                        '\n' +
-                        'En caso de eliminar una ficha clínica, deberá presionar el botón Eliminar. Esta acción removerá la ficha seleccionada del sistema.\n' +
-                        '\n' +
-                        'Si desea crear una nueva ficha clínica, debe seleccionar el botón Nueva Ficha, el cual lo dirigirá al formulario de ingreso para registrar una nueva ficha clínica.'} />
-                </div>
-
-                <div className="max-w-5xl mx-auto px-4">
-                    <header className="mb-6">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div>
-                                <h1 className="text-5xl  font-extrabold text-gray-800">Historial
-                                    Clínico</h1>
-                                <p className="mt-1 text-sm text-slate-500">Detalle y fichas del paciente</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="hidden sm:flex items-center gap-3">
-                                    <span className="text-xs text-slate-500">Registros:</span>
-                                    <span
-                                        className="inline-flex items-center px-3 py-1 rounded-full bg-sky-100 text-sky-800 font-medium text-sm">{detallePaciente.length}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <ShadcnButton nombre={"Volver a Fichas Clinicas"} funcion={() => volverAFichas()}/>
-                                </div>
-                            </div>
+                <div className="mb-6">
+                    {detallePaciente.length === 0 ? (
+                        <div className="rounded-lg border border-dashed border-slate-200 bg-white p-6 text-center text-sm text-slate-500 shadow-sm">
+                            No hay datos disponibles o se están cargando...
                         </div>
-                    </header>
-
-                    {/* CONTENEDOR CON INFORMACION DEL PACIENTE */}
-                    <div className="mb-6">
-                        {detallePaciente.length === 0 ? (
-                            <div
-                                className="rounded-lg border border-dashed border-slate-200 bg-white p-6 text-center text-sm text-slate-500 shadow-sm">No
-                                hay datos disponibles o se están cargando...</div>
-                        ) : (
-                            detallePaciente.map(paciente => (
-                                <article key={paciente.id_paciente}
-                                         className="bg-white rounded-2xl shadow-lg border border-sky-50 overflow-hidden">
-                                    <div className="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                        <div className="sm:col-span-2">
-                                            <div className="flex items-start justify-between">
-                                                <div>
-                                                    <h2 className="text-xl sm:text-2xl font-semibold text-slate-900">{paciente.nombre} {paciente.apellido}</h2>
-                                                    <p className="mt-1 text-sm text-slate-500">RUT: <span
-                                                        className="font-medium text-slate-700">{paciente.rut}</span></p>
-                                                </div>
-                                                <div className="text-right">
-                                                <span
-                                                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-sky-100 text-sky-800">Estado Paciente : {previsionDeterminacion(paciente.prevision_id)}</span>
-                                                </div>
-                                            </div>
-
-                                            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                <div className="bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Fecha de nacimiento</p>
-                                                    <p className="mt-1 font-medium text-slate-700">{formatearFecha(paciente.nacimiento)}</p>
-                                                </div>
-                                                <div className="bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Sexo</p>
-                                                    <p className="mt-1 font-medium text-slate-700">{paciente.sexo}</p>
-                                                </div>
+                    ) : (
+                        detallePaciente.map((paciente) => (
+                            <article key={paciente.id_paciente} className="overflow-hidden rounded-2xl border border-sky-50 bg-white shadow-lg">
+                                <div className="grid grid-cols-1 gap-6 p-5 md:grid-cols-3 md:p-8">
+                                    <div className="md:col-span-2">
+                                        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                            <div>
+                                                <span className="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-800">
+                                                    Estado Paciente: {previsionDeterminacion(paciente.prevision_id)}
+                                                </span>
+                                                <h2 className="mt-4 text-lg font-semibold text-slate-900 md:text-2xl">
+                                                    {paciente.nombre} {paciente.apellido}
+                                                </h2>
+                                                <p className="mt-1 text-sm text-slate-500">
+                                                    RUT: <span className="font-medium text-slate-700">{paciente.rut}</span>
+                                                </p>
                                             </div>
                                         </div>
 
-                                        <div className="sm:col-span-1">
-                                            <div className="flex flex-col gap-3">
-                                                <div className="text-sm bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Teléfono</p>
-                                                    <p className="mt-1 font-medium text-slate-700">{paciente.telefono || '-'}</p>
-                                                </div>
-                                                <div className="text-sm bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Correo</p>
-                                                    <p className="mt-1 font-medium text-slate-700 break-all">{paciente.correo || '-'}</p>
-                                                </div>
-                                                <div className="text-sm bg-slate-50 p-3 rounded-md">
-                                                    <p className="text-xs text-slate-500">Dirección</p>
-                                                    <p className="mt-1 font-medium text-slate-700">{paciente.direccion || '-'}</p>
-                                                </div>
+                                        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                            <div className="rounded-md bg-slate-50 p-3">
+                                                <p className="text-xs text-slate-500">Fecha de nacimiento</p>
+                                                <p className="mt-1 text-sm font-medium text-slate-700">{formatearFecha(paciente.nacimiento)}</p>
+                                            </div>
+                                            <div className="rounded-md bg-slate-50 p-3">
+                                                <p className="text-xs text-slate-500">Sexo</p>
+                                                <p className="mt-1 text-sm font-medium text-slate-700">{paciente.sexo}</p>
                                             </div>
                                         </div>
                                     </div>
-                                </article>
-                            ))
-                        )}
-                    </div>
 
-                    {/*BOTONES VER FICHAS Y NUEVA FICHA*/}
-                    <div className="mt-4 flex justify gap-4">
-                        <ShadcnButton nombre={"Ver Historial"} funcion={() => listarFichasClinicasPaciente(id_paciente)}/>
-
-                        <ShadcnButton nombre={"Nueva Ficha"} funcion={() => nuevaFichaClinica(id_paciente)}/>
-
-                        {listaFichas.length > 0 && (
-                            <ShadcnButton nombre={"Descargar Excel"} funcion={() => descargarExcel()}/>
-                        )}
-
-                    </div>
-                    {/* Fichas Listado */}
-                    <section className="mt-8 grid grid-cols-1 gap-4">
-                        {listaFichas.length === 0 ? (
-                            <div className="text-center text-sm text-slate-500">No hay fichas cargadas para este paciente.</div>
-                        ) : (
-                            listaFichas.map((ficha) => (
-                                <article key={ficha.id_ficha}
-                                         className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <h3 className="text-lg font-bold text-slate-900">Ficha Nº{ficha.id_ficha}</h3>
-                                            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${badgePorEstado(ficha.estadoFicha)}`}>
-                                                {estadoReservacion(ficha.estadoFicha)}
-                                            </span>
+                                    <div className="md:col-span-1">
+                                        <div className="flex flex-col gap-3">
+                                            <div className="rounded-md bg-slate-50 p-3">
+                                                <p className="text-xs text-slate-500">Teléfono</p>
+                                                <p className="mt-1 text-sm font-medium text-slate-700">{paciente.telefono || "-"}</p>
+                                            </div>
+                                            <div className="rounded-md bg-slate-50 p-3">
+                                                <p className="text-xs text-slate-500">Correo</p>
+                                                <p className="mt-1 break-all text-sm font-medium text-slate-700">{paciente.correo || "-"}</p>
+                                            </div>
+                                            <div className="rounded-md bg-slate-50 p-3">
+                                                <p className="text-xs text-slate-500">Dirección</p>
+                                                <p className="mt-1 text-sm font-medium text-slate-700">{paciente.direccion || "-"}</p>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div className="my-4 h-px w-full bg-slate-100" />
-
-                                    <div className="grid grid-cols-4 gap-3">
-                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fecha Reservación</p>
-                                            <p className="mt-1 text-sm font-semibold text-slate-800">{formatearFecha(ficha.fechaConsulta)}</p>
-                                        </div>
-                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tipo Atención</p>
-                                            <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.tipoAtencion || '-'}</p>
-                                        </div>
-                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Valor Sesión</p>
-                                            <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.observaciones || '-'}</p>
-                                        </div>
-                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Estado</p>
-                                            <p className="mt-1 text-sm font-bold text-slate-800">{estadoReservacion(ficha.estadoFicha)}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-4 gap-3 mt-3">
-                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Medio de Pago</p>
-                                            <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.archivosAdjuntos || '-'}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-4">
-                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Anotación General de Consulta</p>
-                                        <p className="mt-1 text-sm leading-relaxed whitespace-pre-line text-slate-700">{ficha.anotacionConsulta || '-'}</p>
-                                    </div>
-
-                                    <div className="my-4 h-px w-full bg-slate-100" />
-
-                                    <div className="flex gap-4">
-                                        <ShadcnButton funcion={() => editarFichaClinica(ficha.id_ficha)} nombre={"Editar"} />
-                                        <ShadcnButton funcion={() => eliminarFicha(ficha.id_ficha)} nombre={"Eliminar"} />
-                                    </div>
-                                </article>
-                            ))
-                        )}
-                    </section>
-
+                                </div>
+                            </article>
+                        ))
+                    )}
                 </div>
 
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <div className="w-full sm:w-auto">
+                        <ShadcnButton nombre={"Ver Historial"} funcion={() => listarFichasClinicasPaciente(id_paciente)} />
+                    </div>
+                    <div className="w-full sm:w-auto">
+                        <ShadcnButton nombre={"Nueva Ficha"} funcion={() => nuevaFichaClinica(id_paciente)} />
+                    </div>
+                    {listaFichas.length > 0 && (
+                        <div className="w-full sm:w-auto">
+                            <ShadcnButton nombre={"Descargar Excel"} funcion={() => descargarExcel()} />
+                        </div>
+                    )}
+                </div>
+
+                <section className="mt-8 grid grid-cols-1 gap-4">
+                    {listaFichas.length === 0 ? (
+                        <div className="text-center text-sm text-slate-500">No hay fichas cargadas para este paciente.</div>
+                    ) : (
+                        listaFichas.map((ficha) => (
+                            <article key={ficha.id_ficha} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+                                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                                    <h3 className="text-base font-bold text-slate-900 md:text-lg">Ficha Nº{ficha.id_ficha}</h3>
+                                    <span className={`inline-flex items-center self-start rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${badgePorEstado(ficha.estadoFicha)}`}>
+                                        {estadoReservacion(ficha.estadoFicha)}
+                                    </span>
+                                </div>
+
+                                <div className="my-4 h-px w-full bg-slate-100" />
+
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fecha Reservación</p>
+                                        <p className="mt-1 text-sm font-semibold text-slate-800">{formatearFecha(ficha.fechaConsulta)}</p>
+                                    </div>
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tipo Atención</p>
+                                        <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.tipoAtencion || "-"}</p>
+                                    </div>
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Valor Sesión</p>
+                                        <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.observaciones || "-"}</p>
+                                    </div>
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Estado</p>
+                                        <p className="mt-1 text-sm font-bold text-slate-800">{estadoReservacion(ficha.estadoFicha)}</p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 xl:col-span-1">
+                                        <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Medio de Pago</p>
+                                        <p className="mt-1 text-sm font-semibold text-slate-800">{ficha.archivosAdjuntos || "-"}</p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4">
+                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Anotación General de Consulta</p>
+                                    <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-slate-700">{ficha.anotacionConsulta || "-"}</p>
+                                </div>
+
+                                <div className="my-4 h-px w-full bg-slate-100" />
+
+                                <div className="flex flex-col gap-3 sm:flex-row">
+                                    <div className="w-full sm:w-auto">
+                                        <ShadcnButton funcion={() => editarFichaClinica(ficha.id_ficha)} nombre={"Editar"} />
+                                    </div>
+                                    <div className="w-full sm:w-auto">
+                                        <ShadcnButton funcion={() => eliminarFicha(ficha.id_ficha)} nombre={"Eliminar"} />
+                                    </div>
+                                </div>
+                            </article>
+                        ))
+                    )}
+                </section>
             </div>
         </div>
     )

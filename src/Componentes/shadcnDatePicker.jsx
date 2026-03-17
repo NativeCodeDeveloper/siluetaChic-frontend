@@ -14,12 +14,36 @@ import {
 
 export default function ShadcnDatePicker({label = "Fecha", value, onChange}) {
     const [open, setOpen] = React.useState(false)
-    const initialDate = value ? new Date(value) : undefined
+    const initialDate = React.useMemo(() => {
+        if (!value) return undefined
+
+        if (typeof value === "string") {
+            const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/)
+            if (match) {
+                const [, year, month, day] = match
+                return new Date(Number(year), Number(month) - 1, Number(day))
+            }
+        }
+
+        const parsed = new Date(value)
+        return Number.isNaN(parsed.getTime()) ? undefined : parsed
+    }, [value])
     const [date, setDate] = React.useState(initialDate)
+
+    React.useEffect(() => {
+        setDate(initialDate)
+    }, [initialDate])
 
     function formatDate(d) {
         if (!d) return ""
         return d.toLocaleDateString()
+    }
+
+    function formatLocalDate(dateValue) {
+        const year = dateValue.getFullYear()
+        const month = String(dateValue.getMonth() + 1).padStart(2, "0")
+        const day = String(dateValue.getDate()).padStart(2, "0")
+        return `${year}-${month}-${day}`
     }
 
     return (
@@ -47,8 +71,7 @@ export default function ShadcnDatePicker({label = "Fecha", value, onChange}) {
                             setDate(selectedDate)
                             setOpen(false)
                             if (onChange && selectedDate) {
-                                // Emitir ISO yyyy-mm-dd
-                                onChange(selectedDate.toISOString().split("T")[0])
+                                onChange(formatLocalDate(selectedDate))
                             }
                         }}
                     />

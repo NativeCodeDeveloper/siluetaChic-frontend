@@ -112,8 +112,8 @@ export default function EdicionFichaClinica() {
 
     async function actualizarFichaConEstado() {
         try {
-            if (!tipoAtencion || !anotacionConsulta || !id_ficha || !estadoFicha || !archivosAdjuntos) {
-                return toast.error("Debe llenar todos los campos obligatorios para actualizar la ficha");
+            if (!id_ficha) {
+                return toast.error("No se encontró la ficha a actualizar");
             }
 
             const res = await fetch(`${API}/ficha/editarFichaPaciente`, {
@@ -123,17 +123,17 @@ export default function EdicionFichaClinica() {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    estadoFicha: Number(estadoFicha),
-                    tipoAtencion,
+                    estadoFicha: estadoFicha === "" ? null : Number(estadoFicha),
+                    tipoAtencion: tipoAtencion || null,
                     motivoConsulta: null,
                     signosVitales: null,
-                    observaciones,
-                    anotacionConsulta,
+                    observaciones: observaciones || null,
+                    anotacionConsulta: anotacionConsulta || null,
                     anamnesis: null,
                     diagnostico: null,
                     indicaciones: null,
-                    archivosAdjuntos,
-                    fechaConsulta,
+                    archivosAdjuntos: archivosAdjuntos || null,
+                    fechaConsulta: fechaConsulta || null,
                     consentimientoFirmado: null,
                     id_ficha
                 }),
