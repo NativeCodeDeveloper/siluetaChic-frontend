@@ -10,7 +10,7 @@ const michroma = Michroma({
 export default function DashboardHome() {
 
     return (
-        <di>
+        <div>
 
 
             {/*PANTALLAS CELULARES*/}
@@ -147,7 +147,7 @@ export default function DashboardHome() {
                     </div>
                 </div>
             </div>
-        </di>
+        </div>
 
     );
 }

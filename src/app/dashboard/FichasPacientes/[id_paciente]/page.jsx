@@ -345,48 +345,54 @@ export default function Paciente() {
                         </div>
                     ) : (
                         detallePaciente.map((paciente) => (
-                            <article key={paciente.id_paciente} className="overflow-hidden rounded-2xl border border-sky-50 bg-white shadow-lg">
-                                <div className="grid grid-cols-1 gap-6 p-5 md:grid-cols-3 md:p-8">
-                                    <div className="md:col-span-2">
-                                        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                                            <div>
-                                                <span className="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-800">
-                                                    Estado Paciente: {previsionDeterminacion(paciente.prevision_id)}
-                                                </span>
-                                                <h2 className="mt-4 text-lg font-semibold text-slate-900 md:text-2xl">
-                                                    {paciente.nombre} {paciente.apellido}
-                                                </h2>
-                                                <p className="mt-1 text-sm text-slate-500">
-                                                    RUT: <span className="font-medium text-slate-700">{paciente.rut}</span>
-                                                </p>
+                            <article key={paciente.id_paciente} className="overflow-hidden rounded-[28px] border border-sky-100/80 bg-white shadow-[0_18px_60px_-28px_rgba(14,116,144,0.35)] ring-1 ring-white/70">
+                                <div className="bg-gradient-to-r from-sky-900 via-cyan-800 to-sky-700 px-5 py-6 sm:px-7">
+                                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                                        <div>
+                                            <p className="text-[11px] uppercase tracking-[0.24em] text-sky-100/80">Paciente</p>
+                                            <h2 className="mt-2 text-xl font-semibold tracking-tight text-white md:text-2xl">
+                                                {paciente.nombre} {paciente.apellido}
+                                            </h2>
+                                            <div className="mt-3 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium text-sky-50 backdrop-blur-sm">
+                                                RUT: {paciente.rut}
                                             </div>
                                         </div>
-
-                                        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                            <div className="rounded-md bg-slate-50 p-3">
-                                                <p className="text-xs text-slate-500">Fecha de nacimiento</p>
-                                                <p className="mt-1 text-sm font-medium text-slate-700">{formatearFecha(paciente.nacimiento)}</p>
-                                            </div>
-                                            <div className="rounded-md bg-slate-50 p-3">
-                                                <p className="text-xs text-slate-500">Sexo</p>
-                                                <p className="mt-1 text-sm font-medium text-slate-700">{paciente.sexo}</p>
-                                            </div>
+                                        <div className="md:text-right">
+                                            <p className="text-[11px] uppercase tracking-[0.18em] text-sky-100/70">Estado</p>
+                                            <span className="mt-2 inline-flex items-center rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-sky-900 shadow-sm">
+                                                {previsionDeterminacion(paciente.prevision_id)}
+                                            </span>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div className="md:col-span-1">
-                                        <div className="flex flex-col gap-3">
-                                            <div className="rounded-md bg-slate-50 p-3">
-                                                <p className="text-xs text-slate-500">Teléfono</p>
-                                                <p className="mt-1 text-sm font-medium text-slate-700">{paciente.telefono || "-"}</p>
+                                <div className="p-5 sm:p-7">
+                                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_0.9fr]">
+                                        <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50 p-5 shadow-sm">
+                                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Resumen del paciente</p>
+                                            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                                <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Fecha de nacimiento</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900">{formatearFecha(paciente.nacimiento) || "-"}</p>
+                                                </div>
+                                                <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Sexo</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900">{paciente.sexo || "-"}</p>
+                                                </div>
                                             </div>
-                                            <div className="rounded-md bg-slate-50 p-3">
-                                                <p className="text-xs text-slate-500">Correo</p>
-                                                <p className="mt-1 break-all text-sm font-medium text-slate-700">{paciente.correo || "-"}</p>
-                                            </div>
-                                            <div className="rounded-md bg-slate-50 p-3">
-                                                <p className="text-xs text-slate-500">Dirección</p>
-                                                <p className="mt-1 text-sm font-medium text-slate-700">{paciente.direccion || "-"}</p>
+                                        </div>
+
+                                        <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-5 shadow-sm">
+                                            <p className="text-[11px] uppercase tracking-[0.18em] text-sky-800/70">Contacto</p>
+                                            <div className="mt-4 space-y-3">
+                                                <div className="rounded-xl bg-white px-4 py-3 ring-1 ring-sky-100">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Teléfono</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900">{paciente.telefono || "-"}</p>
+                                                </div>
+                                                <div className="rounded-xl bg-white px-4 py-3 ring-1 ring-sky-100">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Correo</p>
+                                                    <p className="mt-1 break-all text-sm font-semibold text-slate-900">{paciente.correo || "-"}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -35,8 +35,6 @@ export default function Paciente(){
     const [prevision, setPrevision] = useState("");
     const [telefono, setTelefono] = useState("");
     const [correo, setCorreo] = useState("");
-    const [direccion, setDireccion] = useState("");
-    const[pais, setPais] = useState("");
     const[observaciones, setObservaciones] = useState("");
 
     function volverAingreso(){
@@ -66,9 +64,32 @@ export default function Paciente(){
         return `${year}-${month}-${day}`;
     }
 
+    function formatearRutInput(valor) {
+        const limpio = (valor ?? "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 9);
+        if (!limpio) return "";
+        if (limpio.length === 1) return limpio;
+
+        const cuerpo = limpio.slice(0, -1).replace(/\D/g, "");
+        const dv = limpio.slice(-1).replace(/[^0-9K]/g, "");
+
+        if (!cuerpo && dv) return dv;
+
+        const cuerpoFormateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return dv ? `${cuerpoFormateado}-${dv}` : cuerpoFormateado;
+    }
+
+    function formatearRut(rutSinFormato) {
+        const limpio = (rutSinFormato ?? "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+        if (limpio.length < 7 || limpio.length > 9) return null;
+        const cuerpo = limpio.slice(0, -1);
+        const dv = limpio.slice(-1);
+        const cuerpoFormateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return `${cuerpoFormateado}-${dv}`;
+    }
+
 
     //FUNCION PARA LA ACTUALIZACION DE DATOS DEL PACIENTE
-    async function actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,observaciones,id_paciente ) {
+    async function actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,observaciones,id_paciente ) {
 
         let prevision_id = null;
 
@@ -78,13 +99,20 @@ export default function Paciente(){
             prevision_id = 2
         }else if (prevision.includes("ABANDONO")) {
             prevision_id = 3
+        }else if (prevision.includes("EVALUACION")) {
+            prevision_id = 4
         }else {
             prevision_id = 0
         }
 
         try {
-            if (!nombre || !apellido || !rut || !nacimiento || !sexo || !prevision_id || !telefono || !correo || !direccion || !pais || !id_paciente) {
+            if (!nombre || !apellido || !rut || !nacimiento || !sexo || !prevision_id || !telefono || !correo || !id_paciente) {
                 return toast.error("Debe llenar todos los campos para proceder con la actualziacion")
+            }
+
+            const rutFormateado = formatearRut(rut);
+            if (!rutFormateado) {
+                return toast.error("El RUT debe tener entre 7 y 9 caracteres válidos");
             }
 
             const res = await fetch(`${API}/pacientes/pacientesActualizar`, {
@@ -95,14 +123,14 @@ export default function Paciente(){
                 body: JSON.stringify({
                     nombre,
                     apellido,
-                    rut,
+                    rut: rutFormateado,
                     nacimiento : convertirFecha(nacimiento),
                     sexo,
                     prevision_id,
                     telefono,
                     correo,
-                    direccion,
-                    pais,
+                    direccion: "--",
+                    pais: "--",
                     observaciones,
                     id_paciente})
             })
@@ -120,10 +148,8 @@ export default function Paciente(){
                     setNacimiento("");
                     setTelefono("");
                     setCorreo("");
-                    setDireccion("");
                     setRut("");
                     setSexo("");
-                    setPais("");
                     setObservaciones("");
                     await buscarPacientePorId(id_paciente);
                     return toast.success("Datos del paciente actualizados con Exito!");
@@ -179,13 +205,11 @@ export default function Paciente(){
             const paciente = detallePaciente[0];
             setNombre(paciente.nombre);
             setApellido(paciente.apellido);
-            setRut(paciente.rut);
+            setRut(formatearRutInput(paciente.rut));
             setNacimiento(paciente.nacimiento);
             setSexo(paciente.sexo);
             setTelefono(paciente.telefono);
             setCorreo(paciente.correo);
-            setDireccion(paciente.direccion);
-            setPais(paciente.pais);
             setObservaciones(paciente.observaciones || "");
         }
     }, [detallePaciente]);
@@ -203,6 +227,8 @@ export default function Paciente(){
             previsionString = "TRATAMIENTO"
         } else if(id_prevision === 3){
             previsionString = "ABANDONO"
+        }else if(id_prevision === 4){
+            previsionString = "EVALUACION"
         }else{
             previsionString = "SIN DEFINIR"
         }
@@ -269,56 +295,57 @@ export default function Paciente(){
                         <div className="rounded-xl border border-dashed border-slate-200 bg-white p-5 text-center text-sm text-slate-600 shadow-sm">No hay datos disponibles o se están cargando...</div>
                     ) : (
                         detallePaciente.map(paciente => (
-                            <article key={paciente.id_paciente} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden ring-1 ring-slate-100/60">
-                                <div className="p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 items-start">
-                                    {/* Left: identidad */}
-                                    <div className="sm:col-span-2">
-                                        <div className="flex items-start justify-between">
-                                            <div>
-                                                <h2 className="text-base sm:text-lg font-semibold text-slate-900 leading-tight">{paciente.nombre} {paciente.apellido}</h2>
-                                                <p className="mt-1 text-xs sm:text-sm text-slate-600">RUT: <span className="font-semibold text-slate-800">{paciente.rut}</span></p>
-                                            </div>
-                                            <div className="text-right">
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-900">Estado del Tratamiento: {previsionDeterminacion(paciente.prevision_id)}</span>
+                            <article key={paciente.id_paciente} className="overflow-hidden rounded-[28px] border border-sky-100/80 bg-white shadow-[0_18px_60px_-28px_rgba(14,116,144,0.35)] ring-1 ring-white/70">
+                                <div className="bg-gradient-to-r from-sky-900 via-cyan-800 to-sky-700 px-5 py-6 sm:px-7">
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                        <div>
+                                            <p className="text-[11px] uppercase tracking-[0.24em] text-sky-100/80">Paciente</p>
+                                            <h2 className="mt-2 text-xl sm:text-2xl font-semibold tracking-tight text-white">{paciente.nombre} {paciente.apellido}</h2>
+                                            <div className="mt-3 inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm font-medium text-sky-50 backdrop-blur-sm">
+                                                RUT: {paciente.rut}
                                             </div>
                                         </div>
-
-                                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
-                                                <p className="text-xs text-slate-600">Fecha de nacimiento</p>
-                                                <p className="mt-1 font-medium text-slate-700">{(formatearFecha(paciente.nacimiento)??'---')}</p>
-                                            </div>
-                                            <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
-                                                <p className="text-xs text-slate-600">Sexo</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.sexo ?? '---'}</p>
-                                            </div>
+                                        <div className="sm:text-right">
+                                            <p className="text-[11px] uppercase tracking-[0.18em] text-sky-100/70">Estado</p>
+                                            <span className="mt-2 inline-flex items-center rounded-full bg-white px-3.5 py-1.5 text-xs font-semibold text-sky-900 shadow-sm">
+                                                {previsionDeterminacion(paciente.prevision_id)}
+                                            </span>
                                         </div>
                                     </div>
+                                </div>
 
-
-                                    {/* Right: contacto */}
-                                    <div className="sm:col-span-1">
-                                        <div className="flex flex-col gap-3">
-                                            <div className="text-sm">
-                                                <p className="text-[11px] uppercase tracking-wide text-slate-500">Teléfono</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.telefono ?? '---'} </p>
-                                            </div>
-                                            <div className="text-sm">
-                                                <p className="text-[11px] uppercase tracking-wide text-slate-500">Correo</p>
-                                                <p className="mt-1 font-semibold text-slate-900 break-all">{paciente.correo ?? '---'}</p>
-                                            </div>
-                                            <div className="text-sm">
-                                                <p className="text-[11px] uppercase tracking-wide text-slate-500">Dirección</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.direccion ?? '---'}</p>
+                                <div className="p-5 sm:p-7">
+                                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_0.9fr]">
+                                        <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white to-slate-50 p-5 shadow-sm">
+                                            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">Resumen del paciente</p>
+                                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                                <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Fecha de nacimiento</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900">{formatearFecha(paciente.nacimiento) ?? '---'}</p>
+                                                </div>
+                                                <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Sexo</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900">{paciente.sexo ?? '---'}</p>
+                                                </div>
+                                                <div className="rounded-xl border border-slate-100 bg-white px-4 py-3">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Número de ficha</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900">{paciente.observaciones ?? '---'}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* Número de Ficha */}
-                                    <div className="px-4 sm:px-5 pb-4">
-                                        <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
-                                            <p className="text-xs text-slate-600">Número de Ficha</p>
-                                            <p className="mt-1 font-medium text-slate-700">{paciente.observaciones ?? '---'}</p>
+                                        <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-5 shadow-sm">
+                                            <p className="text-[11px] uppercase tracking-[0.18em] text-sky-800/70">Contacto</p>
+                                            <div className="mt-4 space-y-3">
+                                                <div className="rounded-xl bg-white px-4 py-3 ring-1 ring-sky-100">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Teléfono</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900">{paciente.telefono ?? '---'}</p>
+                                                </div>
+                                                <div className="rounded-xl bg-white px-4 py-3 ring-1 ring-sky-100">
+                                                    <p className="text-[11px] uppercase tracking-wide text-slate-500">Correo</p>
+                                                    <p className="mt-1 text-sm font-semibold text-slate-900 break-all">{paciente.correo ?? '---'}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -368,11 +395,8 @@ export default function Paciente(){
                             <div className="mt-1">
                                 <ShadcnInput
                                     value={rut}
-                                    onChange={(e) => {
-                                        const value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
-                                        setRut(value);
-                                    }}
-                                    placeholder="12345678K (Sin puntos ni guion)"
+                                    onChange={(e) => setRut(formatearRutInput(e.target.value))}
+                                    placeholder="12.345.678-K"
                                     className="w-full"
                                 />
                             </div>
@@ -397,6 +421,7 @@ export default function Paciente(){
                                               value1={"ALTA"}
                                               value2={"TRATAMIENTO"}
                                               value3={"ABANDONO"}
+                                              value4={"EVALUACION"}
                                               onChange={(value) => setPrevision(value)}/>
                             </div>
                         </div>
@@ -427,27 +452,6 @@ export default function Paciente(){
 
 
 
-                        <div className="">
-                            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Dirección</label>
-                            <div className="mt-1">
-                                <ShadcnInput
-                                    placeholder={"Avenida España 123 / Concepcion"}
-                                    value={direccion}
-                                    onChange={(e) => setDireccion(e.target.value)} className="bg-slate-50/70 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
-                            </div>
-                        </div>
-
-                        <div className="">
-                            <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">País del Paciente</label>
-                            <div className="mt-1">
-                                <ShadcnInput
-                                    placeholder={"Colombia"}
-                                    value={pais}
-                                    onChange={(e) => setPais(e.target.value)} className="bg-slate-50/70 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
-                            </div>
-                        </div>
-
-
                         <div className="sm:col-span-2">
                             <div className="mt-1">
                                 <ShadcnDatePicker
@@ -474,7 +478,7 @@ export default function Paciente(){
                             <button
                                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-sky-700 to-blue-600 text-white font-semibold shadow-md hover:from-sky-800 hover:to-blue-700 transition focus:outline-none focus:ring-2 focus:ring-sky-300 focus:ring-offset-2"
                                 type={"button"}
-                                onClick={()=> actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,observaciones,id_paciente )}
+                                onClick={()=> actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,observaciones,id_paciente )}
                             >Actualizar</button>
 
                         </div>

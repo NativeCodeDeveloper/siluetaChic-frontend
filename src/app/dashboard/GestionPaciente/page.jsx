@@ -33,8 +33,6 @@ export default function GestionPaciente() {
     const [prevision, setPrevision] = useState("NO APLICA");
     const [telefono, setTelefono] = useState("");
     const [correo, setCorreo] = useState("");
-    const [direccion, setDireccion] = useState("");
-    const [pais, setPais] = useState("");
     const [observaciones, setobservaciones] = useState("");
 
 
@@ -55,6 +53,28 @@ export default function GestionPaciente() {
         router.push(`/dashboard/paciente/${id_paciente}`);
     }
 
+    function formatearRutInput(valor) {
+        const limpio = (valor ?? "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase().slice(0, 9);
+        if (!limpio) return "";
+        if (limpio.length === 1) return limpio;
+
+        const cuerpo = limpio.slice(0, -1).replace(/\D/g, "");
+        const dv = limpio.slice(-1).replace(/[^0-9K]/g, "");
+
+        if (!cuerpo && dv) return dv;
+
+        const cuerpoFormateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return dv ? `${cuerpoFormateado}-${dv}` : cuerpoFormateado;
+    }
+
+    function formatearRut(rutSinFormato) {
+        const limpio = (rutSinFormato ?? "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+        if (limpio.length < 7 || limpio.length > 9) return null;
+        const cuerpo = limpio.slice(0, -1);
+        const dv = limpio.slice(-1);
+        const cuerpoFormateado = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return `${cuerpoFormateado}-${dv}`;
+    }
 
     //FUNCION PARA ENCONTRAR PACIENTES POR SIMILITD DE RUT
     async function buscarRutSimilar(rutBuscado) {
@@ -137,7 +157,7 @@ export default function GestionPaciente() {
 
 
 //FUNCION PARA INSERTAR NUEVOS PACIENTES
-    async function insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais, observaciones) {
+    async function insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, observaciones) {
         try {
             let prevision_id = null;
 
@@ -147,13 +167,19 @@ export default function GestionPaciente() {
                 prevision_id = 2;
             } else if (prevision.includes("ABANDONO")) {
                 prevision_id = 3;
-
+            } else if (prevision.includes("EVALUACION")) {
+                prevision_id = 4;
             } else {
                 return toast.error("Debe seleccionar al menos una estado de tratamiento")
             }
 
-            if (!nombre || !apellido || !rut || !nacimiento || !sexo || !prevision_id || !telefono || !correo || !direccion || !pais || !observaciones) {
+            if (!nombre || !apellido || !rut || !nacimiento || !sexo || !prevision_id || !telefono || !correo || !observaciones) {
                 return toast.error("Debe llenar todos los campos para ingresar un nuevo paciente en las bases de datos.")
+            }
+
+            const rutFormateado = formatearRut(rut);
+            if (!rutFormateado) {
+                return toast.error("El RUT debe tener entre 7 y 9 caracteres válidos");
             }
 
             const res = await fetch(`${API}/pacientes/pacientesInsercion`, {
@@ -165,14 +191,14 @@ export default function GestionPaciente() {
                 body: JSON.stringify({
                     nombre,
                     apellido,
-                    rut,
+                    rut: rutFormateado,
                     nacimiento,
                     sexo,
                     prevision_id,
                     telefono,
                     correo,
-                    direccion,
-                    pais,
+                    direccion: "--",
+                    pais: "--",
                     observaciones
                 }),
                 mode: "cors"
@@ -190,8 +216,6 @@ export default function GestionPaciente() {
                     setRut("");
                     setTelefono("");
                     setCorreo("");
-                    setDireccion("");
-                    setPais("");
                     setobservaciones("");
                     await  listarPacientes();
                     return toast.success("Paciente ingresado correctamente.");
@@ -297,11 +321,8 @@ export default function GestionPaciente() {
                                 <div className="mt-1">
                                     <ShadcnInput
                                         value={rut}
-                                        onChange={(e) => {
-                                            const value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
-                                            setRut(value);
-                                        }}
-                                        placeholder="12345678K (Sin puntos ni guion)"
+                                        onChange={(e) => setRut(formatearRutInput(e.target.value))}
+                                        placeholder="12.345.678-K"
                                         className="w-full"
                                     />
                                 </div>
@@ -329,6 +350,7 @@ export default function GestionPaciente() {
                                             value1={"ALTA"}
                                             value2={"TRATAMIENTO"}
                                             value3={"ABANDONO"}
+                                            value4={"EVALUACION"}
                                             onChange={(value) => setPrevision(value)}
                                         />
                                     </div>
@@ -359,27 +381,6 @@ export default function GestionPaciente() {
                             </div>
 
 
-                            <div className="">
-                                <label className="text-sm font-medium text-gray-700">Dirección</label>
-                                <div className="mt-1">
-                                    <ShadcnInput
-                                        placeholder={"Avenida España 123 / Concepcion"}
-                                        value={direccion}
-                                        onChange={(e) => setDireccion(e.target.value)}
-                                        className="bg-gray-50 w-full"/>
-                                </div>
-                            </div>
-
-                            <div className="">
-                                <label className="text-sm font-medium text-gray-700">País del Paciente</label>
-                                <div className="mt-1">
-                                    <ShadcnInput
-                                        value={pais}
-                                        placeholder={"Ej: Argentina"}
-                                        onChange={(e) => setPais(e.target.value)}
-                                        className="bg-gray-50 w-full"/>
-                                </div>
-                            </div>
 
 
 
@@ -410,7 +411,7 @@ export default function GestionPaciente() {
                                 <button
                                     className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-blue-900 text-white font-semibold shadow hover:bg-blue-800 transition"
                                     type={"button"}
-                                    onClick={() => insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais, observaciones)}
+                                    onClick={() => insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, observaciones)}
                                 >Ingresar
                                 </button>
 
@@ -449,7 +450,7 @@ export default function GestionPaciente() {
                                     <ShadcnInput
                                         value={rutBuscado}
                                         placeholder={"12.345.678-9"}
-                                        onChange={(e) => setRutBuscado(e.target.value)}
+                                        onChange={(e) => setRutBuscado(formatearRutInput(e.target.value))}
                                         className="w-full "
                                     />
 

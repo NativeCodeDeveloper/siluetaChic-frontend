@@ -81,17 +81,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
+        <html lang="es">
+        <body className="min-h-screen bg-white">
         <ClerkProvider>
-            <html lang="es">
-            <body className="min-h-screen bg-white">
-            {/* Aquí usamos el componente cliente que ya maneja Motion */}
             <AnimatedLayout>
                 <AgendaProvider>
                     {children}
                 </AgendaProvider>
             </AnimatedLayout>
-            </body>
-            </html>
         </ClerkProvider>
+        </body>
+        </html>
     );
 }

@@ -4,7 +4,6 @@ import * as React from "react"
 import {ChevronDownIcon} from "lucide-react"
 import {Button} from "@/components/ui/button"
 import {Calendar} from "@/components/ui/calendar"
-import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {
     Popover,
@@ -12,29 +11,51 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-export default function ShadcnFechaHora({onChange}) {
+export default function ShadcnFechaHora({ onChange, value }) {
     const [open, setOpen] = React.useState(false)
-    const [date, setDate] = React.useState(undefined)
-    const [hour, setHour] = React.useState("10")
-    const [minute, setMinute] = React.useState("30")
+    const [date, setDate] = React.useState(value ?? undefined)
+    const [hour, setHour] = React.useState(value ? String(value.getHours()).padStart(2, "0") : "10")
+    const [minute, setMinute] = React.useState(value ? String(value.getMinutes()).padStart(2, "0") : "30")
     const time = `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}:00`
 
-    const dateTime = React.useMemo(() => {
-        if (!date) return null
+    function emitChange(nextDate, nextHour, nextMinute) {
+        if (!nextDate || !onChange) return
 
-        const [hh = 0, mm = 0, ss = 0] = time.split(":").map(Number)
+        const hh = Number(nextHour)
+        const mm = Number(nextMinute)
+        const nextDateTime = new Date(
+            nextDate.getFullYear(),
+            nextDate.getMonth(),
+            nextDate.getDate(),
+            hh,
+            mm,
+            0,
+            0
+        )
 
-        // Construir desde año/mes/día locales para evitar desfase por timezone
-        const d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hh, mm, ss, 0)
-        return d
-    }, [date, time])
+        onChange(nextDateTime)
+    }
 
-    // 🔔 Notificar al padre
     React.useEffect(() => {
-        if (dateTime && onChange) {
-            onChange(dateTime)
-        }
-    }, [dateTime, onChange])
+        if (!value) return
+        const nextHour = String(value.getHours()).padStart(2, "0")
+        const nextMinute = String(value.getMinutes()).padStart(2, "0")
+
+        setDate((prev) => {
+            if (
+                prev &&
+                prev.getFullYear() === value.getFullYear() &&
+                prev.getMonth() === value.getMonth() &&
+                prev.getDate() === value.getDate()
+            ) {
+                return prev
+            }
+            return value
+        })
+
+        setHour((prev) => (prev === nextHour ? prev : nextHour))
+        setMinute((prev) => (prev === nextMinute ? prev : nextMinute))
+    }, [value?.getTime()])
 
     return (
         <div className="flex gap-4">
@@ -57,6 +78,9 @@ export default function ShadcnFechaHora({onChange}) {
                                 selected={date}
                                 onSelect={(d) => {
                                     setDate(d)
+                                    if (d) {
+                                        emitChange(d, hour, minute)
+                                    }
                                     setOpen(false)
                                 }}
                             />
@@ -70,7 +94,11 @@ export default function ShadcnFechaHora({onChange}) {
                 <div className="flex items-center gap-1">
                     <select
                         value={hour}
-                        onChange={(e) => setHour(e.target.value)}
+                        onChange={(e) => {
+                            const nextHour = e.target.value
+                            setHour(nextHour)
+                            emitChange(date, nextHour, minute)
+                        }}
                         className="w-16 h-9 bg-blue-900 text-white rounded-md px-2 py-1 text-sm border-0 cursor-pointer"
                     >
                         {Array.from({length: 24}, (_, i) => (
@@ -80,7 +108,11 @@ export default function ShadcnFechaHora({onChange}) {
                     <span className="text-slate-700 font-bold">:</span>
                     <select
                         value={minute}
-                        onChange={(e) => setMinute(e.target.value)}
+                        onChange={(e) => {
+                            const nextMinute = e.target.value
+                            setMinute(nextMinute)
+                            emitChange(date, hour, nextMinute)
+                        }}
                         className="w-16 h-9 bg-blue-900 text-white rounded-md px-2 py-1 text-sm border-0 cursor-pointer"
                     >
                         {Array.from({length: 12}, (_, i) => i * 5).map((m) => (

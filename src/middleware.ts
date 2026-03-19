@@ -4,9 +4,8 @@
 
 
 
+
 /*
-
-
 
 // ----------------------------------------------------------
 // MIDLEWARE SIN RESTRICCIONES NO BLOQUEOS (ABIERTO TOTAL)
@@ -122,6 +121,7 @@ export const config = {
         '/sign-up/:path*'
     ],
 }
+
 
 
 
