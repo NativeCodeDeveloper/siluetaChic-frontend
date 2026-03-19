@@ -82,6 +82,12 @@ export function calcularPrecioFinal(producto, sesiones) {
         return valorBase;
     }
 
+    // Pack: usar precios almacenados en BD en vez de tabla hardcodeada
+    if (producto.precio_3_sesiones != null) {
+        if (numSesiones === 3) return Number(producto.precio_3_sesiones);
+        if (numSesiones === 6) return Number(producto.precio_6_sesiones);
+    }
+
     // Buscar precio fijo promocional en la tabla
     const categoria = producto.categoriaProducto;
     const subsubcategoria = producto.subsubcategoria;
@@ -95,6 +101,31 @@ export function calcularPrecioFinal(producto, sesiones) {
     // Fallback: sin tabla de precios, cobrar precio base * sesiones
     console.warn('[calcularPrecioFinal] Sin precio promocional para cat:', categoria, 'subsubcat:', subsubcategoria, 'ses:', numSesiones, '— usando precio base * sesiones');
     return valorBase * numSesiones;
+}
+
+/**
+ * Calcula el precio previo (tachado) según producto y sesiones.
+ * Para packs usa los valores almacenados en BD.
+ * Para productos normales multiplica valor_previo * sesiones.
+ */
+export function calcularPrecioPrevio(producto, sesiones) {
+    if (!producto) return 0;
+    const valorPrevioBase = Number(producto.valor_previo) || 0;
+    const numSesiones = Number(sesiones) || 1;
+
+    if (producto.precio_3_sesiones != null) {
+        if (numSesiones === 1) return valorPrevioBase;
+        if (numSesiones === 3) return Number(producto.valor_previo_3_sesiones) || 0;
+        if (numSesiones === 6) return Number(producto.valor_previo_6_sesiones) || 0;
+    }
+    return valorPrevioBase * numSesiones;
+}
+
+/**
+ * Determina si un producto es de tipo pack (tiene precios por sesion en BD).
+ */
+export function esProductoPack(producto) {
+    return producto && producto.precio_3_sesiones != null;
 }
 
 export { SUBCATEGORIAS_SOLO_UNA_SESION, SESIONES_VALIDAS, PRECIOS_PROMOCION };

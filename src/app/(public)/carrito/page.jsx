@@ -42,10 +42,14 @@ export default function Carrito() {
 
     for (const productos of carrito) {
         if (!productos) continue;
-        if (productoCatidades[productos.id_producto]) {
-            productoCatidades[productos.id_producto].cantidadVendida += 1;
+        // Clave compuesta para packs: evita mezclar packs con distinta cantidad de sesiones
+        const key = productos._esPack
+            ? `${productos.id_producto}_pack_${productos._sesionesSeleccionadas}`
+            : productos.id_producto;
+        if (productoCatidades[key]) {
+            productoCatidades[key].cantidadVendida += 1;
         } else {
-            productoCatidades[productos.id_producto] = {...productos, cantidadVendida: 1};
+            productoCatidades[key] = {...productos, cantidadVendida: 1};
         }
     }
 
@@ -181,7 +185,7 @@ export default function Carrito() {
                                         src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${producto.imagenProducto}/mini`} alt={"Imagen Producto"} width={100}
                                         height={100} className="object-cover rounded"/></TableCell>
                                     <TableCell
-                                        className="px-4 py-4 text-sm text-gray-800 align-middle border-b">{producto.cantidadVendida}</TableCell>
+                                        className="px-4 py-4 text-sm text-gray-800 align-middle border-b">{producto._esPack ? `Pack ${producto._sesionesSeleccionadas} ses.` : producto.cantidadVendida}</TableCell>
                                     <TableCell className="px-4 py-4 text-sm text-gray-800 align-middle border-b">
 
                                         {/*
@@ -231,7 +235,7 @@ export default function Carrito() {
                                 <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                     <div className="flex items-center gap-2 flex-wrap">
 
-                                        <div className="text-sm text-gray-700">Unidades: <span className="font-medium">{producto.cantidadVendida}</span></div>
+                                        <div className="text-sm text-gray-700">{producto._esPack ? `Pack: ${producto._sesionesSeleccionadas} sesiones` : `Unidades: ${producto.cantidadVendida}`}</div>
                                     </div>
 
                                     <div className="flex items-center gap-2 justify-end flex-shrink-0">

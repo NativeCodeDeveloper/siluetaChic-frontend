@@ -42,7 +42,18 @@ export default function Dashboard() {
     const [valor_previo, setvalor_previo] = useState("");
     const [subcategorias, setsubcategorias] = useState("");
     const [subsubcategorias, setsubsubcategorias] = useState("");
+    const [precio_3_sesiones, setPrecio_3_sesiones] = useState("");
+    const [precio_6_sesiones, setPrecio_6_sesiones] = useState("");
+    const [valor_previo_3_sesiones, setValor_previo_3_sesiones] = useState("");
+    const [valor_previo_6_sesiones, setValor_previo_6_sesiones] = useState("");
 
+
+    // Deteccion de producto tipo pack segun la subcategoria seleccionada
+    const subcategoriaActual = listaSubcategorias.find(
+        s => String(s.id_subcategoria) === String(subcategorias)
+    );
+    const esPack = subcategoriaActual &&
+        (subcategoriaActual.descripcionCategoria ?? "").toLowerCase().includes("pack");
 
     // Previews locales para mostrar las imágenes seleccionadas (no mostrar URLs en inputs)
     const [preview1, setPreview1] = useState("");
@@ -498,11 +509,13 @@ useEffect(() => {
                 !valor_previo ||
                 !categoriaProducto ||
                 !subcategorias ||
-                !subsubcategoria ||
                 !imagenProducto||
                 !id_producto
             ) {
                 return toast.error("Faltan Datos Obligatorios ❌ ");
+            }
+            if (!esPack && !subsubcategoria) {
+                return toast.error("Debe seleccionar una sub-subcategoria ❌ ");
             }
             const res = await fetch(`${API}/producto/actualizarProducto`, {
                 method: 'POST',
@@ -514,9 +527,13 @@ useEffect(() => {
                     descripcionProducto,
                     valorProducto,
                     valor_previo,
+                    precio_3_sesiones: esPack ? Number(precio_3_sesiones) : null,
+                    precio_6_sesiones: esPack ? Number(precio_6_sesiones) : null,
+                    valor_previo_3_sesiones: esPack ? Number(valor_previo_3_sesiones) : null,
+                    valor_previo_6_sesiones: esPack ? Number(valor_previo_6_sesiones) : null,
                     categoriaProducto,
                     subcategoria: subcategorias,
-                    subsubcategoria: subsubcategoria,
+                    subsubcategoria: esPack ? null : subsubcategoria,
                     imagenProducto,
                     imagenProductoSegunda,
                     imagenProductoTercera,
@@ -636,6 +653,10 @@ useEffect(() => {
         setcategoriaProducto("");
         setsubcategorias("");
         setsubsubcategorias("");
+        setPrecio_3_sesiones("");
+        setPrecio_6_sesiones("");
+        setValor_previo_3_sesiones("");
+        setValor_previo_6_sesiones("");
 
         // Limpiar URLs y archivos
         setimagenProducto("");
@@ -720,6 +741,10 @@ useEffect(() => {
             setcategoriaProducto(data.categoriaProducto);
             setsubcategorias(data.subcategoria || "");
             setsubsubcategorias(data.subsubcategoria || "");
+            setPrecio_3_sesiones(data.precio_3_sesiones || "");
+            setPrecio_6_sesiones(data.precio_6_sesiones || "");
+            setValor_previo_3_sesiones(data.valor_previo_3_sesiones || "");
+            setValor_previo_6_sesiones(data.valor_previo_6_sesiones || "");
             // Mostrar toast al seleccionar producto para edición
             toast.success("👉 Se ha Seleccionado un producto para edicion ✅");
         } catch (error) {
@@ -829,7 +854,7 @@ useEffect(() => {
                 return;
             }
 
-            if (!subsubcategorias) {
+            if (!esPack && !subsubcategorias) {
                 toast.error("Debe seleccionar una sub-subcategoria");
                 return;
             }
@@ -837,6 +862,25 @@ useEffect(() => {
             if (!valor_previo || Number(valor_previo) <= 0) {
                 toast.error("El campo 'Valor antiguo' debe ser mayor que 0");
                 return;
+            }
+
+            if (esPack) {
+                if (!precio_3_sesiones || Number(precio_3_sesiones) <= 0) {
+                    toast.error("El precio de 3 sesiones del pack es obligatorio");
+                    return;
+                }
+                if (!precio_6_sesiones || Number(precio_6_sesiones) <= 0) {
+                    toast.error("El precio de 6 sesiones del pack es obligatorio");
+                    return;
+                }
+                if (!valor_previo_3_sesiones || Number(valor_previo_3_sesiones) <= 0) {
+                    toast.error("El valor previo de 3 sesiones es obligatorio");
+                    return;
+                }
+                if (!valor_previo_6_sesiones || Number(valor_previo_6_sesiones) <= 0) {
+                    toast.error("El valor previo de 6 sesiones es obligatorio");
+                    return;
+                }
             }
 
             setSubiendo(true);
@@ -909,13 +953,17 @@ useEffect(() => {
                 descripcionProducto,
                 valorProducto: valorNumero,
                 valor_previo: valorPrevioNumero,
+                precio_3_sesiones: esPack ? Number(precio_3_sesiones) : null,
+                precio_6_sesiones: esPack ? Number(precio_6_sesiones) : null,
+                valor_previo_3_sesiones: esPack ? Number(valor_previo_3_sesiones) : null,
+                valor_previo_6_sesiones: esPack ? Number(valor_previo_6_sesiones) : null,
                 imagenProducto: finalImageUrl,
                 imagenProductoSegunda: finalImageUrl2 || "",
                 imagenProductoTercera: finalImageUrl3 || "",
                 imagenProductoCuarta: finalImageUrl4 || "",
                 categoriaProducto: categoriaProducto,
                 subcategoria: subcategorias,
-                subsubcategoria: subsubcategorias,
+                subsubcategoria: esPack ? null : subsubcategorias,
                 especificacionProducto: 1,
             };
 
@@ -946,6 +994,10 @@ useEffect(() => {
             setdescripcionProducto("");
             setvalorProducto("");
             setvalor_previo("");
+            setPrecio_3_sesiones("");
+            setPrecio_6_sesiones("");
+            setValor_previo_3_sesiones("");
+            setValor_previo_6_sesiones("");
             setsubcategorias("");
             setsubsubcategorias("");
             setimagenProducto("");
@@ -1087,7 +1139,8 @@ useEffect(() => {
 
 
 
-                                {/* SubSubCategoría del producto */}
+                                {/* SubSubCategoría del producto - se oculta para packs */}
+                                {!esPack && (
                                 <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
                                     <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
                                     <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
@@ -1109,6 +1162,7 @@ useEffect(() => {
                                         ))}
                                     </select>
                                 </div>
+                                )}
 
 
 
@@ -1150,41 +1204,79 @@ useEffect(() => {
                                 ></textarea>
                             </div>
 
-                            {/* Valor del producto */}
+                            {/* Precio 1 sesion / Valor actual */}
                             <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
                                 <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
                                 <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
-                                    Valor Actual
+                                    {esPack ? "Precio 1 Sesion" : "Valor Actual"}
                                 </label>
                                 <input
                                     type="number"
                                     value={valorProducto}
                                     onChange={(e) => setvalorProducto(e.target.value)}
-                                    name="valorProductoe"
-                                    id="valorProductoe"
                                     className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 transition"
                                 />
                             </div>
 
-
-
-
-                                {/* Valor del producto */}
+                                {/* Valor previo 1 sesion / Valor antiguo */}
                                 <div className="relative group rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">
                                     <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-transparent group-focus-within:bg-blue-500 transition-colors duration-150"></span>
                                     <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-slate-600 group-focus-within:text-blue-600 transition-colors">
-                                        Valor Antiguo
+                                        {esPack ? "Valor Previo 1 Sesion" : "Valor Antiguo"}
                                     </label>
                                     <input
                                         type="number"
                                         value={valor_previo}
-                                        onChange={(e) => setvalor_previo( e.target.value)}
-                                        name="valorProductoe"
-                                        id="valorProductoe"
+                                        onChange={(e) => setvalor_previo(e.target.value)}
                                         className="text-sm w-full mt-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/25 focus:border-blue-500 transition"
                                     />
                                 </div>
 
+                                {/* Campos de precios pack - solo visibles cuando la subcategoria es pack */}
+                                {esPack && (
+                                    <>
+                                        <div className="relative group rounded-2xl border border-purple-200 bg-purple-50/50 backdrop-blur p-4">
+                                            <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-purple-400"></span>
+                                            <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-purple-700">
+                                                Precio 3 Sesiones (Pack)
+                                            </label>
+                                            <input type="number" value={precio_3_sesiones}
+                                                onChange={(e) => setPrecio_3_sesiones(e.target.value)}
+                                                className="text-sm w-full mt-2 rounded-xl border border-purple-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/25 focus:border-purple-500 transition"
+                                            />
+                                        </div>
+                                        <div className="relative group rounded-2xl border border-purple-200 bg-purple-50/50 backdrop-blur p-4">
+                                            <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-purple-400"></span>
+                                            <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-purple-700">
+                                                Valor Previo 3 Sesiones
+                                            </label>
+                                            <input type="number" value={valor_previo_3_sesiones}
+                                                onChange={(e) => setValor_previo_3_sesiones(e.target.value)}
+                                                className="text-sm w-full mt-2 rounded-xl border border-purple-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/25 focus:border-purple-500 transition"
+                                            />
+                                        </div>
+                                        <div className="relative group rounded-2xl border border-purple-200 bg-purple-50/50 backdrop-blur p-4">
+                                            <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-purple-400"></span>
+                                            <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-purple-700">
+                                                Precio 6 Sesiones (Pack)
+                                            </label>
+                                            <input type="number" value={precio_6_sesiones}
+                                                onChange={(e) => setPrecio_6_sesiones(e.target.value)}
+                                                className="text-sm w-full mt-2 rounded-xl border border-purple-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/25 focus:border-purple-500 transition"
+                                            />
+                                        </div>
+                                        <div className="relative group rounded-2xl border border-purple-200 bg-purple-50/50 backdrop-blur p-4">
+                                            <span className="absolute left-0 top-0 h-full w-1 rounded-l-2xl bg-purple-400"></span>
+                                            <label className="pl-2 text-[11px] font-semibold uppercase tracking-wide text-purple-700">
+                                                Valor Previo 6 Sesiones
+                                            </label>
+                                            <input type="number" value={valor_previo_6_sesiones}
+                                                onChange={(e) => setValor_previo_6_sesiones(e.target.value)}
+                                                className="text-sm w-full mt-2 rounded-xl border border-purple-200 bg-white px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500/25 focus:border-purple-500 transition"
+                                            />
+                                        </div>
+                                    </>
+                                )}
 
                                 {/* Imágenes del producto */}
                             <div className="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur p-4">

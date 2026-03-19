@@ -491,64 +491,120 @@ function CatalogoSuspense(){
             )}
 
 
-            <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-8 px-6 md:grid-cols-3">
-                {listasubsubCategoria.map((subsubcategoria) => (
-                    <div
-                        key={subsubcategoria.id_subsubcategoria}
-                        className="group relative flex h-full w-full max-w-[420px] flex-col overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-indigo-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-                    >
-                        {/* Glow / gradient border */}
-                        <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+            {/* Vista Pack: muestra productos directamente (sin sub-subcategorias) */}
+            {(() => {
+                const subcategoriaActualCatalogo = listaSubcategoria.find(s => String(s.id_subcategoria) === subCategoria);
+                const esPackSubcategoria = subcategoriaActualCatalogo && (subcategoriaActualCatalogo.descripcionCategoria ?? "").toLowerCase().includes("pack");
 
-                        {/* Top accent */}
-                        <div className="h-1 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400" />
-
-                        <div className="relative flex h-full flex-col p-6 sm:p-8">
-                            {/* Imagen estandarizada */}
-                            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-50 via-indigo-50 to-cyan-50 ring-1 ring-indigo-100">
-                                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10]">
-                                    <img
-                                        src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${subsubcategoria.imagenReferencial}/card`}
-                                        alt={subsubcategoria.descripcionSubSubCategoria || 'imagen'}
-                                        className="absolute inset-0 h-full w-full object-cover"
-                                        loading="lazy"
-                                    />
-                                </div>
-                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent" />
-                                {/* Badge */}
-                                <div className="absolute left-4 top-4">
-                                    <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-[11px] font-extrabold tracking-[0.22em] text-slate-800 ring-1 ring-slate-200 backdrop-blur">
-                                        TRILASER
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Texto */}
-                            <div className="mt-5 flex flex-1 flex-col">
-                                <h1 className="text-lg font-extrabold tracking-tight text-slate-900">
-                                    {subsubcategoria.descripcionSubSubCategoria}
-                                </h1>
-                                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
-                                    Depilación láser segura y efectiva. Resultados visibles desde la primera sesión.
-                                </p>
-                                <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-                                {/* Botón único */}
-                                <button
-                                    type="button"
-                                    onClick={() => irProductosPorCategoria(subsubcategoria.id_subsubcategoria)}
-                                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 px-5 py-3 text-sm font-extrabold tracking-wide text-white shadow-lg shadow-indigo-500/20 transition-all hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+                if (esPackSubcategoria) {
+                    return (
+                        <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-8 px-6 md:grid-cols-3">
+                            {listaProductos.map((producto) => (
+                                <div
+                                    key={producto.id_producto}
+                                    className="group relative flex h-full w-full max-w-[420px] flex-col overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-indigo-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
                                 >
-                                    <ShoppingCartIcon className="h-5 w-5" />
-                                    {obtenerTextoBoton()}
-                                </button>
-                                <p className="mt-3 text-center text-[11px] text-slate-500">
-                                    Verás los servicios disponibles para esta categoría.
-                                </p>
-                            </div>
+                                    <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+                                    <div className="h-1 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400" />
+                                    <div className="relative flex h-full flex-col p-6 sm:p-8">
+                                        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-50 via-indigo-50 to-cyan-50 ring-1 ring-indigo-100">
+                                            <div className="relative w-full aspect-[4/3] sm:aspect-[16/10]">
+                                                <img
+                                                    src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${producto.imagenProducto}/card`}
+                                                    alt={producto.tituloProducto || 'imagen'}
+                                                    className="absolute inset-0 h-full w-full object-cover"
+                                                    loading="lazy"
+                                                />
+                                            </div>
+                                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent" />
+                                            <div className="absolute left-4 top-4">
+                                                <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-[11px] font-extrabold tracking-[0.22em] text-slate-800 ring-1 ring-slate-200 backdrop-blur">
+                                                    PACK
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="mt-5 flex flex-1 flex-col">
+                                            <h1 className="text-lg font-extrabold tracking-tight text-slate-900">
+                                                {producto.tituloProducto}
+                                            </h1>
+                                            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                                                {producto.descripcionProducto}
+                                            </p>
+                                            <p className="mt-2 text-lg font-bold text-purple-600">
+                                                Desde {formatoCLP(producto.valorProducto)}
+                                            </p>
+                                            <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+                                            <button
+                                                type="button"
+                                                onClick={() => router.push(`/producto/pack/${producto.id_producto}`)}
+                                                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 px-5 py-3 text-sm font-extrabold tracking-wide text-white shadow-lg shadow-indigo-500/20 transition-all hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+                                            >
+                                                <ShoppingCartIcon className="h-5 w-5" />
+                                                VER PACK
+                                            </button>
+                                            <p className="mt-3 text-center text-[11px] text-slate-500">
+                                                Selecciona la cantidad de sesiones que necesitas.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
+                    );
+                }
+
+                return (
+                    <div className="mx-auto mt-10 grid max-w-7xl grid-cols-1 gap-8 px-6 md:grid-cols-3">
+                        {listasubsubCategoria.map((subsubcategoria) => (
+                            <div
+                                key={subsubcategoria.id_subsubcategoria}
+                                className="group relative flex h-full w-full max-w-[420px] flex-col overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-indigo-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                            >
+                                <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+                                <div className="h-1 w-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400" />
+                                <div className="relative flex h-full flex-col p-6 sm:p-8">
+                                    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-purple-50 via-indigo-50 to-cyan-50 ring-1 ring-indigo-100">
+                                        <div className="relative w-full aspect-[4/3] sm:aspect-[16/10]">
+                                            <img
+                                                src={`https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${subsubcategoria.imagenReferencial}/card`}
+                                                alt={subsubcategoria.descripcionSubSubCategoria || 'imagen'}
+                                                className="absolute inset-0 h-full w-full object-cover"
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-indigo-900/20 via-transparent to-transparent" />
+                                        <div className="absolute left-4 top-4">
+                                            <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-[11px] font-extrabold tracking-[0.22em] text-slate-800 ring-1 ring-slate-200 backdrop-blur">
+                                                TRILASER
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="mt-5 flex flex-1 flex-col">
+                                        <h1 className="text-lg font-extrabold tracking-tight text-slate-900">
+                                            {subsubcategoria.descripcionSubSubCategoria}
+                                        </h1>
+                                        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
+                                            Depilacion laser segura y efectiva. Resultados visibles desde la primera sesion.
+                                        </p>
+                                        <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+                                        <button
+                                            type="button"
+                                            onClick={() => irProductosPorCategoria(subsubcategoria.id_subsubcategoria)}
+                                            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 px-5 py-3 text-sm font-extrabold tracking-wide text-white shadow-lg shadow-indigo-500/20 transition-all hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+                                        >
+                                            <ShoppingCartIcon className="h-5 w-5" />
+                                            {obtenerTextoBoton()}
+                                        </button>
+                                        <p className="mt-3 text-center text-[11px] text-slate-500">
+                                            Veras los servicios disponibles para esta categoria.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                );
+            })()}
         </div>
     )
 }

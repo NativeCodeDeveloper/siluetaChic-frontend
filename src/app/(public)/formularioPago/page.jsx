@@ -264,10 +264,14 @@ totalPagado
     const productoCatidades = {};
 
     for (const productos of carrito) {
-        if (productoCatidades[productos.id_producto]) {
-            productoCatidades[productos.id_producto].cantidadVendida += 1;
+        // Clave compuesta para packs: evita mezclar packs con distinta cantidad de sesiones
+        const key = productos._esPack
+            ? `${productos.id_producto}_pack_${productos._sesionesSeleccionadas}`
+            : productos.id_producto;
+        if (productoCatidades[key]) {
+            productoCatidades[key].cantidadVendida += 1;
         }else{
-            productoCatidades[productos.id_producto]= {...productos, cantidadVendida: 1};
+            productoCatidades[key]= {...productos, cantidadVendida: 1};
         }
     }
 
