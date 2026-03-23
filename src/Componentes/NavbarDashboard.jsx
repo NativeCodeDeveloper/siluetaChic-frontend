@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,16 +12,27 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-// Navbar minimalista y profesional para el Dashboard
-// - Sin íconos
-// - Botones claros para navegación principal
-// - Menú compacto en mobile (usa un botón de texto "Menú")
+const NAV_ITEMS = [
+  { label: 'Pedidos', href: '/dashboard/pedidosCompras' },
+  { label: 'Productos', href: '/dashboard/ingresoProductos' },
+  { label: 'Cupones', href: '/dashboard/cupones' },
+  { label: 'Agenda', href: '/dashboard/calendario' },
+  { label: 'Clientes Agendados', href: '/dashboard/agendaCitas' },
+  { label: 'Categorías', href: '/dashboard/categoriasProductos' },
+  { label: 'Publicaciones', href: '/dashboard/publicaciones' },
+];
 
 export default function NavbarDashboard() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const pathname = usePathname();
 
   const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
   const handleCloseNavMenu = () => setAnchorElNav(null);
+
+  // Cerrar menú automáticamente cuando cambia la ruta
+  React.useEffect(() => {
+    setAnchorElNav(null);
+  }, [pathname]);
 
   return (
     <>
@@ -78,298 +90,51 @@ export default function NavbarDashboard() {
 
           {/* Navegación Desktop */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 0.5 }}>
-
+            {NAV_ITEMS.map((item) => (
               <Button
-                  component={Link}
-                  href="/dashboard/pedidosCompras"
-                  color="inherit"
-                  disableRipple
-                  sx={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    textTransform: 'none',
-                    fontWeight: 500,
-                    fontSize: '0.9rem',
-                    borderRadius: '10px',
-                    px: 3,
-                    py: 1,
-                    color: '#475569',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                key={item.href}
+                component={Link}
+                href={item.href}
+                color="inherit"
+                disableRipple
+                sx={{
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  textTransform: 'none',
+                  fontWeight: 500,
+                  fontSize: '0.9rem',
+                  borderRadius: '10px',
+                  px: 3,
+                  py: 1,
+                  color: '#475569',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 0,
+                    height: '2px',
+                    background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
+                    transition: 'width 0.3s ease'
+                  },
+                  '&:hover': {
+                    bgcolor: 'rgba(59, 130, 246, 0.08)',
+                    color: '#3B82F6',
                     '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: 0,
-                      height: '2px',
-                      background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
-                      transition: 'width 0.3s ease'
-                    },
-                    '&:hover': {
-                      bgcolor: 'rgba(59, 130, 246, 0.08)',
-                      color: '#3B82F6',
-                      '&::before': {
-                        width: '80%'
-                      }
+                      width: '80%'
                     }
-                  }}
-              >
-                  Pedidos
-              </Button>
-
-            <Button
-              component={Link}
-              href="/dashboard/ingresoProductos"
-              color="inherit"
-              disableRipple
-              sx={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                textTransform: 'none',
-                fontWeight: 500,
-                fontSize: '0.9rem',
-                borderRadius: '10px',
-                px: 3,
-                py: 1,
-                color: '#475569',
-                position: 'relative',
-                overflow: 'hidden',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  bottom: 0,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 0,
-                  height: '2px',
-                  background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
-                  transition: 'width 0.3s ease'
-                },
-                '&:hover': {
-                  bgcolor: 'rgba(59, 130, 246, 0.08)',
-                  color: '#3B82F6',
-                  '&::before': {
-                    width: '80%'
                   }
-                }
-              }}
-            >
-              Productos
-            </Button>
-
-
-              <Button
-                  component={Link}
-                  href="/dashboard/cupones"
-                  color="inherit"
-                  disableRipple
-                  sx={{
-                      fontFamily: 'Inter, system-ui, sans-serif',
-                      textTransform: 'none',
-                      fontWeight: 500,
-                      fontSize: '0.9rem',
-                      borderRadius: '10px',
-                      px: 3,
-                      py: 1,
-                      color: '#475569',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      '&::before': {
-                          content: '""',
-                          position: 'absolute',
-                          bottom: 0,
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: 0,
-                          height: '2px',
-                          background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
-                          transition: 'width 0.3s ease'
-                      },
-                      '&:hover': {
-                          bgcolor: 'rgba(59, 130, 246, 0.08)',
-                          color: '#3B82F6',
-                          '&::before': {
-                              width: '80%'
-                          }
-                      }
-                  }}
+                }}
               >
-                  Cupones
+                {item.label}
               </Button>
-
-
-              <Button
-              component={Link}
-              href="/dashboard/calendario"
-              color="inherit"
-              disableRipple
-              sx={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                textTransform: 'none',
-                fontWeight: 500,
-                fontSize: '0.9rem',
-                borderRadius: '10px',
-                px: 3,
-                py: 1,
-                color: '#475569',
-                position: 'relative',
-                overflow: 'hidden',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  bottom: 0,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 0,
-                  height: '2px',
-                  background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
-                  transition: 'width 0.3s ease'
-                },
-                '&:hover': {
-                  bgcolor: 'rgba(59, 130, 246, 0.08)',
-                  color: '#3B82F6',
-                  '&::before': {
-                    width: '80%'
-                  }
-                }
-              }}
-            >
-             Agenda
-            </Button>
-
-
-
-
-              <Button
-                  component={Link}
-                  href="/dashboard/agendaCitas"
-                  color="inherit"
-                  disableRipple
-                  sx={{
-                      fontFamily: 'Inter, system-ui, sans-serif',
-                      textTransform: 'none',
-                      fontWeight: 500,
-                      fontSize: '0.9rem',
-                      borderRadius: '10px',
-                      px: 3,
-                      py: 1,
-                      color: '#475569',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      '&::before': {
-                          content: '""',
-                          position: 'absolute',
-                          bottom: 0,
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                          width: 0,
-                          height: '2px',
-                          background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
-                          transition: 'width 0.3s ease'
-                      },
-                      '&:hover': {
-                          bgcolor: 'rgba(59, 130, 246, 0.08)',
-                          color: '#3B82F6',
-                          '&::before': {
-                              width: '80%'
-                          }
-                      }
-                  }}
-              >
-                  Clientes Agendados
-              </Button>
-
-
-
-              <Button
-                  component={Link}
-                  href="/dashboard/categoriasProductos"
-                  color="inherit"
-                  disableRipple
-                  sx={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    textTransform: 'none',
-                    fontWeight: 500,
-                    fontSize: '0.9rem',
-                    borderRadius: '10px',
-                    px: 3,
-                    py: 1,
-                    color: '#475569',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: 0,
-                      height: '2px',
-                      background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
-                      transition: 'width 0.3s ease'
-                    },
-                    '&:hover': {
-                      bgcolor: 'rgba(59, 130, 246, 0.08)',
-                      color: '#3B82F6',
-                      '&::before': {
-                        width: '80%'
-                      }
-                    }
-                  }}
-              >
-                  Categorías
-              </Button>
-
-            <Button
-              component={Link}
-              href="/dashboard/publicaciones"
-              color="inherit"
-              disableRipple
-              sx={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                textTransform: 'none',
-                fontWeight: 500,
-                fontSize: '0.9rem',
-                borderRadius: '10px',
-                px: 3,
-                py: 1,
-                color: '#475569',
-                position: 'relative',
-                overflow: 'hidden',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  bottom: 0,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 0,
-                  height: '2px',
-                  background: 'linear-gradient(90deg, #3B82F6, #2563EB)',
-                  transition: 'width 0.3s ease'
-                },
-                '&:hover': {
-                  bgcolor: 'rgba(59, 130, 246, 0.08)',
-                  color: '#3B82F6',
-                  '&::before': {
-                    width: '80%'
-                  }
-                }
-              }}
-            >
-              Publicaciones
-            </Button>
-
-
+            ))}
           </Box>
 
-          {/* Navegación Mobile (xs-sm) con botón de texto */}
+          {/* Navegación Mobile */}
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <Button
               aria-controls={Boolean(anchorElNav) ? 'menu-appbar' : undefined}
@@ -399,7 +164,6 @@ export default function NavbarDashboard() {
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              keepMounted
               sx={{
                 '& .MuiPaper-root': {
                   borderRadius: '12px',
@@ -411,165 +175,28 @@ export default function NavbarDashboard() {
                 }
               }}
             >
-              <MenuItem
-                onClick={handleCloseNavMenu}
-                sx={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '0.9rem',
-                  py: 1.5,
-                  px: 3,
-                  color: '#475569',
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.08)',
-                    color: '#3B82F6'
-                  }
-                }}
-              >
-                <Link href="/dashboard/pedidosCompras" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                  Pedidos
-                </Link>
-              </MenuItem>
-              <MenuItem
-                onClick={handleCloseNavMenu}
-                sx={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '0.9rem',
-                  py: 1.5,
-                  px: 3,
-                  color: '#475569',
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.08)',
-                    color: '#3B82F6'
-                  }
-                }}
-              >
-                <Link href="/dashboard/ingresoProductos" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                  Productos
-                </Link>
-              </MenuItem>
-              <MenuItem
-                onClick={handleCloseNavMenu}
-                sx={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '0.9rem',
-                  py: 1.5,
-                  px: 3,
-                  color: '#475569',
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.08)',
-                    color: '#3B82F6'
-                  }
-                }}
-              >
-                <Link href="/dashboard" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                  Agenda
-                </Link>
-              </MenuItem>
-
-
+              {NAV_ITEMS.map((item) => (
                 <MenuItem
-                    onClick={handleCloseNavMenu}
-                    sx={{
-                        fontFamily: 'Inter, system-ui, sans-serif',
-                        fontSize: '0.9rem',
-                        py: 1.5,
-                        px: 3,
-                        color: '#475569',
-                        '&:hover': {
-                            bgcolor: 'rgba(59, 130, 246, 0.08)',
-                            color: '#3B82F6'
-                        }
-                    }}
+                  key={item.href}
+                  component={Link}
+                  href={item.href}
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontSize: '0.9rem',
+                    py: 1.5,
+                    px: 3,
+                    color: '#475569',
+                    textDecoration: 'none',
+                    '&:hover': {
+                      bgcolor: 'rgba(59, 130, 246, 0.08)',
+                      color: '#3B82F6'
+                    }
+                  }}
                 >
-                    <Link href="/dashboard/cupones" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                        Cupones
-                    </Link>
+                  {item.label}
                 </MenuItem>
-
-
-
-              <MenuItem
-                onClick={handleCloseNavMenu}
-                sx={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '0.9rem',
-                  py: 1.5,
-                  px: 3,
-                  color: '#475569',
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.08)',
-                    color: '#3B82F6'
-                  }
-                }}
-              >
-                <Link href="/dashboard/categoriasProductos" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                  Categorías
-                </Link>
-              </MenuItem>
-
-
-
-
-                <MenuItem
-                    onClick={handleCloseNavMenu}
-                    sx={{
-                        fontFamily: 'Inter, system-ui, sans-serif',
-                        fontSize: '0.9rem',
-                        py: 1.5,
-                        px: 3,
-                        color: '#475569',
-                        '&:hover': {
-                            bgcolor: 'rgba(59, 130, 246, 0.08)',
-                            color: '#3B82F6'
-                        }
-                    }}
-                >
-                    <Link href="/dashboard/calendario" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                       Agenda
-                    </Link>
-                </MenuItem>
-
-
-
-                <MenuItem
-                    onClick={handleCloseNavMenu}
-                    sx={{
-                        fontFamily: 'Inter, system-ui, sans-serif',
-                        fontSize: '0.9rem',
-                        py: 1.5,
-                        px: 3,
-                        color: '#475569',
-                        '&:hover': {
-                            bgcolor: 'rgba(59, 130, 246, 0.08)',
-                            color: '#3B82F6'
-                        }
-                    }}
-                >
-                    <Link href="/dashboard/agendaCitas" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                        Clientes Agendados
-                    </Link>
-                </MenuItem>
-
-
-
-              <MenuItem
-                onClick={handleCloseNavMenu}
-                sx={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '0.9rem',
-                  py: 1.5,
-                  px: 3,
-                  color: '#475569',
-                  '&:hover': {
-                    bgcolor: 'rgba(59, 130, 246, 0.08)',
-                    color: '#3B82F6'
-                  }
-                }}
-              >
-                <Link href="/dashboard/publicaciones" style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-                  Publicaciones
-                </Link>
-              </MenuItem>
+              ))}
             </Menu>
           </Box>
         </Toolbar>
