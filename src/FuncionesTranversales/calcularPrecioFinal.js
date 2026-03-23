@@ -38,6 +38,8 @@ const SESIONES_VALIDAS = [1, 3, 6];
  */
 export function esSoloUnaSesion(producto) {
     if (!producto) return false;
+    // Los packs tienen precios propios por sesión, no forzar 1 sesión
+    if (producto.precio_3_sesiones != null) return false;
     return (
         producto.categoriaProducto === CATEGORIA_MUJER &&
         SUBCATEGORIAS_SOLO_UNA_SESION.includes(producto.subcategoria)
