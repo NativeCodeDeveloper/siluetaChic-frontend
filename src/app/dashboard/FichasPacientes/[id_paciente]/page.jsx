@@ -74,6 +74,8 @@ export default function Paciente() {
 
     //PARAMETROS PARA LISTAR FICHAS CLINICAS
     const [listaFichas, setListaFichas] = useState([]);
+    const [reservasPaciente, setReservasPaciente] = useState([]);
+    const [actualizandoEstadoId, setActualizandoEstadoId] = useState(null);
 
 
     //FUNCION PARA LA ELIMINACION LOGICA DE UNA FICHA CLINICA
@@ -143,6 +145,147 @@ export default function Paciente() {
             return toast.error("Ha ocurrido un error en el servidor: " + e)
         }
 
+    }
+
+    function normalizarFechaISO(fecha) {
+        return (fecha ?? "").slice(0, 10);
+    }
+
+    function extraerHorarioAgendado(anotacionConsulta) {
+        const texto = anotacionConsulta ?? "";
+        const match = texto.match(/Hora de Agendamiento:\s*([0-2]\d:\d{2}(?::\d{2})?)\s*-\s*([0-2]\d:\d{2}(?::\d{2})?)/i);
+
+        if (!match) {
+            return null;
+        }
+
+        const normalizarHora = (hora) => hora.length === 5 ? `${hora}:00` : hora;
+
+        return {
+            horaInicio: normalizarHora(match[1]),
+            horaFinalizacion: normalizarHora(match[2]),
+        };
+    }
+
+    function obtenerReservaAsociada(ficha) {
+        const paciente = detallePaciente[0];
+        const horario = extraerHorarioAgendado(ficha.anotacionConsulta);
+
+        if (!paciente?.rut || !ficha?.fechaConsulta || !horario) {
+            return null;
+        }
+
+        const fechaFicha = normalizarFechaISO(ficha.fechaConsulta);
+
+        const reservaExacta = reservasPaciente.find((reserva) =>
+            (reserva.rut ?? "") === paciente.rut &&
+            normalizarFechaISO(reserva.fechaFinalizacion) === fechaFicha &&
+            (reserva.horaInicio ?? "") === horario.horaInicio &&
+            (reserva.horaFinalizacion ?? "") === horario.horaFinalizacion
+        );
+
+        if (reservaExacta) {
+            return reservaExacta;
+        }
+
+        return reservasPaciente.find((reserva) =>
+            (reserva.rut ?? "") === paciente.rut &&
+            normalizarFechaISO(reserva.fechaFinalizacion) === fechaFicha
+        ) ?? null;
+    }
+
+    async function cargarReservasPaciente() {
+        try {
+            const res = await fetch(`${API}/reservaPacientes/seleccionarReservados`, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json"
+                },
+                mode: "cors"
+            });
+
+            if (!res.ok) {
+                return toast.error("No fue posible cargar las reservas del paciente");
+            }
+
+            const data = await res.json();
+            setReservasPaciente(Array.isArray(data) ? data : []);
+        } catch (error) {
+            console.log(error);
+            return toast.error("No fue posible cargar las reservas del paciente");
+        }
+    }
+
+    async function actualizarEstadoFichaYReserva(ficha, nuevoEstadoFicha, nuevoEstadoReserva) {
+        const reservaAsociada = obtenerReservaAsociada(ficha);
+
+        if (!reservaAsociada?.id_reserva) {
+            return toast.error("No se encontró la reserva asociada a esta ficha clínica");
+        }
+
+        setActualizandoEstadoId(ficha.id_ficha);
+
+        try {
+            const [resFicha, resReserva] = await Promise.all([
+                fetch(`${API}/ficha/editarFichaPaciente`, {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    mode: "cors",
+                    body: JSON.stringify({
+                        estadoFicha: nuevoEstadoFicha,
+                        tipoAtencion: ficha.tipoAtencion ?? "",
+                        motivoConsulta: ficha.motivoConsulta ?? "",
+                        signosVitales: ficha.signosVitales ?? "",
+                        observaciones: ficha.observaciones ?? "",
+                        anotacionConsulta: ficha.anotacionConsulta ?? "",
+                        anamnesis: ficha.anamnesis ?? "",
+                        diagnostico: ficha.diagnostico ?? "",
+                        indicaciones: ficha.indicaciones ?? "",
+                        archivosAdjuntos: ficha.archivosAdjuntos ?? "",
+                        fechaConsulta: normalizarFechaISO(ficha.fechaConsulta),
+                        consentimientoFirmado: ficha.consentimientoFirmado ?? "",
+                        id_ficha: ficha.id_ficha
+                    })
+                }),
+                fetch(`${API}/reservaPacientes/actualizarEstado`, {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    mode: "cors",
+                    body: JSON.stringify({
+                        estadoReserva: nuevoEstadoReserva,
+                        id_reserva: reservaAsociada.id_reserva
+                    })
+                })
+            ]);
+
+            if (!resFicha.ok || !resReserva.ok) {
+                return toast.error("No fue posible actualizar el estado de asistencia");
+            }
+
+            const resultadoFicha = await resFicha.json();
+            const resultadoReserva = await resReserva.json();
+
+            if (resultadoFicha.message === true && resultadoReserva.message === true) {
+                await Promise.all([
+                    listarFichasClinicasPaciente(id_paciente),
+                    cargarReservasPaciente()
+                ]);
+                return toast.success("Estado de asistencia actualizado correctamente");
+            }
+
+            return toast.error("No fue posible actualizar el estado de asistencia");
+        } catch (error) {
+            console.log(error);
+            return toast.error("No fue posible actualizar el estado de asistencia");
+        } finally {
+            setActualizandoEstadoId(null);
+        }
     }
 
 
@@ -252,6 +395,12 @@ export default function Paciente() {
     useEffect(() => {
         if (!id_paciente) return;
         buscarPacientePorId(id_paciente)
+    }, [id_paciente]);
+
+    useEffect(() => {
+        if (!id_paciente) return;
+        listarFichasClinicasPaciente(id_paciente);
+        cargarReservasPaciente();
     }, [id_paciente]);
 
 
@@ -471,6 +620,22 @@ export default function Paciente() {
                                     <div className="w-full sm:w-auto">
                                         <ShadcnButton funcion={() => eliminarFicha(ficha.id_ficha)} nombre={"Eliminar"} />
                                     </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => actualizarEstadoFichaYReserva(ficha, 4, "asiste")}
+                                        disabled={actualizandoEstadoId === ficha.id_ficha}
+                                        className="inline-flex w-full items-center justify-center rounded-lg bg-pink-200 px-4 py-2 text-sm font-semibold text-pink-900 transition hover:bg-pink-300 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                                    >
+                                        Asiste
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => actualizarEstadoFichaYReserva(ficha, 5, "no asiste")}
+                                        disabled={actualizandoEstadoId === ficha.id_ficha}
+                                        className="inline-flex w-full items-center justify-center rounded-lg bg-amber-200 px-4 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                                    >
+                                        No asiste
+                                    </button>
                                 </div>
                             </article>
                         ))

@@ -4,8 +4,8 @@
 
 
 
-/*
 
+/*
 
 // ----------------------------------------------------------
 // MIDLEWARE SIN RESTRICCIONES NO BLOQUEOS (ABIERTO TOTAL)
@@ -22,10 +22,10 @@ export const config = {
 matcher: ['/dashboard/:path*'], // o simplemente [] si quieres que no aplique a ninguna
 }
 
+
+
+
 */
-
-
-
 
 
 // ----------------------------------------------------------

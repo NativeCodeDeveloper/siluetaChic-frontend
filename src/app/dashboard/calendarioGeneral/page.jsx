@@ -1,6 +1,6 @@
 "use client"
 
-import {useState, useMemo, useEffect} from "react";
+import {useState, useMemo, useEffect, useRef} from "react";
 import {useRouter} from "next/navigation";
 import {Calendar, dateFnsLocalizer} from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -35,6 +35,7 @@ export default function Calendario() {
 
     const API = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
+    const detalleReservaRef = useRef(null);
 
     // Estilos CSS personalizados para mejorar la visualización de eventos
     useEffect(() => {
@@ -104,8 +105,32 @@ export default function Calendario() {
     const [estadoReserva, setEstadoReserva,] = useState("");
     const [id_reserva, setid_reserva] = useState(0);
     const [id_paciente, setId_paciente] = useState("");
+    const [idPacienteSeleccionado, setIdPacienteSeleccionado] = useState("");
+    const [actualizandoEstado, setActualizandoEstado] = useState(false);
 
     const [dataAgenda, setDataAgenda] = useState([] || []);
+
+    function obtenerEstiloPorEstado(estadoReserva) {
+        const estado = (estadoReserva ?? '').toLowerCase();
+
+        if (estado === 'confirmada') {
+            return { backgroundColor: '#16a34a', color: '#ffffff' };
+        }
+
+        if (estado === 'anulada') {
+            return { backgroundColor: '#dc2626', color: '#ffffff' };
+        }
+
+        if (estado === 'asiste') {
+            return { backgroundColor: '#fbcfe8', color: '#831843' };
+        }
+
+        if (estado === 'no asiste') {
+            return { backgroundColor: '#fde68a', color: '#854d0e' };
+        }
+
+        return { backgroundColor: '#0284c7', color: '#ffffff' };
+    }
 
 
     function formatearFechaLocal(d) {
@@ -213,14 +238,7 @@ export default function Calendario() {
 
     // Permite que el contenido del evento haga wrap y no se corte en vistas con poco espacio
     const eventStyleGetter = (event) => {
-        let backgroundColor = '#0284c7'; // azul por defecto (reservada)
-
-        const estado = (event.estadoReserva ?? '').toLowerCase();
-        if (estado === 'confirmada') {
-            backgroundColor = '#16a34a'; // verde
-        } else if (estado === 'anulada') {
-            backgroundColor = '#dc2626'; // rojo
-        }
+        const { backgroundColor, color } = obtenerEstiloPorEstado(event.estadoReserva);
 
         return {
             style: {
@@ -238,7 +256,7 @@ export default function Calendario() {
                 boxSizing: 'border-box',
                 borderRadius: '4px',
                 backgroundColor,
-                color: '#fff',
+                color,
                 fontWeight: '500',
                 wordBreak: 'break-word',
             },
@@ -323,6 +341,7 @@ export default function Calendario() {
             setEmail(reserva.email ?? "");
             setTelefono(reserva.telefono ?? "");
             setId_paciente(reserva.id_paciente ?? "");
+            setIdPacienteSeleccionado(reserva.id_paciente ?? "");
 
             // Si tu endpoint trae estos campos, los cargamos también
             setfechaInicio((reserva.fechaInicio ?? "").slice(0, 10));
@@ -337,11 +356,109 @@ export default function Calendario() {
         }
     }
 
+    async function actualizarEstadoReserva(nuevoEstadoReserva) {
+        try {
+            if (!id_reserva) {
+                return toast.error("Debe seleccionar una reserva");
+            }
+
+            setActualizandoEstado(true);
+
+            const res = await fetch(`${API}/reservaPacientes/actualizarEstado`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                mode: "cors",
+                body: JSON.stringify({
+                    estadoReserva: nuevoEstadoReserva,
+                    id_reserva
+                })
+            });
+
+            if (!res.ok) {
+                return toast.error("No fue posible actualizar el estado de la reserva");
+            }
+
+            const resultadoBackend = await res.json();
+
+            if (resultadoBackend.message === true) {
+                setEstadoReserva(nuevoEstadoReserva);
+                await Promise.all([
+                    seleccionarReservaEspecifica(id_reserva),
+                    cargarDataAgenda()
+                ]);
+                return toast.success("Estado de asistencia actualizado correctamente");
+            }
+
+            return toast.error("No fue posible actualizar el estado de la reserva");
+        } catch (error) {
+            console.log(error);
+            return toast.error("No fue posible actualizar el estado de la reserva");
+        } finally {
+            setActualizandoEstado(false);
+        }
+    }
+
+    async function resolverIdPaciente() {
+        const idDirecto = idPacienteSeleccionado || id_paciente;
+
+        if (idDirecto) {
+            return idDirecto;
+        }
+
+        if (!rut) {
+            return null;
+        }
+
+        try {
+            const res = await fetch(`${API}/pacientes/contieneRut`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                mode: "cors",
+                body: JSON.stringify({ rut })
+            });
+
+            if (!res.ok) {
+                return null;
+            }
+
+            const data = await res.json();
+            const paciente = Array.isArray(data) ? data.find((item) => item?.rut === rut) ?? data[0] : data;
+            const idPacienteEncontrado = paciente?.id_paciente ?? null;
+
+            if (idPacienteEncontrado) {
+                setId_paciente(idPacienteEncontrado);
+                setIdPacienteSeleccionado(idPacienteEncontrado);
+            }
+
+            return idPacienteEncontrado;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+
     useEffect(() => {
         if (id_reserva) {
             seleccionarReservaEspecifica(id_reserva);
         }
     }, [id_reserva]);
+
+    useEffect(() => {
+        if (!id_reserva || !nombrePaciente) {
+            return;
+        }
+
+        detalleReservaRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, [id_reserva, nombrePaciente]);
 
 
     function limpiarData() {
@@ -385,6 +502,14 @@ export default function Calendario() {
                                     <div className="flex items-center gap-1.5">
                                       <span className="inline-block w-3 h-3 rounded-full bg-[#dc2626]" />
                                       <span className="text-xs text-slate-600">Anulada</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="inline-block w-3 h-3 rounded-full bg-[#fbcfe8]" />
+                                      <span className="text-xs text-slate-600">Asiste</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="inline-block w-3 h-3 rounded-full bg-[#fde68a]" />
+                                      <span className="text-xs text-slate-600">No asiste</span>
                                     </div>
                                 </div>
                             </div>
@@ -431,11 +556,13 @@ export default function Calendario() {
                                 }}
 
                                 onSelectEvent={(event) => {
-                                    if (!event?.id_paciente) {
-                                        toast.error("No se encontró el paciente asociado a esta reserva");
+                                    if (!event?.id_reserva) {
+                                        toast.error("No se encontró la reserva seleccionada");
                                         return;
                                     }
-                                    router.push(`/dashboard/FichasPacientes/${event.id_paciente}`);
+                                    setIdPacienteSeleccionado(event.id_paciente ?? "");
+                                    toast.success("Reserva seleccionada");
+                                    setid_reserva(event.id_reserva);
                                 }}
 
                                 /* Función que se ejecuta al seleccionar un rango de tiempo.
@@ -463,6 +590,73 @@ export default function Calendario() {
                         </div>
                     </div>
                 </div>
+
+                {id_reserva ? (
+                    <div ref={detalleReservaRef} className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                            <div className="space-y-3">
+                                <div>
+                                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Reserva seleccionada</p>
+                                    <h3 className="mt-2 text-xl font-bold text-slate-900">
+                                        {nombrePaciente} {apellidoPaciente}
+                                    </h3>
+                                </div>
+
+                                <div className="flex flex-wrap gap-3 text-sm text-slate-600">
+                                    <span className="rounded-full bg-slate-100 px-3 py-1 font-medium">RUT: {rut || "-"}</span>
+                                    <span className="rounded-full bg-slate-100 px-3 py-1 font-medium">Teléfono: {telefono || "-"}</span>
+                                    <span className="rounded-full bg-slate-100 px-3 py-1 font-medium">Estado: {estadoReserva || "-"}</span>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                                        <p className="text-[11px] uppercase tracking-wide text-slate-500">Inicio</p>
+                                        <p className="mt-1 text-sm font-semibold text-slate-900">{fechaInicio || "-"} {horaInicio ? `· ${horaInicio.slice(0, 5)}` : ""}</p>
+                                    </div>
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+                                        <p className="text-[11px] uppercase tracking-wide text-slate-500">Finalización</p>
+                                        <p className="mt-1 text-sm font-semibold text-slate-900">{fechaFinalizacion || "-"} {horaFinalizacion ? `· ${horaFinalizacion.slice(0, 5)}` : ""}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:min-w-[220px]">
+                                <button
+                                    type="button"
+                                    onClick={() => actualizarEstadoReserva("asiste")}
+                                    disabled={actualizandoEstado}
+                                    className="inline-flex items-center justify-center rounded-lg bg-pink-200 px-4 py-2.5 text-sm font-semibold text-pink-900 transition hover:bg-pink-300 disabled:cursor-not-allowed disabled:opacity-60"
+                                >
+                                    Asiste
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => actualizarEstadoReserva("no asiste")}
+                                    disabled={actualizandoEstado}
+                                    className="inline-flex items-center justify-center rounded-lg bg-amber-200 px-4 py-2.5 text-sm font-semibold text-amber-900 transition hover:bg-amber-300 disabled:cursor-not-allowed disabled:opacity-60"
+                                >
+                                    No asiste
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={async () => {
+                                        const destinoPaciente = await resolverIdPaciente();
+
+                                        if (!destinoPaciente) {
+                                            toast.error("No se encontró el paciente asociado a esta reserva");
+                                            return;
+                                        }
+
+                                        router.push(`/dashboard/FichasPacientes/${destinoPaciente}`);
+                                    }}
+                                    className="inline-flex items-center justify-center rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700"
+                                >
+                                    Ver ficha del paciente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ) : null}
 
             </div>
 

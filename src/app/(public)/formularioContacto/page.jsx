@@ -154,9 +154,8 @@ export default function FormularioContacto() {
                         <div className="mt-6 rounded-2xl bg-white/70 p-5 shadow-sm border border-slate-200">
                             <p className="text-lg sm:text-xl font-bold text-slate-900">Horario de Atención</p>
                             <div className="mt-3 space-y-2 text-slate-700 text-sm sm:text-base">
-                                <p><span className="font-extrabold">Lunes a Viernes:</span> 9:00 AM – 7:00 PM</p>
-                                <p><span className="font-extrabold">Sábados:</span> 10:00 AM – 2:00 PM</p>
-                                <p><span className="font-extrabold">Domingos:</span> Cerrado</p>
+                                <p><span className="font-extrabold">Lunes a viernes:</span> 09:00 a 20:00 hrs</p>
+                                <p><span className="font-extrabold">Sábados:</span> 09:00 a 16:00 hrs</p>
                             </div>
                         </div>
                     </div>

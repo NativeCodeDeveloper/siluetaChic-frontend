@@ -75,6 +75,28 @@ function Calendario() {
     const isDraggingPopup = useRef(false);
     const dragOffset = useRef({ x: 0, y: 0 });
 
+    function obtenerEstiloPorEstado(estadoReserva) {
+        const estado = (estadoReserva ?? "").toLowerCase();
+
+        if (estado === "confirmada") {
+            return { backgroundColor: "#16a34a", color: "#ffffff" };
+        }
+
+        if (estado === "anulada") {
+            return { backgroundColor: "#dc2626", color: "#ffffff" };
+        }
+
+        if (estado === "asiste") {
+            return { backgroundColor: "#fbcfe8", color: "#831843" };
+        }
+
+        if (estado === "no asiste") {
+            return { backgroundColor: "#fde68a", color: "#854d0e" };
+        }
+
+        return { backgroundColor: "#0284c7", color: "#ffffff" };
+    }
+
 
     function formatearFechaLocal(d) {
         const y = d.getFullYear();
@@ -325,10 +347,7 @@ function Calendario() {
     }), []);
 
     const eventStyleGetter = (event) => {
-        let backgroundColor = "#0284c7";
-        const estado = (event.estadoReserva ?? "").toLowerCase();
-        if (estado === "confirmada") backgroundColor = "#16a34a";
-        if (estado === "anulada") backgroundColor = "#dc2626";
+        const { backgroundColor, color } = obtenerEstiloPorEstado(event.estadoReserva);
 
         return {
             style: {
@@ -346,7 +365,7 @@ function Calendario() {
                 boxSizing: "border-box",
                 borderRadius: "10px",
                 backgroundColor,
-                color: "#fff",
+                color,
                 fontWeight: "500",
                 wordBreak: "break-word",
             },
