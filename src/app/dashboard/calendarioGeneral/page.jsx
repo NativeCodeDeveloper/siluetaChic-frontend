@@ -364,7 +364,7 @@ export default function Calendario() {
 
             setActualizandoEstado(true);
 
-            const res = await fetch(`${API}/reservaPacientes/actualizarEstado`, {
+            const res = await fetch(`${API}/sincronizacionAsistencia/desdeReserva`, {
                 method: "POST",
                 headers: {
                     Accept: "application/json",

@@ -148,6 +148,28 @@ export default function EdicionFichaClinica() {
 
             const respuestaBackend = await res.json();
             if (respuestaBackend.message === true) {
+                // Sincronizar estado con la reserva asociada (silencioso, no bloquea el flujo).
+                // Solo dispara si el estado nuevo esta dentro del rango mapeable 1-5.
+                try {
+                    const estadoNumerico = Number(estadoFicha);
+                    if ([1, 2, 3, 4, 5].includes(estadoNumerico)) {
+                        await fetch(`${API}/sincronizacionAsistencia/desdeFicha`, {
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json",
+                                "Content-Type": "application/json"
+                            },
+                            mode: "cors",
+                            body: JSON.stringify({
+                                estadoFicha: estadoNumerico,
+                                id_ficha
+                            })
+                        });
+                    }
+                } catch (errSync) {
+                    console.error("[SYNC desdeFicha] No se pudo sincronizar la reserva:", errSync.message);
+                }
+
                 await seleccionarFichaEspecifica(id_ficha);
                 return toast.success("Ficha Clínica actualizada correctamente");
             } else {
