@@ -29,9 +29,11 @@ export default function Carrito() {
     useEffect(() => { setIsMounted(true); }, []);
 
     function obtenerClaveProducto(producto) {
-        return producto?._esPack
-            ? `${producto.id_producto}_pack_${producto._sesionesSeleccionadas}`
-            : String(producto.id_producto);
+        if (producto?._esPack) {
+            return `${producto.id_producto}_pack_${producto._sesionesSeleccionadas}`;
+        }
+        const lote = Number(producto?._loteSesiones) || 1;
+        return `${producto.id_producto}_lote_${lote}`;
     }
 
     function formatoCLP(valor) {
@@ -93,20 +95,25 @@ export default function Carrito() {
 
 
 
+    function obtenerIncrementoLote(producto) {
+        if (producto?._esPack) return 1;
+        return Number(producto?._loteSesiones) || 1;
+    }
+
     function aumentarCantidad(id_producto) {
         try {
             if (!id_producto) {
                 return toast.error('Debe seleccionar un producto para poder aumentar su cantidad.');
-            } else {
-
-                const productoAumentar = carrito.find(producto => obtenerClaveProducto(producto) === id_producto);
-                if (!productoAumentar) {
-                    return toast.error("No se ha encontrado el producto que se quiere aumentar");
-                }else{
-                    setCarrito([...carrito, {...productoAumentar}]);
-                }
-
             }
+
+            const productoAumentar = carrito.find(producto => obtenerClaveProducto(producto) === id_producto);
+            if (!productoAumentar) {
+                return toast.error("No se ha encontrado el producto que se quiere aumentar");
+            }
+
+            const incremento = obtenerIncrementoLote(productoAumentar);
+            const copias = Array.from({length: incremento}, () => ({...productoAumentar}));
+            setCarrito([...carrito, ...copias]);
         } catch (e) {
             console.log(e);
             return toast.error("No se puede aumentar la cantidad. Si necesita mas cantidad contacte a la tienda.");
@@ -121,19 +128,34 @@ export default function Carrito() {
         try {
             if (!id_producto) {
                 return toast.error('Debe seleccionar un producto para poder bajar su cantidad.');
-            } else {
-                const productoEliminar = carrito.findIndex(producto => obtenerClaveProducto(producto) === id_producto);
-                if (productoEliminar === -1) {
-                    return toast.error("No se ha encontrado el producto que se quiere aumentar");
-                }else{
-                    const nuevoCarritoConProductoEliminado = [...carrito];
-                    nuevoCarritoConProductoEliminado.splice(productoEliminar, 1);
-                    setCarrito(nuevoCarritoConProductoEliminado);
+            }
+
+            const productoReferencia = carrito.find(p => obtenerClaveProducto(p) === id_producto);
+            if (!productoReferencia) {
+                return toast.error("No se ha encontrado el producto que se quiere disminuir");
+            }
+
+            const decremento = obtenerIncrementoLote(productoReferencia);
+            const cantidadActual = carrito.filter(p => obtenerClaveProducto(p) === id_producto).length;
+
+            if (cantidadActual <= decremento) {
+                const nuevoCarrito = carrito.filter(p => obtenerClaveProducto(p) !== id_producto);
+                setCarrito(nuevoCarrito);
+                return;
+            }
+
+            const nuevoCarrito = [...carrito];
+            let quitadas = 0;
+            for (let i = nuevoCarrito.length - 1; i >= 0 && quitadas < decremento; i--) {
+                if (obtenerClaveProducto(nuevoCarrito[i]) === id_producto) {
+                    nuevoCarrito.splice(i, 1);
+                    quitadas++;
                 }
             }
+            setCarrito(nuevoCarrito);
         } catch (e) {
             console.log(e);
-            return toast.error("No se puede aumentar la cantidad. Si necesita mas cantidad contacte a la tienda.");
+            return toast.error("No se puede disminuir la cantidad.");
         }
 
     }
@@ -214,7 +236,7 @@ export default function Carrito() {
                                             <button
                                                 type="button"
                                                 onClick={() => disminuirCantidad(producto.carritoKey)}
-                                                disabled={producto.cantidadVendida <= 1}
+                                                disabled={producto.cantidadVendida <= obtenerIncrementoLote(producto)}
                                                 className="flex h-10 w-10 items-center justify-center text-lg font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                             >
                                                 -
@@ -275,7 +297,7 @@ export default function Carrito() {
                                     <button
                                         type="button"
                                         onClick={() => disminuirCantidad(producto.carritoKey)}
-                                        disabled={producto.cantidadVendida <= 1}
+                                        disabled={producto.cantidadVendida <= obtenerIncrementoLote(producto)}
                                         className="flex h-10 w-10 items-center justify-center text-lg font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         -

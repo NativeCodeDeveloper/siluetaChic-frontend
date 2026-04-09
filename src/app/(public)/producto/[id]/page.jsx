@@ -48,23 +48,19 @@ export default function ProductoDetalle() {
     function agregarSesiones(productoSeleccionado, cantidadSesiones) {
         const numeroSesiones = Number(cantidadSesiones);
 
-        if (numeroSesiones === 1) {
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            return toast.success("Sesiones añadidas al carrito de compras!")
-        } else if (numeroSesiones === 3) {
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-        } else if (numeroSesiones === 6) {
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-            setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-        } else {
+        if (![1, 3, 6].includes(numeroSesiones)) {
             return;
         }
+
+        const productoConLote = {...productoSeleccionado, _loteSesiones: numeroSesiones};
+        const copiasProducto = Array.from({length: numeroSesiones}, () => productoConLote);
+
+        setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, ...copiasProducto]);
+
+        const mensaje = numeroSesiones === 1
+            ? "Sesión añadida al carrito de compras!"
+            : `${numeroSesiones} sesiones añadidas al carrito de compras!`;
+        toast.success(mensaje);
     }
 
     function comparAhora(productoSeleccionado, cantidadSesiones) {
