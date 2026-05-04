@@ -263,11 +263,14 @@ totalPagado
 
     const productoCatidades = {};
 
+    function obtenerSesionesPorUnidad(producto) {
+        return Number(producto?._sesionesSeleccionadas) || Number(producto?._loteSesiones) || 1;
+    }
+
     for (const productos of carrito) {
-        // Clave compuesta para packs: evita mezclar packs con distinta cantidad de sesiones
-        const key = productos._esPack
-            ? `${productos.id_producto}_pack_${productos._sesionesSeleccionadas}`
-            : productos.id_producto;
+        const sesiones = obtenerSesionesPorUnidad(productos);
+        const tipoProducto = productos._esPack ? "pack" : "individual";
+        const key = `${productos.id_producto}_${tipoProducto}_${sesiones}`;
         if (productoCatidades[key]) {
             productoCatidades[key].cantidadVendida += 1;
         }else{
@@ -284,6 +287,7 @@ totalPagado
         nombre: p.nombre ?? p.nombreProducto ?? p.titulo ?? "Producto",
         precio: Number(p.precio ?? p.valorProducto ?? p.unit_price ?? 0),
         cantidad: Number(p.cantidadVendida ?? p.cantidad ?? p.quantity ?? 1),
+        sesionesPorUnidad: obtenerSesionesPorUnidad(p),
     }));
 
     const totalCarrito = useMemo(() => {
@@ -603,7 +607,10 @@ totalPagado
                                                         {p.tituloProducto}
                                                     </p>
                                                     <p className="mt-0.5 text-xs text-gray-500">
-                                                        Sesiones: <span className="font-medium text-gray-700">{p.cantidadVendida}</span>
+                                                        Sesiones por unidad: <span className="font-medium text-gray-700">{obtenerSesionesPorUnidad(p)}</span>
+                                                    </p>
+                                                    <p className="mt-0.5 text-xs text-gray-500">
+                                                        Cantidad: <span className="font-medium text-gray-700">{p.cantidadVendida}</span>
                                                     </p>
                                                 </div>
                                                 <div className="text-right">

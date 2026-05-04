@@ -35,16 +35,6 @@ export default function ProductoDetalle() {
     const [dataProductoSeleccionado, setdataProductoSeleccionado] = useState({});
     const [precioFinal, setPrecioFinal] = useState(0);
     const router = useRouter();
-
-
-    function agregarAlCarrito(productoSeleccionado) {
-        setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoSeleccionado])
-        toast.success("Producto añadido al carrito de compras!")
-    }
-
-
-
-
     function agregarSesiones(productoSeleccionado, cantidadSesiones) {
         const numeroSesiones = Number(cantidadSesiones);
 
@@ -52,10 +42,13 @@ export default function ProductoDetalle() {
             return;
         }
 
-        const productoConLote = {...productoSeleccionado, _loteSesiones: numeroSesiones};
-        const copiasProducto = Array.from({length: numeroSesiones}, () => productoConLote);
+        const productoParaCarrito = {
+            ...productoSeleccionado,
+            valorProducto: calcularPrecioFinal(productoSeleccionado, numeroSesiones),
+            _sesionesSeleccionadas: numeroSesiones,
+        };
 
-        setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, ...copiasProducto]);
+        setCarrito(arrayProductosPrevios => [...arrayProductosPrevios, productoParaCarrito]);
 
         const mensaje = numeroSesiones === 1
             ? "Sesión añadida al carrito de compras!"

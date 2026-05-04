@@ -28,12 +28,28 @@ export default function Carrito() {
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => { setIsMounted(true); }, []);
 
+    function obtenerSesionesPorUnidad(producto) {
+        return Number(producto?._sesionesSeleccionadas) || Number(producto?._loteSesiones) || 1;
+    }
+
     function obtenerClaveProducto(producto) {
+        const sesiones = obtenerSesionesPorUnidad(producto);
+        const tipoProducto = producto?._esPack ? "pack" : "individual";
+        return `${producto.id_producto}_${tipoProducto}_${sesiones}`;
+    }
+
+    function obtenerDescripcionProducto(producto) {
+        const sesiones = obtenerSesionesPorUnidad(producto);
+
         if (producto?._esPack) {
-            return `${producto.id_producto}_pack_${producto._sesionesSeleccionadas}`;
+            return `Pack ${sesiones} sesiones`;
         }
-        const lote = Number(producto?._loteSesiones) || 1;
-        return `${producto.id_producto}_lote_${lote}`;
+
+        if (sesiones > 1) {
+            return `Zona individual · ${sesiones} sesiones`;
+        }
+
+        return "Sesión individual";
     }
 
     function formatoCLP(valor) {
@@ -95,11 +111,6 @@ export default function Carrito() {
 
 
 
-    function obtenerIncrementoLote(producto) {
-        if (producto?._esPack) return 1;
-        return Number(producto?._loteSesiones) || 1;
-    }
-
     function aumentarCantidad(id_producto) {
         try {
             if (!id_producto) {
@@ -111,9 +122,7 @@ export default function Carrito() {
                 return toast.error("No se ha encontrado el producto que se quiere aumentar");
             }
 
-            const incremento = obtenerIncrementoLote(productoAumentar);
-            const copias = Array.from({length: incremento}, () => ({...productoAumentar}));
-            setCarrito([...carrito, ...copias]);
+            setCarrito([...carrito, {...productoAumentar}]);
         } catch (e) {
             console.log(e);
             return toast.error("No se puede aumentar la cantidad. Si necesita mas cantidad contacte a la tienda.");
@@ -135,21 +144,19 @@ export default function Carrito() {
                 return toast.error("No se ha encontrado el producto que se quiere disminuir");
             }
 
-            const decremento = obtenerIncrementoLote(productoReferencia);
             const cantidadActual = carrito.filter(p => obtenerClaveProducto(p) === id_producto).length;
 
-            if (cantidadActual <= decremento) {
+            if (cantidadActual <= 1) {
                 const nuevoCarrito = carrito.filter(p => obtenerClaveProducto(p) !== id_producto);
                 setCarrito(nuevoCarrito);
                 return;
             }
 
             const nuevoCarrito = [...carrito];
-            let quitadas = 0;
-            for (let i = nuevoCarrito.length - 1; i >= 0 && quitadas < decremento; i--) {
+            for (let i = nuevoCarrito.length - 1; i >= 0; i--) {
                 if (obtenerClaveProducto(nuevoCarrito[i]) === id_producto) {
                     nuevoCarrito.splice(i, 1);
-                    quitadas++;
+                    break;
                 }
             }
             setCarrito(nuevoCarrito);
@@ -220,7 +227,7 @@ export default function Carrito() {
                                             <div>
                                                 <span className="block text-base font-semibold text-sky-700">{producto.tituloProducto}</span>
                                                 <span className="mt-1 block text-xs text-slate-500">
-                                                    {producto._esPack ? `Pack ${producto._sesionesSeleccionadas} sesiones` : "Sesión individual"}
+                                                    {obtenerDescripcionProducto(producto)}
                                                 </span>
                                                 <span className="mt-3 block"><ShadcnButton
                                             funcion={() => quitarDelCarrito(producto.carritoKey)}
@@ -236,7 +243,7 @@ export default function Carrito() {
                                             <button
                                                 type="button"
                                                 onClick={() => disminuirCantidad(producto.carritoKey)}
-                                                disabled={producto.cantidadVendida <= obtenerIncrementoLote(producto)}
+                                                disabled={producto.cantidadVendida <= 1}
                                                 className="flex h-10 w-10 items-center justify-center text-lg font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                             >
                                                 -
@@ -282,7 +289,7 @@ export default function Carrito() {
                                     <div className="min-w-0">
                                         <div className="text-sm font-semibold text-sky-700 truncate">{producto.tituloProducto}</div>
                                         <div className="mt-1 text-xs text-slate-500">Ref: {producto.id_producto}</div>
-                                        <div className="mt-1 text-xs text-slate-500">{producto._esPack ? `Pack ${producto._sesionesSeleccionadas} sesiones` : "Sesión individual"}</div>
+                                        <div className="mt-1 text-xs text-slate-500">{obtenerDescripcionProducto(producto)}</div>
                                     </div>
                                     <div className="text-right ml-2 flex-shrink-0">
                                         <div className="text-sm font-semibold text-slate-800">{formatoCLP(producto.cantidadVendida * producto.valorProducto)}</div>
@@ -297,7 +304,7 @@ export default function Carrito() {
                                     <button
                                         type="button"
                                         onClick={() => disminuirCantidad(producto.carritoKey)}
-                                        disabled={producto.cantidadVendida <= obtenerIncrementoLote(producto)}
+                                        disabled={producto.cantidadVendida <= 1}
                                         className="flex h-10 w-10 items-center justify-center text-lg font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         -
